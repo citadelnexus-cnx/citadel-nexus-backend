@@ -1,0 +1,1113 @@
+############################################################
+# CITADEL NEXUS BACKEND — MASTER TEST FILE
+# Manual sequential test file
+# Run top-to-bottom for a brand new clean test run.
+# Replace placeholders only after the relevant step returns.
+############################################################
+
+############################################################
+# ENVIRONMENT — LOCKED CONFIG
+############################################################
+
+@baseUrl = http://localhost:3000
+@adminId = admin-001
+
+############################################################
+# ROLE IDS — LOCKED REFERENCE
+# Do not edit unless backend mapping truly changes.
+############################################################
+
+@role_cnx_holder              = 1484138333788704878
+@role_cnx_holder_tier_1       = 1486299725056446524
+@role_cnx_holder_tier_2       = 1486299823257948191
+@role_cnx_holder_tier_3       = 1486299865322491914
+@role_temp_premium_alpha      = 1486300614957994054
+
+############################################################
+# RUN PLACEHOLDERS — REPLACE AS YOU PROGRESS
+# Leave all of these untouched before starting a fresh run.
+############################################################
+
+# Main user flow
+@userId                       = REPLACE_USER_ID
+@entitlementId                = REPLACE_ENTITLEMENT_ID
+@confirmedPayoutId            = REPLACE_CONFIRMED_PAYOUT_ID
+@failurePayoutId              = REPLACE_FAILURE_PAYOUT_ID
+@rejectionPayoutId            = REPLACE_REJECTION_PAYOUT_ID
+
+# Step 8H clean verification success flow
+@successUserId                = REPLACE_SUCCESS_USER_ID
+@successAuditId               = REPLACE_SUCCESS_AUDIT_ID
+
+# Step 8H clean verification failure flow
+@failureUserId                = REPLACE_FAILURE_USER_ID
+@failureAuditId               = REPLACE_FAILURE_AUDIT_ID
+
+# Step 8I mutation flow
+@mutationUserId               = REPLACE_MUTATION_USER_ID
+@mutationAuditIdA             = REPLACE_MUTATION_AUDIT_ID_A
+@mutationAuditIdB             = REPLACE_MUTATION_AUDIT_ID_B
+@mutationAuditIdC             = REPLACE_MUTATION_AUDIT_ID_C
+
+############################################################
+# SECTION 0 — PRE-FLIGHT / HEALTH
+############################################################
+
+### 0.1 Root Health Check
+GET {{baseUrl}}/
+
+###
+
+### 0.2 Token Info
+GET {{baseUrl}}/token/info
+
+###
+
+############################################################
+# SECTION 1 — MAIN USER FLOW
+# GOAL:
+#   - create primary user
+#   - link discord
+#   - bind wallet
+#   - add XP
+#   - inspect base state
+############################################################
+
+### 1.1 Create Main User
+# Copy returned "id" into @userId above
+POST {{baseUrl}}/user/create
+Content-Type: application/json
+
+{
+  "username": "CitadelTest"
+}
+
+###
+
+### 1.2 Link Discord For Main User
+POST {{baseUrl}}/user/{{userId}}/discord
+Content-Type: application/json
+
+{
+  "discordId": "123456789012345678",
+  "discordTag": "CitadelUser#0001"
+}
+
+###
+
+### 1.3 Bind Wallet For Main User
+POST {{baseUrl}}/user/{{userId}}/wallet
+Content-Type: application/json
+
+{
+  "wallet": "0.0.9999999"
+}
+
+###
+
+### 1.4 Add XP To Main User
+# 400 XP = solid baseline for later access / payout tests
+POST {{baseUrl}}/user/{{userId}}/xp
+Content-Type: application/json
+
+{
+  "amount": 400
+}
+
+###
+
+### 1.5 Get Main User
+GET {{baseUrl}}/user/{{userId}}
+
+###
+
+### 1.6 Get Main User Balance
+GET {{baseUrl}}/user/{{userId}}/balance
+
+###
+
+### 1.7 Get Main User Access State
+GET {{baseUrl}}/access/{{userId}}
+
+###
+
+### 1.8 Get All Access States
+GET {{baseUrl}}/access
+
+###
+
+############################################################
+# SECTION 2 — TEMP ACCESS / CNX SINK
+# GOAL:
+#   - purchase temp access
+#   - confirm balance and access changes
+############################################################
+
+### 2.1 Purchase Temporary Access
+# Copy returned "entitlementId" into @entitlementId above if present
+POST {{baseUrl}}/temp-access/{{userId}}/purchase
+Content-Type: application/json
+
+{
+  "accessType": "premium_alpha"
+}
+
+###
+
+### 2.2 Get Access State After Temp Purchase
+GET {{baseUrl}}/access/{{userId}}
+
+###
+
+### 2.3 Get Main User After Temp Purchase
+GET {{baseUrl}}/user/{{userId}}
+
+###
+
+### 2.4 Get Main User Balance After Temp Purchase
+GET {{baseUrl}}/user/{{userId}}/balance
+
+###
+
+############################################################
+# SECTION 3 — ENTITLEMENT INSPECTION
+############################################################
+
+### 3.1 Get All Entitlements
+GET {{baseUrl}}/entitlements
+
+###
+
+### 3.2 Get Main User Entitlements
+GET {{baseUrl}}/entitlements/user/{{userId}}
+
+###
+
+### 3.3 Get Main User Active Entitlements
+GET {{baseUrl}}/entitlements/user/{{userId}}/active
+
+###
+
+### 3.4 Get Entitlement By ID
+# Run only if @entitlementId was returned in Step 2.1
+GET {{baseUrl}}/entitlements/{{entitlementId}}
+
+###
+
+############################################################
+# SECTION 4 — EXPIRY SWEEP
+############################################################
+
+### 4.1 Run Expiry Sweep
+POST {{baseUrl}}/access/expire/run
+
+###
+
+### 4.2 Get Access State After Expiry Sweep
+GET {{baseUrl}}/access/{{userId}}
+
+###
+
+### 4.3 Get Active Entitlements After Expiry Sweep
+GET {{baseUrl}}/entitlements/user/{{userId}}/active
+
+###
+
+############################################################
+# SECTION 5 — PAYOUT CONFIRM FLOW
+# GOAL:
+#   - queue payout
+#   - approve
+#   - send
+#   - confirm
+############################################################
+
+### 5.1 Queue Payout
+# Copy returned "payoutId" into @confirmedPayoutId above
+POST {{baseUrl}}/payout/{{userId}}/queue
+
+###
+
+### 5.2 Approve Confirm Flow Payout
+POST {{baseUrl}}/payout/{{confirmedPayoutId}}/approve
+Content-Type: application/json
+
+{
+  "adminId": "{{adminId}}"
+}
+
+###
+
+### 5.3 Get Balance After Approval
+GET {{baseUrl}}/user/{{userId}}/balance
+
+###
+
+### 5.4 Mark Payout Sent
+POST {{baseUrl}}/payout/{{confirmedPayoutId}}/send
+Content-Type: application/json
+
+{
+  "txId": "0.0.mock-tx-12345"
+}
+
+###
+
+### 5.5 Confirm Payout
+POST {{baseUrl}}/payout/{{confirmedPayoutId}}/confirm
+
+###
+
+### 5.6 Get Confirmed Payout By ID
+GET {{baseUrl}}/payout/{{confirmedPayoutId}}
+
+###
+
+### 5.7 Get Balance After Confirm
+GET {{baseUrl}}/user/{{userId}}/balance
+
+###
+
+### 5.8 Get Main User After Confirm
+GET {{baseUrl}}/user/{{userId}}
+
+###
+
+### 5.9 Get Access State After Confirm
+GET {{baseUrl}}/access/{{userId}}
+
+###
+
+############################################################
+# SECTION 6 — PAYOUT FAILURE / ROLLBACK FLOW
+# GOAL:
+#   - queue payout
+#   - approve
+#   - send
+#   - fail
+############################################################
+
+### 6.1 Queue Payout For Failure Flow
+# Copy returned "payoutId" into @failurePayoutId above
+POST {{baseUrl}}/payout/{{userId}}/queue
+
+###
+
+### 6.2 Approve Failure Flow Payout
+POST {{baseUrl}}/payout/{{failurePayoutId}}/approve
+Content-Type: application/json
+
+{
+  "adminId": "{{adminId}}"
+}
+
+###
+
+### 6.3 Mark Failure Flow Payout Sent
+POST {{baseUrl}}/payout/{{failurePayoutId}}/send
+Content-Type: application/json
+
+{
+  "txId": "0.0.mock-fail-tx-99999"
+}
+
+###
+
+### 6.4 Fail Payout
+POST {{baseUrl}}/payout/{{failurePayoutId}}/fail
+Content-Type: application/json
+
+{
+  "reason": "Mirror node timeout / send failure"
+}
+
+###
+
+### 6.5 Get Failed Payout By ID
+GET {{baseUrl}}/payout/{{failurePayoutId}}
+
+###
+
+### 6.6 Get Balance After Failed Payout
+GET {{baseUrl}}/user/{{userId}}/balance
+
+###
+
+### 6.7 Get Main User After Failed Payout
+GET {{baseUrl}}/user/{{userId}}
+
+###
+
+############################################################
+# SECTION 7 — PAYOUT REJECTION FLOW
+# GOAL:
+#   - queue payout
+#   - approve
+#   - reject
+############################################################
+
+### 7.1 Queue Payout For Rejection Flow
+# Copy returned "payoutId" into @rejectionPayoutId above
+POST {{baseUrl}}/payout/{{userId}}/queue
+
+###
+
+### 7.2 Approve Rejection Flow Payout
+POST {{baseUrl}}/payout/{{rejectionPayoutId}}/approve
+Content-Type: application/json
+
+{
+  "adminId": "{{adminId}}"
+}
+
+###
+
+### 7.3 Get Balance Before Rejection
+GET {{baseUrl}}/user/{{userId}}/balance
+
+###
+
+### 7.4 Reject Approved Payout
+POST {{baseUrl}}/payout/{{rejectionPayoutId}}/reject
+Content-Type: application/json
+
+{
+  "adminId": "{{adminId}}",
+  "reason": "Manual review hold"
+}
+
+###
+
+### 7.5 Get Rejected Payout By ID
+GET {{baseUrl}}/payout/{{rejectionPayoutId}}
+
+###
+
+### 7.6 Get Balance After Rejection
+GET {{baseUrl}}/user/{{userId}}/balance
+
+###
+
+### 7.7 Get Main User After Rejection
+GET {{baseUrl}}/user/{{userId}}
+
+###
+
+############################################################
+# SECTION 8 — INVALID TRANSITION CHECKS
+# These should error. That is expected.
+############################################################
+
+### 8.1 Invalid: Confirm Rejected Payout
+POST {{baseUrl}}/payout/{{rejectionPayoutId}}/confirm
+
+###
+
+### 8.2 Invalid: Send Rejected Payout
+POST {{baseUrl}}/payout/{{rejectionPayoutId}}/send
+Content-Type: application/json
+
+{
+  "txId": "0.0.invalid-send"
+}
+
+###
+
+### 8.3 Invalid: Approve Already Confirmed Payout
+POST {{baseUrl}}/payout/{{confirmedPayoutId}}/approve
+Content-Type: application/json
+
+{
+  "adminId": "{{adminId}}"
+}
+
+###
+
+############################################################
+# SECTION 9 — OPTIONAL ALT TEMP ACCESS TEST
+############################################################
+
+### 9.1 Purchase Partner Offers Temp Access
+POST {{baseUrl}}/temp-access/{{userId}}/purchase
+Content-Type: application/json
+
+{
+  "accessType": "partner_offers"
+}
+
+###
+
+### 9.2 Get Access State After Partner Offers Purchase
+GET {{baseUrl}}/access/{{userId}}
+
+###
+
+############################################################
+# SECTION 10 — GLOBAL INSPECTION
+############################################################
+
+### 10.1 Get Full Payout Log
+GET {{baseUrl}}/payout/log/all
+
+###
+
+### 10.2 Get All Access States
+GET {{baseUrl}}/access
+
+###
+
+### 10.3 Get All Entitlements
+GET {{baseUrl}}/entitlements
+
+###
+
+############################################################
+# SECTION 11 — ACCESS STATE HARDENING (8C)
+############################################################
+
+### 11.1 Get Access State
+GET {{baseUrl}}/access/{{userId}}
+
+###
+
+### 11.2 Get Access Modifiers
+GET {{baseUrl}}/access/{{userId}}/modifiers
+
+###
+
+### 11.3 Force Refresh Access State
+POST {{baseUrl}}/access/{{userId}}/refresh
+
+###
+
+### 11.4 Get Access State After Refresh
+GET {{baseUrl}}/access/{{userId}}
+
+###
+
+### 11.5 Run Expiry Sweep
+POST {{baseUrl}}/access/expire/run
+
+###
+
+############################################################
+# SECTION 12 — ACCESS CONTRACT CHECKS (8D)
+############################################################
+
+### 12.1 Get Access State
+GET {{baseUrl}}/access/{{userId}}
+
+###
+
+### 12.2 Get Access Modifiers
+GET {{baseUrl}}/access/{{userId}}/modifiers
+
+###
+
+### 12.3 Force Refresh Access State
+POST {{baseUrl}}/access/{{userId}}/refresh
+
+###
+
+### 12.4 Get Access State After Refresh
+GET {{baseUrl}}/access/{{userId}}
+
+###
+
+### 12.5 Get All Access States
+GET {{baseUrl}}/access
+
+###
+
+############################################################
+# SECTION 13 — ROLE SYNC PREPARATION (8E)
+############################################################
+
+### 13.1 Get Role Sync Payload For User
+GET {{baseUrl}}/role-sync/{{userId}}
+
+###
+
+### 13.2 Get All Role Sync Payloads
+GET {{baseUrl}}/role-sync
+
+###
+
+############################################################
+# SECTION 14 — ROLE SYNC EXECUTION CONTRACT (8F)
+############################################################
+
+### 14.1 Get Role Sync Payload
+GET {{baseUrl}}/role-sync/{{userId}}
+
+###
+
+### 14.2 Mark Role Sync Complete
+POST {{baseUrl}}/role-sync/{{userId}}/mark-synced
+
+###
+
+### 14.3 Get Access State After Mark Synced
+GET {{baseUrl}}/access/{{userId}}
+
+###
+
+### 14.4 Get Role Sync Payload After Mark Synced
+GET {{baseUrl}}/role-sync/{{userId}}
+
+###
+
+############################################################
+# SECTION 15 — DISCORD SYNC WORKER DRY RUN (8G)
+############################################################
+
+### 15.1 Get Role Map Preview
+GET {{baseUrl}}/discord-sync-worker/role-map
+
+###
+
+### 15.2 Dry Run — No Current Roles
+POST {{baseUrl}}/discord-sync-worker/{{userId}}/dry-run
+Content-Type: application/json
+
+{
+  "currentMemberRoleIds": []
+}
+
+###
+
+### 15.3 Dry Run — Correct Tier Already Present
+POST {{baseUrl}}/discord-sync-worker/{{userId}}/dry-run
+Content-Type: application/json
+
+{
+  "currentMemberRoleIds": [
+    "{{role_cnx_holder}}",
+    "{{role_cnx_holder_tier_1}}"
+  ]
+}
+
+###
+
+### 15.4 Dry Run — Wrong Tier Present
+POST {{baseUrl}}/discord-sync-worker/{{userId}}/dry-run
+Content-Type: application/json
+
+{
+  "currentMemberRoleIds": [
+    "{{role_cnx_holder}}",
+    "{{role_cnx_holder_tier_3}}"
+  ]
+}
+
+###
+
+### 15.5 Dry Run — Temp Premium Role Present
+POST {{baseUrl}}/discord-sync-worker/{{userId}}/dry-run
+Content-Type: application/json
+
+{
+  "currentMemberRoleIds": [
+    "{{role_temp_premium_alpha}}"
+  ]
+}
+
+###
+
+############################################################
+# SECTION 16 — EXECUTION ATTEMPT SERVICE LAYER (8H STEP 2)
+############################################################
+
+### 16.1 Role Map Preview
+GET {{baseUrl}}/discord-sync-worker/role-map
+
+###
+
+### 16.2 Execute Attempt — No Current Roles
+POST {{baseUrl}}/discord-sync-worker/{{userId}}/execute-attempt
+Content-Type: application/json
+
+{
+  "executionSource": "manual",
+  "currentMemberRoleIds": []
+}
+
+###
+
+### 16.3 Execute Attempt — Correct Tier Already Present
+POST {{baseUrl}}/discord-sync-worker/{{userId}}/execute-attempt
+Content-Type: application/json
+
+{
+  "executionSource": "manual",
+  "currentMemberRoleIds": [
+    "{{role_cnx_holder}}",
+    "{{role_cnx_holder_tier_1}}"
+  ]
+}
+
+###
+
+### 16.4 Execute Attempt — Wrong Tier Present
+POST {{baseUrl}}/discord-sync-worker/{{userId}}/execute-attempt
+Content-Type: application/json
+
+{
+  "executionSource": "manual",
+  "currentMemberRoleIds": [
+    "{{role_cnx_holder}}",
+    "{{role_cnx_holder_tier_3}}"
+  ]
+}
+
+###
+
+### 16.5 Execute Attempt — Temp Premium Role Present
+POST {{baseUrl}}/discord-sync-worker/{{userId}}/execute-attempt
+Content-Type: application/json
+
+{
+  "executionSource": "manual",
+  "currentMemberRoleIds": [
+    "{{role_temp_premium_alpha}}"
+  ]
+}
+
+###
+
+### 16.6 Execute Attempt — Idempotency First Run
+POST {{baseUrl}}/discord-sync-worker/{{userId}}/execute-attempt
+Content-Type: application/json
+
+{
+  "executionSource": "manual",
+  "idempotencyKey": "duplicate-test-001",
+  "currentMemberRoleIds": []
+}
+
+###
+
+### 16.7 Execute Attempt — Idempotency Duplicate
+POST {{baseUrl}}/discord-sync-worker/{{userId}}/execute-attempt
+Content-Type: application/json
+
+{
+  "executionSource": "manual",
+  "idempotencyKey": "duplicate-test-001",
+  "currentMemberRoleIds": []
+}
+
+###
+
+### 16.8 Get All Audit Records
+GET {{baseUrl}}/discord-sync-worker/audit
+
+###
+
+### 16.9 Get All Audit Records — Limit 5
+GET {{baseUrl}}/discord-sync-worker/audit?limit=5
+
+###
+
+### 16.10 Get All Audit Records — Limit 5 Offset 5
+GET {{baseUrl}}/discord-sync-worker/audit?limit=5&offset=5
+
+###
+
+### 16.11 Get Audit Records By User
+GET {{baseUrl}}/discord-sync-worker/audit/user/{{userId}}
+
+###
+
+### 16.12 Get Audit Records By User — Limit 5
+GET {{baseUrl}}/discord-sync-worker/audit/user/{{userId}}?limit=5
+
+###
+
+### 16.13 Get Audit Records By User — Limit 5 Offset 5
+GET {{baseUrl}}/discord-sync-worker/audit/user/{{userId}}?limit=5&offset=5
+
+###
+
+### 16.14 Get Audit Record By ID
+# Replace REPLACE_AUDIT_ID manually only when needed
+GET {{baseUrl}}/discord-sync-worker/audit/REPLACE_AUDIT_ID
+
+###
+
+############################################################
+# SECTION 17 — CLEAN SUCCESS VERIFICATION FLOW (8H STEP 3)
+# GOAL:
+#   - fresh user
+#   - execute-attempt creates fresh audit
+#   - verify with correct expected roles
+#   - audit becomes verified
+############################################################
+
+### 17.1 Create Fresh Success User
+# Copy returned "id" into @successUserId above
+POST {{baseUrl}}/user/create
+Content-Type: application/json
+
+{
+  "username": "Step8HSuccessUser"
+}
+
+###
+
+### 17.2 Link Discord For Success User
+POST {{baseUrl}}/user/{{successUserId}}/discord
+Content-Type: application/json
+
+{
+  "discordId": "success-discord-001",
+  "discordTag": "Step8HSuccess#0001"
+}
+
+###
+
+### 17.3 Set Wallet For Success User
+POST {{baseUrl}}/user/{{successUserId}}/wallet
+Content-Type: application/json
+
+{
+  "wallet": "0.0.99999991"
+}
+
+###
+
+### 17.4 Add XP To Success User
+POST {{baseUrl}}/user/{{successUserId}}/xp
+Content-Type: application/json
+
+{
+  "amount": 400
+}
+
+###
+
+### 17.5 Confirm Success User Access State
+GET {{baseUrl}}/access/{{successUserId}}
+
+###
+
+### 17.6 Execute Attempt For Success User
+# Copy returned "auditRecord.id" into @successAuditId above
+POST {{baseUrl}}/discord-sync-worker/{{successUserId}}/execute-attempt
+Content-Type: application/json
+
+{
+  "executionSource": "manual",
+  "currentMemberRoleIds": []
+}
+
+###
+
+### 17.7 Get Success Audits By User
+GET {{baseUrl}}/discord-sync-worker/audit/user/{{successUserId}}?limit=5
+
+###
+
+### 17.8 Verify Success Result
+POST {{baseUrl}}/discord-sync-worker/verify/{{successAuditId}}
+Content-Type: application/json
+
+{
+  "actualMemberRoleIds": [
+    "{{role_cnx_holder}}",
+    "{{role_cnx_holder_tier_1}}"
+  ]
+}
+
+###
+
+### 17.9 Get Success Audit After Verification
+GET {{baseUrl}}/discord-sync-worker/audit/{{successAuditId}}
+
+###
+
+############################################################
+# SECTION 18 — CLEAN FAILURE VERIFICATION FLOW (8H STEP 3)
+# GOAL:
+#   - fresh user
+#   - execute-attempt creates fresh audit
+#   - verify with missing tier 1 role
+#   - audit becomes failed
+############################################################
+
+### 18.1 Create Fresh Failure User
+# Copy returned "id" into @failureUserId above
+POST {{baseUrl}}/user/create
+Content-Type: application/json
+
+{
+  "username": "Step8HFailureUser"
+}
+
+###
+
+### 18.2 Link Discord For Failure User
+POST {{baseUrl}}/user/{{failureUserId}}/discord
+Content-Type: application/json
+
+{
+  "discordId": "failure-discord-001",
+  "discordTag": "Step8HFailure#0001"
+}
+
+###
+
+### 18.3 Set Wallet For Failure User
+POST {{baseUrl}}/user/{{failureUserId}}/wallet
+Content-Type: application/json
+
+{
+  "wallet": "0.0.99999992"
+}
+
+###
+
+### 18.4 Add XP To Failure User
+POST {{baseUrl}}/user/{{failureUserId}}/xp
+Content-Type: application/json
+
+{
+  "amount": 400
+}
+
+###
+
+### 18.5 Confirm Failure User Access State
+GET {{baseUrl}}/access/{{failureUserId}}
+
+###
+
+### 18.6 Execute Attempt For Failure User
+# Copy returned "auditRecord.id" into @failureAuditId above
+POST {{baseUrl}}/discord-sync-worker/{{failureUserId}}/execute-attempt
+Content-Type: application/json
+
+{
+  "executionSource": "manual",
+  "currentMemberRoleIds": []
+}
+
+###
+
+### 18.7 Get Failure Audits By User
+GET {{baseUrl}}/discord-sync-worker/audit/user/{{failureUserId}}?limit=5
+
+###
+
+### 18.8 Verify Failure Result
+# Deliberately omit tier 1 role
+POST {{baseUrl}}/discord-sync-worker/verify/{{failureAuditId}}
+Content-Type: application/json
+
+{
+  "actualMemberRoleIds": [
+    "{{role_cnx_holder}}"
+  ]
+}
+
+###
+
+### 18.9 Get Failure Audit After Verification
+GET {{baseUrl}}/discord-sync-worker/audit/{{failureAuditId}}
+
+###
+
+############################################################
+# SECTION 19 — OPTIONAL VERIFICATION DIAGNOSTICS
+############################################################
+
+### 19.1 Get All Audit Records
+GET {{baseUrl}}/discord-sync-worker/audit
+
+###
+
+### 19.2 Get All Audit Records — Limit 10
+GET {{baseUrl}}/discord-sync-worker/audit?limit=10
+
+###
+
+### 19.3 Get Success User Audits
+GET {{baseUrl}}/discord-sync-worker/audit/user/{{successUserId}}?limit=10
+
+###
+
+### 19.4 Get Failure User Audits
+GET {{baseUrl}}/discord-sync-worker/audit/user/{{failureUserId}}?limit=10
+
+###
+
+############################################################
+# SECTION 20 — LIVE DISCORD ROLE MUTATION (8I)
+# GOAL:
+#   - fresh mutation user
+#   - test mutation from empty
+#   - test no-op when already correct
+#   - test tier swap when wrong tier is present
+############################################################
+
+### 20A.1 Create Fresh Mutation User
+# Copy returned "id" into @mutationUserId above
+POST {{baseUrl}}/user/create
+Content-Type: application/json
+
+{
+  "username": "Step8IMutationUser"
+}
+
+###
+
+### 20A.2 Link Discord For Mutation User
+POST {{baseUrl}}/user/{{mutationUserId}}/discord
+Content-Type: application/json
+
+{
+  "discordId": "mutation-discord-001",
+  "discordTag": "Step8IMutation#0001"
+}
+
+###
+
+### 20A.3 Set Wallet For Mutation User
+POST {{baseUrl}}/user/{{mutationUserId}}/wallet
+Content-Type: application/json
+
+{
+  "wallet": "0.0.99999993"
+}
+
+###
+
+### 20A.4 Add XP To Mutation User
+POST {{baseUrl}}/user/{{mutationUserId}}/xp
+Content-Type: application/json
+
+{
+  "amount": 400
+}
+
+###
+
+### 20A.5 Confirm Mutation User Access State
+GET {{baseUrl}}/access/{{mutationUserId}}
+
+###
+
+############################################################
+# SECTION 20B — MUTATION TEST A
+# Empty current roles → add holder + tier 1
+############################################################
+
+### 20B.1 Mutate Roles From Empty
+# Copy returned "auditId" into @mutationAuditIdA above
+POST {{baseUrl}}/discord-sync-worker/{{mutationUserId}}/mutate
+Content-Type: application/json
+
+{
+  "executionSource": "manual",
+  "currentMemberRoleIds": []
+}
+
+###
+
+### 20B.2 Get Mutation Audit A By ID
+GET {{baseUrl}}/discord-sync-worker/audit/{{mutationAuditIdA}}
+
+###
+
+############################################################
+# SECTION 20C — MUTATION TEST B
+# Already correct roles → no-op
+############################################################
+
+### 20C.1 Mutate Roles When Already Correct
+# Copy returned "auditId" into @mutationAuditIdB above
+POST {{baseUrl}}/discord-sync-worker/{{mutationUserId}}/mutate
+Content-Type: application/json
+
+{
+  "executionSource": "manual",
+  "currentMemberRoleIds": [
+    "{{role_cnx_holder}}",
+    "{{role_cnx_holder_tier_1}}"
+  ]
+}
+
+###
+
+### 20C.2 Get Mutation Audit B By ID
+GET {{baseUrl}}/discord-sync-worker/audit/{{mutationAuditIdB}}
+
+###
+
+############################################################
+# SECTION 20D — MUTATION TEST C
+# Wrong tier present → remove tier 3 and add tier 1
+############################################################
+
+### 20D.1 Mutate Roles With Wrong Tier Present
+# Copy returned "auditId" into @mutationAuditIdC above
+POST {{baseUrl}}/discord-sync-worker/{{mutationUserId}}/mutate
+Content-Type: application/json
+
+{
+  "executionSource": "manual",
+  "currentMemberRoleIds": [
+    "{{role_cnx_holder}}",
+    "{{role_cnx_holder_tier_3}}"
+  ]
+}
+
+###
+
+### 20D.2 Get Mutation Audit C By ID
+GET {{baseUrl}}/discord-sync-worker/audit/{{mutationAuditIdC}}
+
+###
+
+############################################################
+# SECTION 20E — MUTATION AUDIT DIAGNOSTICS
+############################################################
+
+### 20E.1 Get Mutation User Audits
+GET {{baseUrl}}/discord-sync-worker/audit/user/{{mutationUserId}}?limit=10
+
+###
+
+### 20E.2 Get All Audit Records
+GET {{baseUrl}}/discord-sync-worker/audit?limit=20
+
+###
+
+############################################################
+# PASS / FAIL CHECKLIST
+############################################################
+
+# SECTION 17 SUCCESS FLOW — PASS IF:
+#   17.5 access shows isCnxHolder = true and holderTierInternal = 1
+#   17.6 returns fresh auditRecord.id
+#   17.8 returns verificationPassed = true
+#   17.9 returns status = "verified"
+
+# SECTION 18 FAILURE FLOW — PASS IF:
+#   18.5 access shows isCnxHolder = true and holderTierInternal = 1
+#   18.6 returns fresh auditRecord.id
+#   18.8 returns verificationPassed = false
+#   18.8 mismatch.missing includes {{role_cnx_holder_tier_1}}
+#   18.9 returns status = "failed"
+
+# SECTION 20 MUTATION FLOW — PASS IF:
+#   20B.1 returns mutationApplied = true and auditStatusAfterMutation = "mutated"
+#   20C.1 returns mutationApplied = false and auditStatusAfterMutation = "no_op"
+#   20D.1 returns mutationApplied = true
+#   20D.1 removedRoleIds includes {{role_cnx_holder_tier_3}}
+#   20D.1 addedRoleIds includes {{role_cnx_holder_tier_1}}
+
+# IMPORTANT:
+#   If any execute-attempt or mutate test reuses an old user/audit unexpectedly,
+#   stop and create a fresh user for that section.
+############################################################
