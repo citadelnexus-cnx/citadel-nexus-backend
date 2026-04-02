@@ -7,29 +7,74 @@ datasource db {
 }
 
 model User {
-  id           String                 @id @default(uuid())
-  discordId    String?                @unique
-  createdAt    DateTime               @default(now())
-  accessStates AccessState[]
-  audits       DiscordRoleSyncAudit[]
+  id             String                 @id @default(uuid())
+  username       String
+  discordId      String?                @unique
+  discordTag     String?
+  wallet         String?
+  xp             Int                    @default(0)
+  level          Int                    @default(1)
+  cnxBalance     Float                  @default(0)
+  reservedCnx    Float                  @default(0)
+  isVerified     Boolean                @default(false)
+  payoutEligible Boolean                @default(false)
+  joinedAt       DateTime               @default(now())
+  lastActiveAt   DateTime               @default(now())
+  rewardLog      Json                   @default("[]")
+  createdAt      DateTime               @default(now())
+  updatedAt      DateTime               @updatedAt
+
+  accessState    AccessState?
+  audits         DiscordRoleSyncAudit[]
 }
 
 model AccessState {
-  id        String   @id @default(uuid())
-  userId    String
-  tier      String
-  active    Boolean  @default(true)
-  updatedAt DateTime @updatedAt
+  id                  String    @id @default(uuid())
+  userId              String    @unique
+  tier                String
+  active              Boolean   @default(true)
+  isCnxHolder         Boolean   @default(false)
+  holderTierInternal  Int       @default(0)
+  xpBoost             Float     @default(0)
+  cooldownReduction   Float     @default(0)
+  tempAccessType      String?
+  tempAccessExpiresAt DateTime?
+  lastEvaluatedAt     DateTime  @default(now())
+  lastRoleSyncAt      DateTime?
+  updatedAt           DateTime  @updatedAt
+  createdAt           DateTime  @default(now())
 
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
 model DiscordRoleSyncAudit {
-  id        String   @id @default(uuid())
-  userId    String
-  status    String
-  details   String?
-  createdAt DateTime @default(now())
+  id                        String   @id @default(uuid())
+  userId                    String
+  contractVersion           String
+  executionSource           String
+  status                    String
+  canExecute                Boolean
+  reasonsBlocked            String[]
+  warnings                  String[]
+  unsupportedTempAccessType String?
+  unresolvedRoleKeys        String[]
+  desiredAddRoleIds         String[]
+  desiredRemoveRoleIds      String[]
+  currentMemberRoleIds      String[]
+  finalMemberRoleIds        String[]
+  payloadJson               String
+  verificationPassed        Boolean?
+  rollbackSnapshotJson      String?
+  errorMessage              String?
+  idempotencyKey            String   @unique
+  executionHash             String   @unique
+  rateLimitBucket           String
+  executionDurationMs       Int?
+  attemptCount              Int      @default(1)
+  createdAt                 DateTime @default(now())
+  updatedAt                 DateTime @updatedAt
 
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, createdAt])
 }
