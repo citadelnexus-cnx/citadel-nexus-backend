@@ -32,13 +32,13 @@ export type DiscordRoleMutationResult = {
   auditStatusAfterMutation: DiscordRoleSyncAuditStatus;
 };
 
-export function mutateDiscordRolesForUser(params: {
+export async function mutateDiscordRolesForUser(params: {
   userId: string;
   currentMemberRoleIds: string[];
   executionSource: DiscordRoleSyncExecutionSource;
   idempotencyKey?: string;
-}): DiscordRoleMutationResult | null {
-  const executionResult = executeDiscordRoleSyncAttempt({
+}): Promise<DiscordRoleMutationResult | null> {
+  const executionResult = await executeDiscordRoleSyncAttempt({
     userId: params.userId,
     currentMemberRoleIds: params.currentMemberRoleIds,
     executionSource: params.executionSource,
@@ -58,7 +58,7 @@ export function mutateDiscordRolesForUser(params: {
   if (!decision.canExecute) {
     const blockedStatus: DiscordRoleSyncAuditStatus = "blocked";
 
-    updateDiscordRoleSyncAuditRecord(auditRecord.id, {
+    await updateDiscordRoleSyncAuditRecord(auditRecord.id, {
       status: blockedStatus,
     });
 
@@ -72,7 +72,9 @@ export function mutateDiscordRolesForUser(params: {
       beforeRoleIds,
       addedRoleIds: [],
       removedRoleIds: [],
-      finalRoleIds: normalizeRoleIds(auditRecord.finalMemberRoleIds ?? beforeRoleIds),
+      finalRoleIds: normalizeRoleIds(
+        auditRecord.finalMemberRoleIds ?? beforeRoleIds
+      ),
       auditStatusAfterMutation: blockedStatus,
     };
   }
@@ -89,7 +91,7 @@ export function mutateDiscordRolesForUser(params: {
 
   const nextStatus: DiscordRoleSyncAuditStatus = isNoOp ? "no_op" : "mutated";
 
-  updateDiscordRoleSyncAuditRecord(auditRecord.id, {
+  await updateDiscordRoleSyncAuditRecord(auditRecord.id, {
     status: nextStatus,
     finalMemberRoleIds: finalRoleIds,
   });

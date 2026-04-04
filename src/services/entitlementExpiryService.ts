@@ -1,12 +1,9 @@
 // backend/src/services/entitlementExpiryService.ts
+import { refreshAccessState } from "./accessStateService";
+import { expireDueEntitlements } from "./entitlementStore";
 
-import {
-  expireDueEntitlements,
-  getAllEntitlements,
-} from "./entitlementStore";
-
-export function expireExpiredEntitlements() {
-  const expiredRecords = expireDueEntitlements();
+export async function expireExpiredEntitlements() {
+  const expiredRecords = await expireDueEntitlements();
 
   const expiredEntitlementIds: string[] = [];
   const expiredUserIds = new Set<string>();
@@ -16,9 +13,13 @@ export function expireExpiredEntitlements() {
     expiredUserIds.add(record.userId);
   }
 
+  for (const userId of expiredUserIds) {
+    await refreshAccessState(userId);
+  }
+
   return {
-    expiredCount: expiredEntitlementIds.length,
+    expiredCount: expiredRecords.length,
     expiredEntitlementIds,
-    expiredUserIds: Array.from(expiredUserIds),
+    affectedUserIds: Array.from(expiredUserIds),
   };
 }

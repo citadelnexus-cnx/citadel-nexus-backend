@@ -1,14 +1,22 @@
 // backend/src/services/accessStateService.ts
+import { prisma } from "../lib/prisma";
 import { getUser } from "./userService";
-import {
-  upsertAccessState,
-  getAccessStateRecord,
-  getAllAccessStateRecords,
-  getUserActiveEntitlements,
-  type CnxAccessStateRecord,
-} from "./entitlementStore";
+import { getUserActiveEntitlements } from "./entitlementStore";
 
-export type AccessState = CnxAccessStateRecord;
+export type AccessState = {
+  id?: string;
+  userId: string;
+  tier: string;
+  active: boolean;
+  isCnxHolder: boolean;
+  holderTierInternal: number;
+  xpBoost: number;
+  cooldownReduction: number;
+  tempAccessType: string | null;
+  tempAccessExpiresAt: string | null;
+  lastEvaluatedAt: string;
+  lastRoleSyncAt?: string | null;
+};
 
 export type AccessModifiers = {
   userId: string;
@@ -26,8 +34,42 @@ const CNX_THRESHOLDS = {
   BOOST_TIER_2: 10000,
 };
 
-function getActiveTempEntitlement(userId: string) {
-  const entitlements = getUserActiveEntitlements(userId);
+function toAccessState(record: {
+  id: string;
+  userId: string;
+  tier: string;
+  active: boolean;
+  isCnxHolder: boolean;
+  holderTierInternal: number;
+  xpBoost: number;
+  cooldownReduction: number;
+  tempAccessType: string | null;
+  tempAccessExpiresAt: Date | null;
+  lastEvaluatedAt: Date;
+  lastRoleSyncAt: Date | null;
+}): AccessState {
+  return {
+    id: record.id,
+    userId: record.userId,
+    tier: record.tier,
+    active: record.active,
+    isCnxHolder: record.isCnxHolder,
+    holderTierInternal: record.holderTierInternal,
+    xpBoost: record.xpBoost,
+    cooldownReduction: record.cooldownReduction,
+    tempAccessType: record.tempAccessType,
+    tempAccessExpiresAt: record.tempAccessExpiresAt
+      ? record.tempAccessExpiresAt.toISOString()
+      : null,
+    lastEvaluatedAt: record.lastEvaluatedAt.toISOString(),
+    lastRoleSyncAt: record.lastRoleSyncAt
+      ? record.lastRoleSyncAt.toISOString()
+      : null,
+  };
+}
+
+async function getActiveTempEntitlement(userId: string) {
+  const entitlements = await getUserActiveEntitlements(userId);
 
   return (
     entitlements.find(
@@ -40,10 +82,23 @@ function getActiveTempEntitlement(userId: string) {
   );
 }
 
-function evaluateAccessStateFromBalance(
+function resolveTier(holderTierInternal: number): string {
+  switch (holderTierInternal) {
+    case 3:
+      return "boost_tier_2";
+    case 2:
+      return "boost_tier_1";
+    case 1:
+      return "holder";
+    default:
+      return "none";
+  }
+}
+
+async function evaluateAccessStateFromBalance(
   userId: string,
   cnxBalance: number
-): AccessState {
+): Promise<AccessState> {
   const isCnxHolder = cnxBalance >= CNX_THRESHOLDS.HOLDER;
 
   let holderTierInternal = 0;
@@ -66,10 +121,12 @@ function evaluateAccessStateFromBalance(
     holderTierInternal = 3;
   }
 
-  const tempEntitlement = getActiveTempEntitlement(userId);
+  const tempEntitlement = await getActiveTempEntitlement(userId);
 
   return {
     userId,
+    tier: resolveTier(holderTierInternal),
+    active: isCnxHolder || Boolean(tempEntitlement),
     isCnxHolder,
     holderTierInternal,
     xpBoost,
@@ -77,40 +134,88 @@ function evaluateAccessStateFromBalance(
     tempAccessType: tempEntitlement ? tempEntitlement.entitlementKey : null,
     tempAccessExpiresAt: tempEntitlement ? tempEntitlement.expiresAt : null,
     lastEvaluatedAt: new Date().toISOString(),
+    lastRoleSyncAt: null,
   };
 }
 
-export function updateAccessState(userId: string): AccessState | null {
-  const user = getUser(userId);
+export async function updateAccessState(
+  userId: string
+): Promise<AccessState | null> {
+  const user = await getUser(userId);
   if (!user) return null;
 
-  const existing = getAccessStateRecord(userId);
-  const evaluated = evaluateAccessStateFromBalance(user.id, user.cnxBalance);
+  const existing = await prisma.accessState.findUnique({
+    where: { userId },
+  });
 
-  if (existing?.lastRoleSyncAt) {
-    evaluated.lastRoleSyncAt = existing.lastRoleSyncAt;
-  }
+  const evaluated = await evaluateAccessStateFromBalance(user.id, user.cnxBalance);
 
-  return upsertAccessState(evaluated);
+  const saved = await prisma.accessState.upsert({
+    where: { userId },
+    update: {
+      tier: evaluated.tier,
+      active: evaluated.active,
+      isCnxHolder: evaluated.isCnxHolder,
+      holderTierInternal: evaluated.holderTierInternal,
+      xpBoost: evaluated.xpBoost,
+      cooldownReduction: evaluated.cooldownReduction,
+      tempAccessType: evaluated.tempAccessType,
+      tempAccessExpiresAt: evaluated.tempAccessExpiresAt
+        ? new Date(evaluated.tempAccessExpiresAt)
+        : null,
+      lastEvaluatedAt: new Date(evaluated.lastEvaluatedAt),
+      lastRoleSyncAt: existing?.lastRoleSyncAt ?? null,
+    },
+    create: {
+      userId: evaluated.userId,
+      tier: evaluated.tier,
+      active: evaluated.active,
+      isCnxHolder: evaluated.isCnxHolder,
+      holderTierInternal: evaluated.holderTierInternal,
+      xpBoost: evaluated.xpBoost,
+      cooldownReduction: evaluated.cooldownReduction,
+      tempAccessType: evaluated.tempAccessType,
+      tempAccessExpiresAt: evaluated.tempAccessExpiresAt
+        ? new Date(evaluated.tempAccessExpiresAt)
+        : null,
+      lastEvaluatedAt: new Date(evaluated.lastEvaluatedAt),
+      lastRoleSyncAt: null,
+    },
+  });
+
+  return toAccessState(saved);
 }
 
-export function getAccessState(userId: string): AccessState | null {
-  return getAccessStateRecord(userId);
+export async function getAccessState(
+  userId: string
+): Promise<AccessState | null> {
+  const state = await prisma.accessState.findUnique({
+    where: { userId },
+  });
+
+  if (!state) return null;
+  return toAccessState(state);
 }
 
-export function getOrCreateAccessState(userId: string): AccessState | null {
-  const existing = getAccessStateRecord(userId);
+export async function getOrCreateAccessState(
+  userId: string
+): Promise<AccessState | null> {
+  const existing = await getAccessState(userId);
   if (existing) return existing;
 
   return updateAccessState(userId);
 }
 
-export function refreshAccessState(userId: string): AccessState | null {
+export async function refreshAccessState(
+  userId: string
+): Promise<AccessState | null> {
   return updateAccessState(userId);
 }
 
-export function getAccessModifiers(userId: string): AccessModifiers {
-  const state = getOrCreateAccessState(userId);
+export async function getAccessModifiers(
+  userId: string
+): Promise<AccessModifiers> {
+  const state = await getOrCreateAccessState(userId);
 
   if (!state) {
     return {
@@ -135,18 +240,29 @@ export function getAccessModifiers(userId: string): AccessModifiers {
   };
 }
 
-export function markRoleSync(userId: string): AccessState | null {
-  const state = getAccessStateRecord(userId);
-  if (!state) return null;
+export async function markRoleSync(
+  userId: string
+): Promise<AccessState | null> {
+  const existing = await prisma.accessState.findUnique({
+    where: { userId },
+  });
 
-  const updated: AccessState = {
-    ...state,
-    lastRoleSyncAt: new Date().toISOString(),
-  };
+  if (!existing) return null;
 
-  return upsertAccessState(updated);
+  const updated = await prisma.accessState.update({
+    where: { userId },
+    data: {
+      lastRoleSyncAt: new Date(),
+    },
+  });
+
+  return toAccessState(updated);
 }
 
-export function getAllAccessStates(): AccessState[] {
-  return getAllAccessStateRecords();
+export async function getAllAccessStates(): Promise<AccessState[]> {
+  const states = await prisma.accessState.findMany({
+    orderBy: { lastEvaluatedAt: "desc" },
+  });
+
+  return states.map(toAccessState);
 }

@@ -1,4 +1,3 @@
-//backend/src/index.ts
 import express, { Request, Response } from "express";
 import dotenv from "dotenv";
 import tokenRoutes from "./routes/tokenRoutes";
@@ -16,24 +15,18 @@ const app = express();
 const PORT = Number(process.env.PORT) || 3000;
 
 app.use(express.json());
-app.use("/user", userRoutes);
-
-app.use("/payout", payoutRoutes);
 
 app.get("/", (_req: Request, res: Response) => {
   res.send("Citadel Nexus Backend Running");
 });
 
+app.use("/user", userRoutes);
+app.use("/payout", payoutRoutes);
 app.use("/token", tokenRoutes);
-
 app.use("/access", accessRoutes);
-
 app.use("/temp-access", tempAccessRoutes);
-
 app.use("/entitlements", entitlementRoutes);
-
 app.use("/role-sync", roleSyncRoutes);
-
 app.use("/discord-sync-worker", discordSyncWorkerRoutes);
 
 app.listen(PORT, () => {

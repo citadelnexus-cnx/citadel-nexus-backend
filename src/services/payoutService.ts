@@ -1,5 +1,4 @@
 // backend/src/services/payoutService.ts
-
 import {
   getPayoutReadyUser,
   reserveCnx,
@@ -47,8 +46,8 @@ function getPayoutOrNull(payoutId: string): PayoutRecord | null {
   return payoutLog.find((p) => p.payoutId === payoutId) || null;
 }
 
-export function queuePayout(userId: string): PayoutRecord | null {
-  const user = getPayoutReadyUser(userId);
+export async function queuePayout(userId: string): Promise<PayoutRecord | null> {
+  const user = await getPayoutReadyUser(userId);
   if (!user) return null;
   if (!user.wallet) return null;
 
@@ -58,7 +57,7 @@ export function queuePayout(userId: string): PayoutRecord | null {
     return null;
   }
 
-  const reserved = reserveCnx(user.id, amount);
+  const reserved = await reserveCnx(user.id, amount);
   if (!reserved) {
     return null;
   }
@@ -76,10 +75,10 @@ export function queuePayout(userId: string): PayoutRecord | null {
   return payout;
 }
 
-export function approvePayout(
+export async function approvePayout(
   payoutId: string,
   adminId: string
-): PayoutRecord | { error: string } | null {
+): Promise<PayoutRecord | { error: string } | null> {
   const payout = getPayoutOrNull(payoutId);
   if (!payout) return null;
 
@@ -94,11 +93,11 @@ export function approvePayout(
   return payout;
 }
 
-export function rejectPayout(
+export async function rejectPayout(
   payoutId: string,
   reason: string,
   adminId?: string
-): PayoutRecord | { error: string } | null {
+): Promise<PayoutRecord | { error: string } | null> {
   const payout = getPayoutOrNull(payoutId);
   if (!payout) return null;
 
@@ -106,7 +105,7 @@ export function rejectPayout(
     return { error: "Only APPROVED payouts can be rejected" };
   }
 
-  const released = releaseReservedCnx(payout.userId, payout.amount);
+  const released = await releaseReservedCnx(payout.userId, payout.amount);
   if (!released) {
     return { error: "Failed to release reserved CNX for rejected payout" };
   }
@@ -119,10 +118,10 @@ export function rejectPayout(
   return payout;
 }
 
-export function markPayoutSent(
+export async function markPayoutSent(
   payoutId: string,
   txId: string
-): PayoutRecord | { error: string } | null {
+): Promise<PayoutRecord | { error: string } | null> {
   const payout = getPayoutOrNull(payoutId);
   if (!payout) return null;
 
@@ -137,9 +136,9 @@ export function markPayoutSent(
   return payout;
 }
 
-export function confirmPayout(
+export async function confirmPayout(
   payoutId: string
-): PayoutRecord | { error: string } | null {
+): Promise<PayoutRecord | { error: string } | null> {
   const payout = getPayoutOrNull(payoutId);
   if (!payout) return null;
 
@@ -147,7 +146,7 @@ export function confirmPayout(
     return { error: "Only SENT payouts can be confirmed" };
   }
 
-  const finalized = finalizeReservedCnx(payout.userId, payout.amount);
+  const finalized = await finalizeReservedCnx(payout.userId, payout.amount);
   if (!finalized) {
     return { error: "Failed to finalize reserved CNX for confirmed payout" };
   }
@@ -158,10 +157,10 @@ export function confirmPayout(
   return payout;
 }
 
-export function failPayout(
+export async function failPayout(
   payoutId: string,
   reason: string
-): PayoutRecord | { error: string } | null {
+): Promise<PayoutRecord | { error: string } | null> {
   const payout = getPayoutOrNull(payoutId);
   if (!payout) return null;
 
@@ -169,7 +168,7 @@ export function failPayout(
     return { error: "Only SENT payouts can be failed" };
   }
 
-  const released = releaseReservedCnx(payout.userId, payout.amount);
+  const released = await releaseReservedCnx(payout.userId, payout.amount);
   if (!released) {
     return { error: "Failed to release reserved CNX for failed payout" };
   }
@@ -181,10 +180,12 @@ export function failPayout(
   return payout;
 }
 
-export function getPayoutLog(): PayoutRecord[] {
+export async function getPayoutLog(): Promise<PayoutRecord[]> {
   return payoutLog;
 }
 
-export function getPayoutById(payoutId: string): PayoutRecord | null {
+export async function getPayoutById(
+  payoutId: string
+): Promise<PayoutRecord | null> {
   return getPayoutOrNull(payoutId);
 }

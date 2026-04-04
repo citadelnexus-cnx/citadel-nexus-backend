@@ -116,6 +116,7 @@ export function createDiscordRoleSyncAuditRecord(params: {
   executionHash?: string;
   executionDurationMs?: number | null;
   attemptCount?: number;
+  rateLimitBucket: string;
 }): DiscordRoleSyncAuditRecord {
   const timestamp = nowIso();
 
@@ -154,7 +155,7 @@ export function createDiscordRoleSyncAuditRecord(params: {
         warnings: params.decision.warnings ?? [],
         unsupportedTempAccessType: params.decision.unsupportedTempAccessType ?? null,
       }),
-    rateLimitBucket: buildRateLimitBucket(params.decision.userId),
+    rateLimitBucket: params.rateLimitBucket,
     executionDurationMs: params.executionDurationMs ?? null,
     attemptCount: params.attemptCount ?? 1,
     createdAt: timestamp,

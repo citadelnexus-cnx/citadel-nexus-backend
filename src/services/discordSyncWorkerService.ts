@@ -32,11 +32,11 @@ export type DiscordSyncDecision = {
   unsupportedTempAccessType: string | null;
 };
 
-export function buildDiscordSyncDecision(
+export async function buildDiscordSyncDecision(
   userId: string,
   currentMemberRoleIds: string[]
-): DiscordSyncDecision | null {
-  const payload = getRoleSyncPayload(userId);
+): Promise<DiscordSyncDecision | null> {
+  const payload = await getRoleSyncPayload(userId);
   if (!payload) return null;
 
   const normalizedCurrentMemberRoleIds = sortStrings(unique(currentMemberRoleIds));
@@ -102,12 +102,18 @@ export function buildDiscordSyncDecision(
   };
 }
 
-export function buildAllDiscordSyncDecisions(
+export async function buildAllDiscordSyncDecisions(
   memberRoleStateByUserId: Record<string, string[]>
-): DiscordSyncDecision[] {
-  return Object.entries(memberRoleStateByUserId)
-    .map(([userId, roleIds]) => buildDiscordSyncDecision(userId, roleIds))
-    .filter((item): item is DiscordSyncDecision => item !== null);
+): Promise<DiscordSyncDecision[]> {
+  const decisions = await Promise.all(
+    Object.entries(memberRoleStateByUserId).map(([userId, roleIds]) =>
+      buildDiscordSyncDecision(userId, roleIds)
+    )
+  );
+
+  return decisions.filter(
+    (item): item is DiscordSyncDecision => item !== null
+  );
 }
 
 export function getRoleKeyToRoleIdPreview(): Record<string, string | null> {

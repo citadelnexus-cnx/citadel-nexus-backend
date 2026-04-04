@@ -1,14 +1,15 @@
-// backend/src/services/userService.ts
+//backend/src/services/userService.ts
+import { prisma } from "../lib/prisma";
 import { updateAccessState } from "./accessStateService";
 
-type RewardLogEntry = {
+export type RewardLogEntry = {
   type: "LEVEL_UP_REWARD";
   levelReached: number;
   cnxAwarded: number;
   timestamp: string;
 };
 
-type User = {
+export type User = {
   id: string;
   username: string;
 
@@ -31,112 +32,163 @@ type User = {
   rewardLog: RewardLogEntry[];
 };
 
-const users: Record<string, User> = {};
+type PrismaUserRecord = {
+  id: string;
+  username: string;
+  discordId: string | null;
+  discordTag: string | null;
+  wallet: string | null;
+  xp: number;
+  level: number;
+  cnxBalance: number;
+  reservedCnx: number;
+  isVerified: boolean;
+  payoutEligible: boolean;
+  createdAt: Date;
+  lastActiveAt: Date;
+};
 
-export function createUser(username: string): User {
-  const id = Date.now().toString();
-
-  const user: User = {
-    id,
-    username,
-
-    discordId: undefined,
-    discordTag: undefined,
-    wallet: undefined,
-
-    xp: 0,
-    level: 1,
-    cnxBalance: 0,
-    reservedCnx: 0,
-
-    isVerified: false,
-    payoutEligible: false,
-
-    joinedAt: new Date().toISOString(),
-    lastActiveAt: new Date().toISOString(),
-
+function toUser(record: PrismaUserRecord): User {
+  return {
+    id: record.id,
+    username: record.username,
+    discordId: record.discordId ?? undefined,
+    discordTag: record.discordTag ?? undefined,
+    wallet: record.wallet ?? undefined,
+    xp: record.xp,
+    level: record.level,
+    cnxBalance: record.cnxBalance,
+    reservedCnx: record.reservedCnx,
+    isVerified: record.isVerified,
+    payoutEligible: record.payoutEligible,
+    joinedAt: record.createdAt.toISOString(),
+    lastActiveAt: record.lastActiveAt.toISOString(),
     rewardLog: [],
   };
-
-  users[id] = user;
-  updateAccessState(user.id);
-
-  return user;
-}
-
-export function getUser(id: string): User | null {
-  return users[id] || null;
 }
 
 function calculateLevelReward(level: number): number {
   return level * 5;
 }
 
-export function addXP(id: string, amount: number): User | null {
-  const user = users[id];
-  if (!user) return null;
+export async function createUser(username: string): Promise<User> {
+  const created = await prisma.user.create({
+    data: {
+      username,
+      xp: 0,
+      level: 1,
+      cnxBalance: 0,
+      reservedCnx: 0,
+      isVerified: false,
+      payoutEligible: false,
+      lastActiveAt: new Date(),
+    },
+  });
 
-  user.xp += amount;
-  user.lastActiveAt = new Date().toISOString();
+  await updateAccessState(created.id);
 
-  while (user.xp >= user.level * 100) {
-    user.level += 1;
-
-    const reward = calculateLevelReward(user.level);
-    user.cnxBalance += reward;
-
-    user.rewardLog.push({
-      type: "LEVEL_UP_REWARD",
-      levelReached: user.level,
-      cnxAwarded: reward,
-      timestamp: new Date().toISOString(),
-    });
-  }
-
-  updateAccessState(user.id);
-  return user;
+  return toUser(created);
 }
 
-export function linkDiscord(
+export async function getUser(id: string): Promise<User | null> {
+  const user = await prisma.user.findUnique({
+    where: { id },
+  });
+
+  if (!user) return null;
+  return toUser(user);
+}
+
+export async function addXP(id: string, amount: number): Promise<User | null> {
+  if (amount <= 0) return getUser(id);
+
+  const current = await prisma.user.findUnique({
+    where: { id },
+  });
+
+  if (!current) return null;
+
+  let nextXp = current.xp + amount;
+  let nextLevel = current.level;
+  let nextCnxBalance = current.cnxBalance;
+
+  while (nextXp >= nextLevel * 100) {
+    nextLevel += 1;
+    nextCnxBalance += calculateLevelReward(nextLevel);
+  }
+
+  const updated = await prisma.user.update({
+    where: { id },
+    data: {
+      xp: nextXp,
+      level: nextLevel,
+      cnxBalance: nextCnxBalance,
+      lastActiveAt: new Date(),
+    },
+  });
+
+  await updateAccessState(updated.id);
+
+  return toUser(updated);
+}
+
+export async function linkDiscord(
   id: string,
   discordId: string,
   discordTag: string
-): User | null {
-  const user = users[id];
-  if (!user) return null;
+): Promise<User | null> {
+  const current = await prisma.user.findUnique({
+    where: { id },
+  });
 
-  user.discordId = discordId;
-  user.discordTag = discordTag;
-  user.isVerified = true;
-  user.lastActiveAt = new Date().toISOString();
+  if (!current) return null;
 
-  if (user.wallet) {
-    user.payoutEligible = true;
-  }
+  const updated = await prisma.user.update({
+    where: { id },
+    data: {
+      discordId,
+      discordTag,
+      isVerified: true,
+      payoutEligible: Boolean(current.wallet),
+      lastActiveAt: new Date(),
+    },
+  });
 
-  updateAccessState(user.id);
-  return user;
+  await updateAccessState(updated.id);
+
+  return toUser(updated);
 }
 
-export function bindWallet(id: string, wallet: string): User | null {
-  const user = users[id];
-  if (!user) return null;
+export async function bindWallet(
+  id: string,
+  wallet: string
+): Promise<User | null> {
+  const current = await prisma.user.findUnique({
+    where: { id },
+  });
 
-  user.wallet = wallet;
-  user.lastActiveAt = new Date().toISOString();
+  if (!current) return null;
 
-  if (user.isVerified) {
-    user.payoutEligible = true;
-  }
+  const updated = await prisma.user.update({
+    where: { id },
+    data: {
+      wallet,
+      payoutEligible: current.isVerified,
+      lastActiveAt: new Date(),
+    },
+  });
 
-  updateAccessState(user.id);
-  return user;
+  await updateAccessState(updated.id);
+
+  return toUser(updated);
 }
 
-export function getPayoutReadyUser(id: string): User | null {
-  const user = users[id];
-  if (!user) return null;
+export async function getPayoutReadyUser(id: string): Promise<User | null> {
+  const user = await prisma.user.findUnique({
+    where: { id },
+  });
 
+  if (!user) return null;
   if (!user.isVerified) return null;
   if (!user.wallet) return null;
   if (user.cnxBalance <= 0) return null;
@@ -144,72 +196,143 @@ export function getPayoutReadyUser(id: string): User | null {
   const available = user.cnxBalance - user.reservedCnx;
   if (available <= 0) return null;
 
-  return user;
+  return toUser(user);
 }
 
-export function deductCnxBalance(id: string, amount: number): User | null {
-  const user = users[id];
-  if (!user) return null;
+export async function deductCnxBalance(
+  id: string,
+  amount: number
+): Promise<User | null> {
   if (amount <= 0) return null;
 
-  const available = user.cnxBalance - user.reservedCnx;
-  if (available < amount) return null;
+  const result = await prisma.$transaction(async (tx) => {
+    const user = await tx.user.findUnique({
+      where: { id },
+    });
 
-  user.cnxBalance -= amount;
-  user.lastActiveAt = new Date().toISOString();
+    if (!user) return null;
 
-  updateAccessState(user.id);
-  return user;
+    const available = user.cnxBalance - user.reservedCnx;
+    if (available < amount) return null;
+
+    return tx.user.update({
+      where: { id },
+      data: {
+        cnxBalance: user.cnxBalance - amount,
+        payoutEligible: user.cnxBalance - amount > 0 ? user.payoutEligible : false,
+        lastActiveAt: new Date(),
+      },
+    });
+  });
+
+  if (!result) return null;
+
+  await updateAccessState(result.id);
+
+  return toUser(result);
 }
 
-export function getAvailableCnx(id: string): number | null {
-  const user = users[id];
+export async function getAvailableCnx(id: string): Promise<number | null> {
+  const user = await prisma.user.findUnique({
+    where: { id },
+    select: {
+      cnxBalance: true,
+      reservedCnx: true,
+    },
+  });
+
   if (!user) return null;
 
   return user.cnxBalance - user.reservedCnx;
 }
 
-export function reserveCnx(id: string, amount: number): User | null {
-  const user = users[id];
-  if (!user) return null;
+export async function reserveCnx(
+  id: string,
+  amount: number
+): Promise<User | null> {
   if (amount <= 0) return null;
 
-  const available = user.cnxBalance - user.reservedCnx;
-  if (available < amount) return null;
+  const result = await prisma.$transaction(async (tx) => {
+    const user = await tx.user.findUnique({
+      where: { id },
+    });
 
-  user.reservedCnx += amount;
-  user.lastActiveAt = new Date().toISOString();
+    if (!user) return null;
 
-  return user;
+    const available = user.cnxBalance - user.reservedCnx;
+    if (available < amount) return null;
+
+    return tx.user.update({
+      where: { id },
+      data: {
+        reservedCnx: user.reservedCnx + amount,
+        lastActiveAt: new Date(),
+      },
+    });
+  });
+
+  if (!result) return null;
+  return toUser(result);
 }
 
-export function releaseReservedCnx(id: string, amount: number): User | null {
-  const user = users[id];
-  if (!user) return null;
+export async function releaseReservedCnx(
+  id: string,
+  amount: number
+): Promise<User | null> {
   if (amount <= 0) return null;
-  if (user.reservedCnx < amount) return null;
 
-  user.reservedCnx -= amount;
-  user.lastActiveAt = new Date().toISOString();
+  const result = await prisma.$transaction(async (tx) => {
+    const user = await tx.user.findUnique({
+      where: { id },
+    });
 
-  return user;
+    if (!user) return null;
+    if (user.reservedCnx < amount) return null;
+
+    return tx.user.update({
+      where: { id },
+      data: {
+        reservedCnx: user.reservedCnx - amount,
+        lastActiveAt: new Date(),
+      },
+    });
+  });
+
+  if (!result) return null;
+  return toUser(result);
 }
 
-export function finalizeReservedCnx(id: string, amount: number): User | null {
-  const user = users[id];
-  if (!user) return null;
+export async function finalizeReservedCnx(
+  id: string,
+  amount: number
+): Promise<User | null> {
   if (amount <= 0) return null;
-  if (user.reservedCnx < amount) return null;
-  if (user.cnxBalance < amount) return null;
 
-  user.reservedCnx -= amount;
-  user.cnxBalance -= amount;
-  user.lastActiveAt = new Date().toISOString();
+  const result = await prisma.$transaction(async (tx) => {
+    const user = await tx.user.findUnique({
+      where: { id },
+    });
 
-  if (user.cnxBalance <= 0) {
-    user.payoutEligible = false;
-  }
+    if (!user) return null;
+    if (user.reservedCnx < amount) return null;
+    if (user.cnxBalance < amount) return null;
 
-  updateAccessState(user.id);
-  return user;
+    const nextBalance = user.cnxBalance - amount;
+
+    return tx.user.update({
+      where: { id },
+      data: {
+        reservedCnx: user.reservedCnx - amount,
+        cnxBalance: nextBalance,
+        payoutEligible: nextBalance > 0 ? user.payoutEligible : false,
+        lastActiveAt: new Date(),
+      },
+    });
+  });
+
+  if (!result) return null;
+
+  await updateAccessState(result.id);
+
+  return toUser(result);
 }

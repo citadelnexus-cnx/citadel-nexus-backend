@@ -1,7 +1,7 @@
-// backend/src/services/roleSyncService.ts
 import {
   getAccessState,
   getAllAccessStates,
+  type AccessState,
 } from "./accessStateService";
 
 export const BACKEND_ROLE_KEYS = Object.freeze({
@@ -60,10 +60,7 @@ export type RoleSyncPayload = {
   lastRoleSyncAt: string | null;
 };
 
-export function buildRoleSyncPayload(userId: string): RoleSyncPayload | null {
-  const state = getAccessState(userId);
-  if (!state) return null;
-
+function buildPayloadFromState(state: AccessState): RoleSyncPayload {
   const shouldHaveRoles: string[] = [];
   const shouldNotHaveRoles: string[] = [
     BACKEND_ROLE_KEYS.CNX_HOLDER,
@@ -86,12 +83,15 @@ export function buildRoleSyncPayload(userId: string): RoleSyncPayload | null {
     } else if (state.holderTierInternal === 3) {
       shouldHaveRoles.push(BACKEND_ROLE_KEYS.CNX_HOLDER_TIER_3);
     } else if (state.holderTierInternal !== 0) {
-      warnings.push(`Unsupported holderTierInternal: ${state.holderTierInternal}`);
+      warnings.push(
+        `Unsupported holderTierInternal: ${state.holderTierInternal}`
+      );
     }
   }
 
-  const mappedTempRole =
-    state.tempAccessType ? TEMP_ACCESS_ROLE_MAP[state.tempAccessType] : null;
+  const mappedTempRole = state.tempAccessType
+    ? TEMP_ACCESS_ROLE_MAP[state.tempAccessType]
+    : null;
 
   if (state.tempAccessType && !mappedTempRole) {
     unsupportedTempAccessType = state.tempAccessType;
@@ -108,7 +108,7 @@ export function buildRoleSyncPayload(userId: string): RoleSyncPayload | null {
   );
 
   return {
-    userId,
+    userId: state.userId,
     contractVersion: "role_sync_prep_v1",
     shouldHaveRoles: sortRoles(normalized.shouldHaveRoles),
     shouldNotHaveRoles: sortRoles(normalized.shouldNotHaveRoles),
@@ -125,16 +125,27 @@ export function buildRoleSyncPayload(userId: string): RoleSyncPayload | null {
   };
 }
 
-export function buildAllRoleSyncPayloads(): RoleSyncPayload[] {
-  return getAllAccessStates()
-    .map((state) => buildRoleSyncPayload(state.userId))
-    .filter((payload): payload is RoleSyncPayload => payload !== null);
+export async function buildRoleSyncPayload(
+  userId: string
+): Promise<RoleSyncPayload | null> {
+  const state = await getAccessState(userId);
+  if (!state) return null;
+
+  return buildPayloadFromState(state);
 }
 
-export function getRoleSyncPayload(userId: string): RoleSyncPayload | null {
+export async function buildAllRoleSyncPayloads(): Promise<RoleSyncPayload[]> {
+  const states = await getAllAccessStates();
+
+  return states.map((state) => buildPayloadFromState(state));
+}
+
+export async function getRoleSyncPayload(
+  userId: string
+): Promise<RoleSyncPayload | null> {
   return buildRoleSyncPayload(userId);
 }
 
-export function getAllRoleSyncPayloads(): RoleSyncPayload[] {
+export async function getAllRoleSyncPayloads(): Promise<RoleSyncPayload[]> {
   return buildAllRoleSyncPayloads();
 }

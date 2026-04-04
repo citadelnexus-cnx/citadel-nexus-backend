@@ -1,4 +1,5 @@
 // backend/src/services/discordRoleSyncExecutionService.ts
+
 import {
   buildDiscordSyncDecision,
   type DiscordSyncDecision,
@@ -39,13 +40,13 @@ export type DiscordRoleSyncExecutionAttemptResult = {
   };
 };
 
-export function executeDiscordRoleSyncAttempt(params: {
+export async function executeDiscordRoleSyncAttempt(params: {
   userId: string;
   currentMemberRoleIds: string[];
   executionSource: DiscordRoleSyncExecutionSource;
   idempotencyKey?: string;
-}): DiscordRoleSyncExecutionAttemptResult | null {
-  const decision = buildDiscordSyncDecision(
+}): Promise<DiscordRoleSyncExecutionAttemptResult | null> {
+  const decision = await buildDiscordSyncDecision(
     params.userId,
     params.currentMemberRoleIds
   );
@@ -75,21 +76,25 @@ export function executeDiscordRoleSyncAttempt(params: {
   let reuseReason: "idempotency_key" | "execution_hash" | null = null;
 
   if (params.idempotencyKey) {
-    existing = findDiscordRoleSyncAuditRecordByIdempotencyKey(params.idempotencyKey);
+    existing = await findDiscordRoleSyncAuditRecordByIdempotencyKey(
+      params.idempotencyKey
+    );
+
     if (existing) {
       reuseReason = "idempotency_key";
     }
   }
 
   if (!existing) {
-    existing = findDiscordRoleSyncAuditRecordByExecutionHash(executionHash);
+    existing = await findDiscordRoleSyncAuditRecordByExecutionHash(executionHash);
+
     if (existing) {
       reuseReason = "execution_hash";
     }
   }
 
   if (existing) {
-    const persistedReuse = updateDiscordRoleSyncAuditRecord(existing.id, {
+    const persistedReuse = await updateDiscordRoleSyncAuditRecord(existing.id, {
       attemptCount: existing.attemptCount + 1,
     });
 
@@ -129,7 +134,7 @@ export function executeDiscordRoleSyncAttempt(params: {
 
   const executionDurationMs = Date.now() - startTime;
 
-  const auditRecord = createDiscordRoleSyncAuditRecord({
+  const auditRecord = await createDiscordRoleSyncAuditRecord({
     executionSource: params.executionSource,
     decision,
     status,
@@ -141,6 +146,7 @@ export function executeDiscordRoleSyncAttempt(params: {
     executionHash,
     executionDurationMs,
     attemptCount: 1,
+    rateLimitBucket,
   });
 
   return {
