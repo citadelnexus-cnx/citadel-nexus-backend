@@ -1,3 +1,4 @@
+//backend/src/rputes/entitlementRoutes.ts
 import { Router, Request, Response } from "express";
 import {
   getAllEntitlements,

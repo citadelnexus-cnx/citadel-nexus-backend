@@ -26,6 +26,7 @@ model User {
 
   accessState    AccessState?
   audits         DiscordRoleSyncAudit[]
+  entitlements   Entitlement[]
 }
 
 model AccessState {
@@ -45,6 +46,24 @@ model AccessState {
   createdAt           DateTime  @default(now())
 
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model Entitlement {
+  id              String   @id @default(uuid())
+  userId          String
+  entitlementType String
+  entitlementKey  String
+  status          String
+  source          String
+  grantedAt       DateTime @default(now())
+  expiresAt       DateTime?
+  updatedAt       DateTime @updatedAt
+  metadataJson    String?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, grantedAt])
+  @@index([status, expiresAt])
 }
 
 model DiscordRoleSyncAudit {

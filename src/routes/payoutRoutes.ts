@@ -1,5 +1,4 @@
 // backend/src/routes/payoutRoutes.ts
-
 import { Router, Request, Response } from "express";
 import {
   queuePayout,
@@ -14,182 +13,207 @@ import {
 
 const router = Router();
 
-router.post("/:userId/queue", (req: Request, res: Response) => {
-  const userId = req.params.userId as string;
-
-  if (!userId) {
-    return res.status(400).json({ error: "User ID is required" });
+router.get("/log/all", async (_req: Request, res: Response) => {
+  try {
+    const log = await getPayoutLog();
+    return res.json(log);
+  } catch (error) {
+    console.error("GET /payout/log/all failed:", error);
+    return res.status(500).json({ error: "Failed to fetch payout log" });
   }
-
-  const payout = queuePayout(userId);
-
-  if (!payout) {
-    return res
-      .status(404)
-      .json({ error: "User not payout ready or below threshold" });
-  }
-
-  res.json(payout);
 });
 
-router.post("/:payoutId/approve", (req: Request, res: Response) => {
-  const payoutId = req.params.payoutId as string;
-  const { adminId } = req.body;
+router.post("/:userId/queue", async (req: Request, res: Response) => {
+  try {
+    const userId = String(req.params.userId ?? "");
 
-  if (!payoutId) {
-    return res.status(400).json({ error: "Payout ID is required" });
+    if (!userId) {
+      return res.status(400).json({ error: "User ID is required" });
+    }
+
+    const payout = await queuePayout(userId);
+
+    if (!payout) {
+      return res
+        .status(404)
+        .json({ error: "User not payout ready or below threshold" });
+    }
+
+    return res.json(payout);
+  } catch (error) {
+    console.error("POST /payout/:userId/queue failed:", error);
+    return res.status(500).json({ error: "Failed to queue payout" });
   }
-
-  if (!adminId || typeof adminId !== "string") {
-    return res.status(400).json({ error: "Valid adminId is required" });
-  }
-
-  const result = approvePayout(payoutId, adminId);
-
-  if (!result) {
-    return res.status(404).json({ error: "Payout not found" });
-  }
-
-  if ("error" in result) {
-    return res.status(400).json(result);
-  }
-
-  res.json(result);
 });
 
-router.post("/:payoutId/reject", (req: Request, res: Response) => {
-  const payoutId = req.params.payoutId as string;
-  const { reason, adminId } = req.body;
+router.post("/:payoutId/approve", async (req: Request, res: Response) => {
+  try {
+    const payoutId = String(req.params.payoutId ?? "");
+    const { adminId } = req.body;
 
-  if (!payoutId) {
-    return res.status(400).json({ error: "Payout ID is required" });
+    if (!payoutId) {
+      return res.status(400).json({ error: "Payout ID is required" });
+    }
+
+    if (!adminId || typeof adminId !== "string") {
+      return res.status(400).json({ error: "Valid adminId is required" });
+    }
+
+    const result = await approvePayout(payoutId, adminId);
+
+    if (!result) {
+      return res.status(404).json({ error: "Payout not found" });
+    }
+
+    if ("error" in result) {
+      return res.status(400).json(result);
+    }
+
+    return res.json(result);
+  } catch (error) {
+    console.error("POST /payout/:payoutId/approve failed:", error);
+    return res.status(500).json({ error: "Failed to approve payout" });
   }
-
-  if (!reason || typeof reason !== "string") {
-    return res.status(400).json({ error: "Valid rejection reason is required" });
-  }
-
-  const result = rejectPayout(
-    payoutId,
-    reason,
-    typeof adminId === "string" ? adminId : undefined
-  );
-
-  if (!result) {
-    return res.status(404).json({ error: "Payout not found" });
-  }
-
-  if ("error" in result) {
-    return res.status(400).json(result);
-  }
-
-  res.json(result);
 });
 
-router.post("/:payoutId/send", (req: Request, res: Response) => {
-  const payoutId = req.params.payoutId as string;
-  const { txId } = req.body;
+router.post("/:payoutId/reject", async (req: Request, res: Response) => {
+  try {
+    const payoutId = String(req.params.payoutId ?? "");
+    const { reason, adminId } = req.body;
 
-  if (!payoutId) {
-    return res.status(400).json({ error: "Payout ID is required" });
+    if (!payoutId) {
+      return res.status(400).json({ error: "Payout ID is required" });
+    }
+
+    if (!reason || typeof reason !== "string") {
+      return res.status(400).json({ error: "Valid rejection reason is required" });
+    }
+
+    const result = await rejectPayout(
+      payoutId,
+      reason,
+      typeof adminId === "string" ? adminId : undefined
+    );
+
+    if (!result) {
+      return res.status(404).json({ error: "Payout not found" });
+    }
+
+    if ("error" in result) {
+      return res.status(400).json(result);
+    }
+
+    return res.json(result);
+  } catch (error) {
+    console.error("POST /payout/:payoutId/reject failed:", error);
+    return res.status(500).json({ error: "Failed to reject payout" });
   }
-
-  if (!txId || typeof txId !== "string") {
-    return res.status(400).json({ error: "Valid txId is required" });
-  }
-
-  const result = markPayoutSent(payoutId, txId);
-
-  if (!result) {
-    return res.status(404).json({ error: "Payout not found" });
-  }
-
-  if ("error" in result) {
-    return res.status(400).json(result);
-  }
-
-  res.json(result);
 });
 
-router.post("/:payoutId/confirm", (req: Request, res: Response) => {
-  const payoutId = req.params.payoutId as string;
+router.post("/:payoutId/send", async (req: Request, res: Response) => {
+  try {
+    const payoutId = String(req.params.payoutId ?? "");
+    const { txId } = req.body;
 
-  if (!payoutId) {
-    return res.status(400).json({ error: "Payout ID is required" });
+    if (!payoutId) {
+      return res.status(400).json({ error: "Payout ID is required" });
+    }
+
+    if (!txId || typeof txId !== "string") {
+      return res.status(400).json({ error: "Valid txId is required" });
+    }
+
+    const result = await markPayoutSent(payoutId, txId);
+
+    if (!result) {
+      return res.status(404).json({ error: "Payout not found" });
+    }
+
+    if ("error" in result) {
+      return res.status(400).json(result);
+    }
+
+    return res.json(result);
+  } catch (error) {
+    console.error("POST /payout/:payoutId/send failed:", error);
+    return res.status(500).json({ error: "Failed to mark payout as sent" });
   }
-
-  const result = confirmPayout(payoutId);
-
-  if (!result) {
-    return res.status(404).json({ error: "Payout not found" });
-  }
-
-  if ("error" in result) {
-    return res.status(400).json(result);
-  }
-
-  res.json(result);
 });
 
-router.post("/:payoutId/fail", (req: Request, res: Response) => {
-  const payoutId = req.params.payoutId as string;
-  const { reason } = req.body;
+router.post("/:payoutId/confirm", async (req: Request, res: Response) => {
+  try {
+    const payoutId = String(req.params.payoutId ?? "");
 
-  if (!payoutId) {
-    return res.status(400).json({ error: "Payout ID is required" });
+    if (!payoutId) {
+      return res.status(400).json({ error: "Payout ID is required" });
+    }
+
+    const result = await confirmPayout(payoutId);
+
+    if (!result) {
+      return res.status(404).json({ error: "Payout not found" });
+    }
+
+    if ("error" in result) {
+      return res.status(400).json(result);
+    }
+
+    return res.json(result);
+  } catch (error) {
+    console.error("POST /payout/:payoutId/confirm failed:", error);
+    return res.status(500).json({ error: "Failed to confirm payout" });
   }
-
-  if (!reason || typeof reason !== "string") {
-    return res.status(400).json({ error: "Valid failure reason is required" });
-  }
-
-  const result = failPayout(payoutId, reason);
-
-  if (!result) {
-    return res.status(404).json({ error: "Payout not found" });
-  }
-
-  if ("error" in result) {
-    return res.status(400).json(result);
-  }
-
-  res.json(result);
 });
 
-router.get("/:payoutId", (req: Request, res: Response) => {
-  const payoutId = req.params.payoutId as string;
+router.post("/:payoutId/fail", async (req: Request, res: Response) => {
+  try {
+    const payoutId = String(req.params.payoutId ?? "");
+    const { reason } = req.body;
 
-  if (!payoutId) {
-    return res.status(400).json({ error: "Payout ID is required" });
+    if (!payoutId) {
+      return res.status(400).json({ error: "Payout ID is required" });
+    }
+
+    if (!reason || typeof reason !== "string") {
+      return res.status(400).json({ error: "Valid failure reason is required" });
+    }
+
+    const result = await failPayout(payoutId, reason);
+
+    if (!result) {
+      return res.status(404).json({ error: "Payout not found" });
+    }
+
+    if ("error" in result) {
+      return res.status(400).json(result);
+    }
+
+    return res.json(result);
+  } catch (error) {
+    console.error("POST /payout/:payoutId/fail failed:", error);
+    return res.status(500).json({ error: "Failed to fail payout" });
   }
-
-  const payout = getPayoutById(payoutId);
-
-  if (!payout) {
-    return res.status(404).json({ error: "Payout not found" });
-  }
-
-  res.json(payout);
 });
 
-router.get("/log/all", (_req: Request, res: Response) => {
-  res.json(getPayoutLog());
-});
+router.get("/:payoutId", async (req: Request, res: Response) => {
+  try {
+    const payoutId = String(req.params.payoutId ?? "");
 
-router.get("/:payoutId", (req: Request, res: Response) => {
-  const payoutId = req.params.payoutId as string;
+    if (!payoutId) {
+      return res.status(400).json({ error: "Payout ID is required" });
+    }
 
-  if (!payoutId) {
-    return res.status(400).json({ error: "Payout ID is required" });
+    const payout = await getPayoutById(payoutId);
+
+    if (!payout) {
+      return res.status(404).json({ error: "Payout not found" });
+    }
+
+    return res.json(payout);
+  } catch (error) {
+    console.error("GET /payout/:payoutId failed:", error);
+    return res.status(500).json({ error: "Failed to fetch payout" });
   }
-
-  const payout = getPayoutById(payoutId);
-
-  if (!payout) {
-    return res.status(404).json({ error: "Payout not found" });
-  }
-
-  res.json(payout);
 });
 
 export default router;
