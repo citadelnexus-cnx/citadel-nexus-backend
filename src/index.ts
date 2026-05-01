@@ -1,3 +1,4 @@
+//backend/src/index.ts
 import express, { Request, Response } from "express";
 import dotenv from "dotenv";
 import cors from "cors";
@@ -12,6 +13,7 @@ import roleSyncRoutes from "./routes/roleSyncRoutes";
 import discordSyncWorkerRoutes from "./routes/discordSyncWorkerRoutes";
 import sessionRoutes from "./routes/sessionRoutes";
 import memberStateRoutes from "./routes/memberStateRoutes";
+import ascensionSummaryRoutes from "./routes/ascensionSummaryRoutes";
 
 dotenv.config();
 
@@ -41,6 +43,10 @@ app.use("/role-sync", roleSyncRoutes);
 app.use("/discord-sync-worker", discordSyncWorkerRoutes);
 app.use("/session", sessionRoutes);
 app.use("/member-state", memberStateRoutes);
+app.use("/ascension-summary", ascensionSummaryRoutes);
+
+// Boot Ascension Discord runtime
+require("./modules/ascension/runtime/bot-entry");
 
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);

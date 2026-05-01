@@ -7,26 +7,27 @@ datasource db {
 }
 
 model User {
-  id             String                 @id @default(uuid())
-  username       String
-  discordId      String?                @unique
-  discordTag     String?
-  wallet         String?
-  xp             Int                    @default(0)
-  level          Int                    @default(1)
-  cnxBalance     Float                  @default(0)
-  reservedCnx    Float                  @default(0)
-  isVerified     Boolean                @default(false)
-  payoutEligible Boolean                @default(false)
-  joinedAt       DateTime               @default(now())
-  lastActiveAt   DateTime               @default(now())
-  rewardLog      Json                   @default("[]")
-  createdAt      DateTime               @default(now())
-  updatedAt      DateTime               @updatedAt
+  id               String                 @id @default(uuid())
+  username         String                 @unique
+  discordId        String?                @unique
+  discordTag       String?
+  wallet           String?
+  xp               Int                    @default(0)
+  level            Int                    @default(1)
+  cnxBalance       Float                  @default(0)
+  reservedCnx      Float                  @default(0)
+  isVerified       Boolean                @default(false)
+  payoutEligible   Boolean                @default(false)
+  joinedAt         DateTime               @default(now())
+  lastActiveAt     DateTime               @default(now())
+  rewardLog        Json                   @default("[]")
+  createdAt        DateTime               @default(now())
+  updatedAt        DateTime               @updatedAt
 
-  accessState    AccessState?
-  audits         DiscordRoleSyncAudit[]
-  entitlements   Entitlement[]
+  accessState      AccessState?
+  ascensionProfile AscensionProfile?
+  audits           DiscordRoleSyncAudit[]
+  entitlements     Entitlement[]
 }
 
 model AccessState {
@@ -96,4 +97,79 @@ model DiscordRoleSyncAudit {
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@index([userId, createdAt])
+}
+
+model AscensionProfile {
+  id                String   @id @default(uuid())
+  userId            String   @unique
+  discordId         String?  @unique
+  username          String
+  guardian          String   @default("nova")
+  stage             Int      @default(1)
+  rank              String   @default("initiate")
+  xp                Int      @default(0)
+  level             Int      @default(1)
+  nodeScore         Int      @default(0)
+  sessionCount      Int      @default(0)
+  missionsCompleted Int      @default(0)
+  isLocked          Boolean  @default(false)
+  lockReason        String?
+  power             Int      @default(5)
+  maxPower          Int      @default(10)
+  credits           Int      @default(50)
+  intel             Int      @default(10)
+  lastClaimAt       DateTime?
+  buildingsJson     Json     @default("{\"knowledge_core\":1,\"trade_hub\":1,\"power_reactor\":1,\"security_layer\":1}")
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([stage, rank])
+}
+
+model AscensionPrizePool {
+  id               String   @id @default(uuid())
+  poolName         String   @unique @default("main")
+  totalXpAvailable Int      @default(0)
+  totalXpAdded     Int      @default(0)
+  totalXpAwarded   Int      @default(0)
+  totalXpRemoved   Int      @default(0)
+  notes            String?
+  seasonId         String?
+  updatedAt        DateTime @updatedAt
+  createdAt        DateTime @default(now())
+}
+
+model AscensionAdminAction {
+  id             String   @id @default(uuid())
+  adminUserId    String
+  adminUsername  String?
+  targetUserId   String?
+  targetUsername String?
+  actionType     String
+  resourceType   String?
+  amount         Int?
+  valueBefore    Json?
+  valueAfter     Json?
+  reason         String
+  metadataJson   Json?
+  createdAt      DateTime @default(now())
+
+  @@index([adminUserId, createdAt])
+  @@index([targetUserId, createdAt])
+  @@index([actionType, createdAt])
+}
+
+model AscensionAdminSnapshot {
+  id             String   @id @default(uuid())
+  actionId       String
+  targetUserId   String
+  snapshotType   String
+  profileState   Json?
+  inventoryState Json?
+  createdAt      DateTime @default(now())
+
+  @@index([actionId])
+  @@index([targetUserId, createdAt])
 }

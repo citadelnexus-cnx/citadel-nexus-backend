@@ -48,6 +48,10 @@ type PrismaUserRecord = {
   lastActiveAt: Date;
 };
 
+function normalizeUsername(value: string): string {
+  return value.trim();
+}
+
 function toUser(record: PrismaUserRecord): User {
   return {
     id: record.id,
@@ -90,6 +94,18 @@ export async function createUser(username: string): Promise<User> {
   return toUser(created);
 }
 
+export async function getUserByUsername(username: string): Promise<User | null> {
+  const normalized = username.trim();
+  if (!normalized) return null;
+
+  const user = await prisma.user.findUnique({
+    where: { username: normalized },
+  });
+
+  if (!user) return null;
+  return toUser(user);
+}
+
 export async function getUser(id: string): Promise<User | null> {
   const user = await prisma.user.findUnique({
     where: { id },
@@ -130,6 +146,90 @@ export async function addXP(id: string, amount: number): Promise<User | null> {
   await updateAccessState(updated.id);
 
   return toUser(updated);
+}
+
+export async function getUserByDiscordId(
+  discordId: string
+): Promise<User | null> {
+  const normalized = discordId.trim();
+  if (!normalized) return null;
+
+  const user = await prisma.user.findUnique({
+    where: { discordId: normalized },
+  });
+
+  if (!user) return null;
+  return toUser(user);
+}
+
+export async function createUserWithDiscord(input: {
+  username: string;
+  discordId: string;
+  discordTag: string;
+}): Promise<User> {
+  const created = await prisma.user.create({
+    data: {
+      username: normalizeUsername(input.username),
+      discordId: input.discordId,
+      discordTag: input.discordTag,
+      xp: 0,
+      level: 1,
+      cnxBalance: 0,
+      reservedCnx: 0,
+      isVerified: true,
+      payoutEligible: false,
+      lastActiveAt: new Date(),
+    },
+  });
+
+  await updateAccessState(created.id);
+  return toUser(created);
+}
+
+export async function ensureUserForDiscord(input: {
+  username: string;
+  discordId: string;
+  discordTag: string;
+}): Promise<User> {
+  const existingByDiscord = await getUserByDiscordId(input.discordId);
+  if (existingByDiscord) {
+    const updated = await prisma.user.update({
+      where: { id: existingByDiscord.id },
+      data: {
+        username: normalizeUsername(input.username),
+        discordTag: input.discordTag,
+        isVerified: true,
+        payoutEligible: existingByDiscord.wallet
+          ? true
+          : existingByDiscord.payoutEligible,
+        lastActiveAt: new Date(),
+      },
+    });
+
+    await updateAccessState(updated.id);
+    return toUser(updated);
+  }
+
+  const existingByUsername = await getUserByUsername(input.username);
+  if (existingByUsername) {
+    const updated = await prisma.user.update({
+      where: { id: existingByUsername.id },
+      data: {
+        discordId: input.discordId,
+        discordTag: input.discordTag,
+        isVerified: true,
+        payoutEligible: existingByUsername.wallet
+          ? true
+          : existingByUsername.payoutEligible,
+        lastActiveAt: new Date(),
+      },
+    });
+
+    await updateAccessState(updated.id);
+    return toUser(updated);
+  }
+
+  return createUserWithDiscord(input);
 }
 
 export async function linkDiscord(

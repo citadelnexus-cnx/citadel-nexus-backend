@@ -1,73 +1,122 @@
 /**
  * ============================================================
  * CITADEL ASCENSION — /status Handler
- * Full Citadel dashboard with rotating flavor lines.
+ * Prisma/Supabase-backed Citadel dashboard
  * ============================================================
  */
 
-const { EmbedBuilder } = require('discord.js');
-const db = require('./player-service');
+const { EmbedBuilder } = require("discord.js");
+const {
+  getResolvedAscensionActor,
+  getStageName,
+  getNextStage,
+  xpToNextRank,
+  checkClaimCooldown,
+  formatCooldown,
+} = require("../../../services/ascensionGameplayService");
 
 // ─── DISPLAY MAPS ─────────────────────────────────────────────────────────────
 
 const GUARDIAN_DISPLAY = {
-  nova:  { emoji: '🦉', name: 'Nova',  color: 0x60A5FA },
-  tarin: { emoji: '🐘', name: 'Tarin', color: 0x4ADE80 },
-  raxa:  { emoji: '🐅', name: 'Raxa',  color: 0xF59E0B },
+  nova: { emoji: "🦉", name: "Nova", color: 0x60a5fa },
+  tarin: { emoji: "🐘", name: "Tarin", color: 0x4ade80 },
+  raxa: { emoji: "🐅", name: "Raxa", color: 0xf59e0b },
 };
 
-const STAGE_EMOJI  = { 1: '⬛', 2: '🟦', 3: '🟪', 4: '🟧', 5: '🟨' };
+const STAGE_EMOJI = { 1: "⬛", 2: "🟦", 3: "🟪", 4: "🟧", 5: "🟨" };
 
 const RANK_DISPLAY = {
-  initiate:  { label: 'Initiate',  emoji: '▪️' },
-  operator:  { label: 'Operator',  emoji: '🔵' },
-  builder:   { label: 'Builder',   emoji: '🟢' },
-  architect: { label: 'Architect', emoji: '🟣' },
-  warden:    { label: 'Warden',    emoji: '🟠' },
-  sentinel:  { label: 'Sentinel',  emoji: '🟡' },
+  initiate: { label: "Initiate", emoji: "▪️" },
+  operator: { label: "Operator", emoji: "🔵" },
+  builder: { label: "Builder", emoji: "🟢" },
+  architect: { label: "Architect", emoji: "🟣" },
+  warden: { label: "Warden", emoji: "🟠" },
+  sentinel: { label: "Sentinel", emoji: "🟡" },
 };
 
 // ─── FLAVOR LINES ─────────────────────────────────────────────────────────────
 
 const FLAVOR_LINES = [
-  '*The Nexus hums. Something is watching.*',
-  '*Three dormant Nodes pulsed in your direction. Coincidence is rare here.*',
-  '*The signal is stronger today. Your Citadel is being noticed.*',
-  '*Patterns form in the static. The archive stirs.*',
-  '*Your Node is not the only one rebuilding. Be ready.*',
-  '*The Cascade left echoes. Some of them are still running.*',
-  '*A broadcast loops nearby. Its origin is unclear.*',
-  '*The Nexus remembers everything. Even what you haven\'t done yet.*',
+  "*The Nexus hums. Something is watching.*",
+  "*Three dormant Nodes pulsed in your direction. Coincidence is rare here.*",
+  "*The signal is stronger today. Your Citadel is being noticed.*",
+  "*Patterns form in the static. The archive stirs.*",
+  "*Your Node is not the only one rebuilding. Be ready.*",
+  "*The Cascade left echoes. Some of them are still running.*",
+  "*A broadcast loops nearby. Its origin is unclear.*",
+  "*The Nexus remembers everything. Even what you haven't done yet.*",
 ];
 
 function getFlavorLine() {
   return FLAVOR_LINES[Math.floor(Math.random() * FLAVOR_LINES.length)];
 }
 
-// ─── DISPLAY HELPERS ─────────────────────────────────────────────────────────
+// ─── HELPERS ──────────────────────────────────────────────────────────────────
 
 function powerBar(current, max) {
-  const filled = Math.round((current / max) * 10);
-  return '█'.repeat(filled) + '░'.repeat(10 - filled);
+  const safeMax = Math.max(1, max || 1);
+  const filled = Math.round((current / safeMax) * 10);
+  return "█".repeat(filled) + "░".repeat(10 - filled);
 }
 
 function xpBar(xp, next) {
-  if (!next) return '██████████ MAX';
+  if (!next) return "██████████ MAX";
   const filled = Math.round(Math.min(xp / next, 1) * 10);
-  return '█'.repeat(filled) + '░'.repeat(10 - filled);
+  return "█".repeat(filled) + "░".repeat(10 - filled);
 }
 
 function buildingLine(name, level, outputLabel) {
-  return `\`${'▮'.repeat(level)}${'▯'.repeat(5 - level)}\` L${level}  ${name}  —  ${outputLabel}`;
+  return `\`${"▮".repeat(level)}${"▯".repeat(5 - level)}\` L${level}  ${name}  —  ${outputLabel}`;
+}
+
+function parseBuildings(buildingsJson) {
+  const fallback = {
+    knowledge_core: 1,
+    trade_hub: 1,
+    power_reactor: 1,
+    security_layer: 1,
+  };
+
+  if (!buildingsJson || typeof buildingsJson !== "object" || Array.isArray(buildingsJson)) {
+    return fallback;
+  }
+
+  return {
+    knowledge_core: Number(buildingsJson.knowledge_core ?? 1),
+    trade_hub: Number(buildingsJson.trade_hub ?? 1),
+    power_reactor: Number(buildingsJson.power_reactor ?? 1),
+    security_layer: Number(buildingsJson.security_layer ?? 1),
+  };
 }
 
 function stageProgress(nodeScore, stage) {
-  const next = db.getNextStage(stage);
-  if (!next) return { pct: 100, label: 'ASCENDED' };
-  const prev  = db.EVOLUTION_STAGES.find(s => s.stage === stage);
-  const base  = prev?.node_score_required || 0;
-  const pct   = Math.min(Math.round(((nodeScore - base) / (next.node_score_required - base)) * 100), 100);
-  return { pct, label: next.name, next };
+  const next = getNextStage(stage);
+  if (!next) return { pct: 100, label: "ASCENDED", next: null };
+
+  const thresholds = {
+    1: 0,
+    2: 50,
+    3: 200,
+    4: 750,
+    5: 2500,
+  };
+
+  const base = thresholds[stage] ?? 0;
+  const nextRequired = next.nodeScoreRequired ?? 0;
+
+  const pct =
+    nextRequired > base
+      ? Math.min(
+          Math.round(((nodeScore - base) / (nextRequired - base)) * 100),
+          100
+        )
+      : 100;
+
+  return {
+    pct: Math.max(0, pct),
+    label: next.name,
+    next,
+  };
 }
 
 // ─── /status ─────────────────────────────────────────────────────────────────
@@ -75,18 +124,26 @@ function stageProgress(nodeScore, stage) {
 async function handleStatus(interaction) {
   await interaction.deferReply();
 
-  const userId = interaction.user.id;
-  const player = await db.getPlayer(userId);
+  const discordId = interaction.user.id;
+  const username = interaction.user.username;
+  const discordTag = interaction.user.tag ?? interaction.user.username;
 
-  if (!player) {
-    return interaction.editReply('Your Node is not initialized. Use `/start` to begin.');
+  const { profile } = await getResolvedAscensionActor({
+    discordId,
+    username,
+    discordTag,
+  });
+
+  if (!profile) {
+    return interaction.editReply("Your Node is not initialized. Use `/start` to begin.");
   }
 
-  const guardian   = GUARDIAN_DISPLAY[player.guardian] || GUARDIAN_DISPLAY.nova;
-  const rankInfo   = RANK_DISPLAY[player.rank]         || RANK_DISPLAY.initiate;
-  const stageName  = db.getStageName(player.stage);
-  const nextRankXP = db.xpToNextRank(player.xp);
-  const progress   = stageProgress(player.node_score, player.stage);
+  const guardian = GUARDIAN_DISPLAY[profile.guardian] || GUARDIAN_DISPLAY.nova;
+  const rankInfo = RANK_DISPLAY[profile.rank] || RANK_DISPLAY.initiate;
+  const stageName = getStageName(profile.stage);
+  const nextRankXP = xpToNextRank(profile.xp);
+  const progress = stageProgress(profile.nodeScore, profile.stage);
+  const buildings = parseBuildings(profile.buildingsJson);
 
   const embed = new EmbedBuilder()
     .setColor(guardian.color)
@@ -94,99 +151,121 @@ async function handleStatus(interaction) {
     .setDescription(getFlavorLine())
     .addFields(
       {
-        name:  '── IDENTITY ────────────────────────',
+        name: "── IDENTITY ────────────────────────",
         value: [
-          `Stage:     ${STAGE_EMOJI[player.stage]} **${stageName}**`,
+          `Stage:     ${STAGE_EMOJI[profile.stage] || "⬛"} **${stageName}**`,
           `Rank:      ${rankInfo.emoji} **${rankInfo.label}**`,
           `Guardian:  ${guardian.emoji} **${guardian.name}**`,
-        ].join('\n'),
+        ].join("\n"),
       },
       {
-        name:  '── RESOURCES ───────────────────────',
+        name: "── RESOURCES ───────────────────────",
         value: [
-          `🔋 Power      \`${powerBar(player.power, player.max_power)}\` ${player.power} / ${player.max_power}`,
-          `💰 Credits    \`${player.credits}\``,
-          `🧠 Intel      \`${player.intel}\``,
-        ].join('\n'),
+          `🔋 Power      \`${powerBar(profile.power, profile.maxPower)}\` ${profile.power} / ${profile.maxPower}`,
+          `💰 Credits    \`${profile.credits}\``,
+          `🧠 Intel      \`${profile.intel}\``,
+        ].join("\n"),
       },
       {
-        name:  '── BUILDINGS ───────────────────────',
+        name: "── BUILDINGS ───────────────────────",
         value: [
-          buildingLine('Knowledge Core', player.buildings.knowledge_core, `+${5 * player.buildings.knowledge_core} Intel/mission`),
-          buildingLine('Trade Hub',      player.buildings.trade_hub,      `+${10 * player.buildings.trade_hub} Credits/claim`),
-          buildingLine('Power Reactor',  player.buildings.power_reactor,  `${10 + (player.buildings.power_reactor - 1) * 2} max Power`),
-          buildingLine('Security Layer', player.buildings.security_layer, `${player.buildings.security_layer * 10}% risk reduction`),
-        ].join('\n'),
+          buildingLine(
+            "Knowledge Core",
+            buildings.knowledge_core,
+            `+${5 * buildings.knowledge_core} Intel/mission`
+          ),
+          buildingLine(
+            "Trade Hub",
+            buildings.trade_hub,
+            `+${10 * buildings.trade_hub} Credits/claim`
+          ),
+          buildingLine(
+            "Power Reactor",
+            buildings.power_reactor,
+            `${10 + (buildings.power_reactor - 1) * 2} max Power`
+          ),
+          buildingLine(
+            "Security Layer",
+            buildings.security_layer,
+            `${buildings.security_layer * 10}% risk reduction`
+          ),
+        ].join("\n"),
       },
       {
-        name:  '── PROGRESSION ─────────────────────',
+        name: "── PROGRESSION ─────────────────────",
         value: [
           nextRankXP
-            ? `XP:          \`${xpBar(player.xp, nextRankXP)}\` ${player.xp} / ${nextRankXP}`
-            : `XP:          \`██████████\` MAX RANK`,
-          `Node Score:  **${player.node_score}**  →  next stage: *${progress.label}* (${progress.pct}%)`,
-          `Sessions:    **${player.session_count}** claims completed`,
-        ].join('\n'),
+            ? `XP:          \`${xpBar(profile.xp, nextRankXP)}\` ${profile.xp} / ${nextRankXP}`
+            : "XP:          `██████████` MAX RANK",
+          `Node Score:  **${profile.nodeScore}**  →  next stage: *${progress.label}* (${progress.pct}%)`,
+          `Sessions:    **${profile.sessionCount}** claims completed`,
+        ].join("\n"),
       },
       {
-        name:  '━━━━━━━━━━━━━━━━',
-        value: buildNextActionPrompt(player),
+        name: "━━━━━━━━━━━━━━━━",
+        value: buildNextActionPrompt(profile, buildings),
       }
     )
-    .setFooter({ text: 'Citadel Ascension  |  Node online' });
+    .setFooter({ text: "Citadel Ascension  |  Node online" });
 
   return interaction.editReply({ embeds: [embed] });
 }
 
 // ─── SMART NEXT ACTION PROMPT ─────────────────────────────────────────────────
 
-function buildNextActionPrompt(player) {
+function buildNextActionPrompt(profile, buildings) {
   const lines = [];
 
-  if (player.power >= 2) {
-    lines.push(`> 🔋 You have **${player.power} Power** — run a mission: \`/mission recon\``);
+  if (profile.power >= 2) {
+    lines.push("> 🔋 You have **" + profile.power + "** Power — run a mission: `/mission recon`");
   }
 
-  const cooldown = db.checkClaimCooldown(player);
-  if (!cooldown.onCooldown && player.power < 5) {
-    lines.push('> ⚡ \`/claim\` is available — restore your Power now');
+  const cooldown = checkClaimCooldown(profile);
+  if (!cooldown.onCooldown && profile.power < 5) {
+    lines.push("> ⚡ `/claim` is available — restore your Power now");
   } else if (cooldown.onCooldown) {
-    lines.push(`> ⏳ Next claim in \`${db.formatCooldown(cooldown.remainingMs)}\``);
+    lines.push(`> ⏳ Next claim in \`${formatCooldown(cooldown.remainingMs)}\``);
   }
 
-  if (player.intel < 20) {
-    lines.push('> 🧠 Intel low — try \`/mission archive_dive\` for Intel-heavy rewards');
+  if (profile.intel < 20) {
+    lines.push("> 🧠 Intel low — try `/mission archive_dive` for Intel-heavy rewards");
   }
 
-  const suggestion = getSuggestedUpgrade(player);
+  const suggestion = getSuggestedUpgrade(profile, buildings);
   if (suggestion) {
     lines.push(`> 🏗️  You can afford: \`/build ${suggestion}\``);
   }
 
-  const progress = stageProgress(player.node_score, player.stage);
+  const progress = stageProgress(profile.nodeScore, profile.stage);
   if (progress.pct >= 75 && progress.pct < 100) {
-    lines.push(`> 🏛️  **${progress.pct}%** to *${progress.label}* — you\'re close`);
+    lines.push(`> 🏛️  **${progress.pct}%** to *${progress.label}* — you're close`);
   }
 
-  return lines.length > 0 ? lines.join('\n') : '> Keep building. The Nexus is watching.';
+  return lines.length > 0 ? lines.join("\n") : "> Keep building. The Nexus is watching.";
 }
 
-function getSuggestedUpgrade(player) {
+function getSuggestedUpgrade(profile, buildings) {
   const BASE_COSTS = {
     knowledge_core: { credits: 50, intel: 20 },
-    trade_hub:      { credits: 50, intel: 20 },
-    power_reactor:  { credits: 60, intel: 15 },
+    trade_hub: { credits: 50, intel: 20 },
+    power_reactor: { credits: 60, intel: 15 },
     security_layer: { credits: 40, intel: 25 },
   };
+
   for (const [key, base] of Object.entries(BASE_COSTS)) {
-    const level = player.buildings[key] || 1;
+    const level = buildings[key] || 1;
     if (level >= 5) continue;
+
     const cost = {
       credits: Math.round(base.credits * Math.pow(1.8, level - 1)),
-      intel:   Math.round(base.intel   * Math.pow(1.8, level - 1)),
+      intel: Math.round(base.intel * Math.pow(1.8, level - 1)),
     };
-    if (player.credits >= cost.credits && player.intel >= cost.intel) return key;
+
+    if (profile.credits >= cost.credits && profile.intel >= cost.intel) {
+      return key;
+    }
   }
+
   return null;
 }
 

@@ -1,6 +1,7 @@
+//backend/src/routes/sessionRoutes.ts
 import crypto from "node:crypto";
 import express, { Request, Response } from "express";
-import { createUser, getUser } from "../services/userService";
+import { createUser, getUser, getUserByUsername } from "../services/userService";
 
 const router = express.Router();
 
@@ -114,11 +115,16 @@ router.post("/dev-login", async (req: Request, res: Response) => {
 
     if (providedUserId) {
       user = await getUser(providedUserId);
+
       if (!user) {
         return res.status(404).json({ error: "User not found" });
       }
     } else if (providedUsername) {
-      user = await createUser(providedUsername);
+      user = await getUserByUsername(providedUsername);
+
+      if (!user) {
+        user = await createUser(providedUsername);
+      }
     } else {
       return res.status(400).json({
         error: "Either userId or username is required",
@@ -150,6 +156,7 @@ router.get("/me", async (req: Request, res: Response) => {
     }
 
     const user = await getUser(userId);
+
     if (!user) {
       res.setHeader("Set-Cookie", buildExpiredCookieValue());
       return res.status(404).json({ error: "Session user not found" });
