@@ -9,6 +9,7 @@
     "build": "tsc",
     "start": "node dist/index.js",
     "ascension:start": "node src/modules/ascension/runtime/bot-entry.js",
+    "ascension:dev": "nodemon src/modules/ascension/runtime/bot-entry.js",
     "ascension:deploy": "node src/modules/ascension/runtime/deploy-commands.js"
   },
   "keywords": [],

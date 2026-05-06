@@ -7,6 +7,19 @@
 
 require("dotenv").config();
 
+require("ts-node").register({
+  transpileOnly: true,
+  skipProject: true,
+  compilerOptions: {
+    module: "commonjs",
+    moduleResolution: "node",
+    esModuleInterop: true,
+    resolveJsonModule: true,
+    strict: false,
+    skipLibCheck: true,
+  },
+});
+
 const { Client, GatewayIntentBits, Events } = require("discord.js");
 const { prisma } = require("../../../lib/prisma");
 
