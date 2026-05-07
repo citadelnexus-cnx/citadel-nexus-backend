@@ -1022,6 +1022,60 @@ Checklist:
  admin commands are not available to normal users
  no destructive command is tested in public channels
 
+---
+
+## Controlled Reward Verification
+
+Controlled reward verification confirms that prize-pool distribution works as the preferred reward-management path instead of relying only on direct admin mutation commands.
+
+Tested commands:
+
+- `/admin_prize_pool_view`
+- `/admin_prize_pool_add`
+- `/admin_prize_pool_award`
+- `/admin_prize_pool_remove`
+- `/status`
+- `/admin_player_view`
+
+Verified behavior:
+
+- prize pool status displays correctly
+- XP can be added to the prize pool
+- XP can be awarded from the prize pool
+- player XP updates after prize-pool award
+- prize pool balance decreases after award
+- XP can be removed from the prize pool
+- final pool balance reconciles correctly
+- terminal logs show `[ADMIN]` entries
+- no runtime crash occurred
+- no Prisma error occurred
+- no duplicate player profile appeared
+- no player reset occurred
+
+Verification result:
+
+```text
+Initial prize pool view: passed
+Prize pool add test: passed
+Prize pool award test: passed
+Player state verification: passed
+Prize pool remove test: passed
+Final prize pool view: passed
+```
+
+## Approval
+
+Controlled Reward Path Verified: [x] Yes / [ ] No
+Prize Pool View Verified: [x] Yes / [ ] No
+Prize Pool Add Verified: [x] Yes / [ ] No
+Prize Pool Award Verified: [x] Yes / [ ] No
+Prize Pool Remove Verified: [x] Yes / [ ] No
+Player XP Update Verified: [x] Yes / [ ] No
+Admin Logs Verified: [x] Yes / [ ] No
+Reviewer: Anthony Hammon
+Date: 2026-05-07
+Notes: Prize pool commands verified in the main CNX server admin channel. Founder-only execution path remained active. Pool accounting reconciled correctly after add, award, and remove tests.
+
 ## Admin Safety Approval
 
 Founder/Admin IDs Verified: [x] Yes / [ ] No
