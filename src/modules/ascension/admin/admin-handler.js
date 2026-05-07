@@ -199,28 +199,39 @@ async function adminInventoryView(interaction) {
     });
   }
 
-  const rs = inv.rarity_summary;
+  const rs = inv.rarity_summary || {};
+
   return interaction.editReply({
     embeds: [
       successEmbed(`INVENTORY — ${target.username}`, [
         {
           name: "Item Counts",
-          value: `Relics: ${inv.relic_count} | Artifacts: ${inv.artifact_count} | Cosmetics: ${inv.cosmetic_count} | Collectibles: ${inv.collectible_count} | Titles: ${inv.title_count}`,
+          value:
+            `Relics: ${inv.relic_count ?? 0} | ` +
+            `Artifacts: ${inv.artifact_count ?? 0} | ` +
+            `Cosmetics: ${inv.cosmetic_count ?? 0} | ` +
+            `Collectibles: ${inv.collectible_count ?? 0} | ` +
+            `Titles: ${inv.title_count ?? 0}`,
           inline: false
         },
         {
           name: "Equipped",
-          value: `Relics equipped: ${inv.equipped_relics}`,
+          value: `Relics equipped: ${inv.equipped_relics ?? 0}`,
           inline: false
         },
         {
           name: "Rarity Summary",
-          value: `Common: ${rs.common} | Uncommon: ${rs.uncommon} | Rare: ${rs.rare} | Epic: ${rs.epic} | Legendary: ${rs.legendary}`,
+          value:
+            `Common: ${rs.common ?? 0} | ` +
+            `Uncommon: ${rs.uncommon ?? 0} | ` +
+            `Rare: ${rs.rare ?? 0} | ` +
+            `Epic: ${rs.epic ?? 0} | ` +
+            `Legendary: ${rs.legendary ?? 0}`,
           inline: false
         },
         {
           name: "Total Items",
-          value: `${inv.total_items}`,
+          value: `${inv.total_items ?? 0}`,
           inline: false
         }
       ])

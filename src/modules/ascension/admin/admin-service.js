@@ -172,8 +172,8 @@ function toLegacyPlayerShape(user, profile) {
   const buildings = getBuildingsJson(profile.buildingsJson);
 
   return {
-    user_id: user.discordId || null,
-    platform_user_id: user.id,
+    user_id: user?.discordId || profile.discordId || null,
+    platform_user_id: user?.id || profile.userId || null,
     username: profile.username,
     guardian: profile.guardian,
     stage: profile.stage,
@@ -227,23 +227,42 @@ async function snapshot(actionId, targetUserId, type, playerState, inventoryStat
 }
 
 async function resolveTargetByDiscordId(discordId) {
+  const normalizedDiscordId = String(discordId);
+
   const user = await prisma.user.findUnique({
-    where: { discordId },
+    where: { discordId: normalizedDiscordId },
     include: { ascensionProfile: true }
   });
 
-  if (!user) {
-    throw new Error("No platform user linked to that Discord account.");
+  if (user?.ascensionProfile) {
+    return {
+      user,
+      profile: user.ascensionProfile,
+      resolutionMode: "platform_user"
+    };
   }
 
-  if (!user.ascensionProfile) {
-    throw new Error("Ascension profile not found for that user.");
+  const profile = await prisma.ascensionProfile.findFirst({
+    where: { discordId: normalizedDiscordId },
+    include: { user: true }
+  });
+
+  if (profile) {
+    const fallbackUser =
+      profile.user || {
+        id: profile.userId,
+        discordId: profile.discordId,
+        username: profile.username
+      };
+
+    return {
+      user: fallbackUser,
+      profile,
+      resolutionMode: "ascension_profile_fallback"
+    };
   }
 
-  return {
-    user,
-    profile: user.ascensionProfile
-  };
+  throw new Error("No Ascension profile found for that Discord account.");
 }
 
 async function getPool() {
