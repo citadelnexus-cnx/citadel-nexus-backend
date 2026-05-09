@@ -1,9 +1,12 @@
 {
   "compilerOptions": {
+    "target": "ES2020",
+    "lib": ["ES2020"],
+    "module": "CommonJS",
     "rootDir": "./src",
     "outDir": "./dist",
     "moduleResolution": "node",
-    "ignoreDeprecations": "6.0",
+    "ignoreDeprecations": "5.0",
     "esModuleInterop": true,
     "resolveJsonModule": true,
     "strict": false,

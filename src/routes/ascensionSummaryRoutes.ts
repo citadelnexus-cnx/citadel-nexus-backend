@@ -1,6 +1,7 @@
 //backend/src/routes/ascensionSummaryRoutes.ts
 // backend/src/routes/ascensionSummaryRoutes.ts
 import express, { Request, Response } from "express";
+import { getSessionUserIdFromRequest } from "./sessionRoutes";
 import {
   getAscensionMemberSummaryByDiscordId,
   getAscensionMemberSummaryByUserId,
@@ -23,6 +24,44 @@ function normalizeRouteParam(value: string | string[] | undefined): string | nul
 
   return null;
 }
+
+/**
+ * GET /ascension-summary/me
+ * Internal/member-safe summary for the currently authenticated session user
+ */
+router.get("/me", async (req: Request, res: Response) => {
+  try {
+    const userId = getSessionUserIdFromRequest(req);
+
+    if (!userId) {
+      return res.status(401).json({
+        ok: false,
+        error: "No active session.",
+      });
+    }
+
+    const summary = await getAscensionMemberSummaryByUserId(userId);
+
+    if (!summary) {
+      return res.status(200).json({
+        ok: true,
+        summary: null,
+      });
+    }
+
+    return res.status(200).json({
+      ok: true,
+      summary,
+    });
+  } catch (error) {
+    console.error("[ascension-summary][me] error:", error);
+
+    return res.status(500).json({
+      ok: false,
+      error: "Failed to load ascension summary for current session.",
+    });
+  }
+});
 
 /**
  * GET /ascension-summary/discord/:discordId

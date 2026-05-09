@@ -18,11 +18,31 @@ import ascensionSummaryRoutes from "./routes/ascensionSummaryRoutes";
 dotenv.config();
 
 const app = express();
-const PORT = Number(process.env.PORT) || 3001;
+
+const PORT = Number(process.env.BACKEND_PORT || process.env.PORT || 3001);
+
+const allowedOrigins = (
+  process.env.CORS_ORIGINS ||
+  process.env.FRONTEND_ORIGIN ||
+  "http://localhost:3000"
+)
+  .split(",")
+  .map((origin) => origin.trim())
+  .filter(Boolean);
 
 app.use(
   cors({
-    origin: "http://localhost:3000",
+    origin(origin, callback) {
+      if (!origin) {
+        return callback(null, true);
+      }
+
+      if (allowedOrigins.includes(origin)) {
+        return callback(null, true);
+      }
+
+      return callback(new Error(`CORS blocked origin: ${origin}`));
+    },
     credentials: true,
   })
 );
@@ -45,8 +65,9 @@ app.use("/session", sessionRoutes);
 app.use("/member-state", memberStateRoutes);
 app.use("/ascension-summary", ascensionSummaryRoutes);
 
-// Boot Ascension Discord runtime
-require("./modules/ascension/runtime/bot-entry");
+// Bot Ascension Discord runtime disabled for API production host.
+// Start Ascension separately with its own PM2 process after backend API is stable.
+// require("./modules/ascension/runtime/bot-entry");
 
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
