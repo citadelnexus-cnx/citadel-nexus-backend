@@ -1562,3 +1562,64 @@ Date: 2026-05-09
 Notes: Proceed with controlled production dev-login validation only. Keep bot runtime deferred.
 
 End of Deployment Checklist.
+
+---
+
+## Step 9 Validation — Ascension Discord Runtime PM2 Deployment
+
+Status: PASS
+
+Date: 2026-05-09  
+Reviewer: Anthony Hammon
+
+Confirmed:
+- `citadel-ascension` runs as a separate PM2 process.
+- `citadel-backend` remains isolated as the API process.
+- Both processes are online under PM2.
+- `pm2 save` completed successfully.
+- Discord slash commands respond while local development machine is not required.
+- Ascension runtime connects to Prisma/Supabase successfully.
+- Phase 1 caps are active.
+- Bot runtime remains separate from backend API host logic.
+
+Operational Boundary:
+- Discord is an interface.
+- Backend remains the source of truth.
+- Ascension runtime may process current Phase 1 commands.
+- CNX utility enforcement, wallet entitlement logic, payout automation, and role mutation remain deferred unless separately authorized.
+
+---
+
+## Step 10 Validation — Final Controlled Production-Dev Runtime Check
+
+Status: PASS
+
+Date: 2026-05-09  
+Reviewer: Anthony Hammon
+
+Confirmed:
+- Public frontend is online.
+- Backend API root responds with HTTP 200.
+- CORS allows `https://citadelnexus.app`.
+- Browser session dev-login was successfully tested.
+- `/session/me` returned active session user data.
+- `/member-state/me` returned full member state.
+- `/ascension-summary/me` returned `summary: null`, which is acceptable because no Ascension summary is linked yet.
+- Temporary frontend dev-login route is locked by environment variable.
+- `NEXT_PUBLIC_ENABLE_DEV_LOGIN=false` is active in production.
+- Discord Ascension runtime is online as a persistent PM2 process.
+- Discord slash commands respond.
+- PM2 process list has been saved.
+
+Current Production-Dev State:
+- Frontend: online
+- Backend API: online
+- Discord Ascension Runtime: online
+- Supabase/Prisma: connected
+- Dev-login surface: locked
+- Public launch: not yet open
+- Controlled validation: passed
+
+Result:
+Citadel Nexus has passed controlled production-dev runtime validation. The system is online, persistent, and correctly separated between frontend, backend API, and Discord runtime.
+
