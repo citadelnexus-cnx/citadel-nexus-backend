@@ -15,17 +15,19 @@ Run these commands from the backend droplet:
 ```bash
 cd /home/deploy/apps/citadel-nexus-backend
 pm2 status
-curl -i https://api.citadelnexus.app/ -H "Origin: https://citadelnexus.app"
+curl -i https://api.citadelnexus.app/health -H "Origin: https://citadelnexus.app"
+curl -i https://api.citadelnexus.app/health/db -H "Origin: https://citadelnexus.app"
 git status
 
 Expected result:
 
 citadel-backend is online.
 citadel-ascension is online.
-API returns HTTP/1.1 200 OK.
-Response includes Citadel Nexus Backend Running.
+API /health returns HTTP/1.1 200 OK.
+API /health returns status: healthy.
+API /health/db returns HTTP/1.1 200 OK.
+API /health/db returns status: connected.
 Git working tree is clean.
-Discord Runtime Check
 
 Run:
 
