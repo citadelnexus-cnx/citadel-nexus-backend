@@ -239,3 +239,28 @@ Nginx API boundary:
 - api.citadelnexus.app proxies to local backend service on 127.0.0.1:3001.
 - Backend CORS remains controlled by the Express API.
 - Certbot-managed SSL files must not be manually edited.
+
+---
+
+## PM2 Runtime Stability Baseline
+
+Status: PASS
+
+Confirmed:
+
+- citadel-backend remains online under PM2.
+- citadel-ascension remains online under PM2.
+- pm2-logrotate remains online.
+- Watch mode is disabled for runtime processes.
+- Unstable restarts are 0.
+- Backend API process uses the correct working directory.
+- Ascension runtime process uses the correct working directory.
+- Both runtime processes use Node.js 24.15.0.
+- citadel-backend has max memory restart set to 300M.
+- citadel-ascension has max memory restart set to 300M.
+- PM2 process list has been saved.
+
+Known note:
+
+- A CORS blocked-origin log may appear when testing with an incorrect origin typo.
+- This is expected behavior and confirms the CORS boundary is active.
