@@ -103,6 +103,8 @@ app.use("/ascension-summary", ascensionSummaryRoutes);
 // Start Ascension separately with its own PM2 process after backend API is stable.
 // require("./modules/ascension/runtime/bot-entry");
 
-app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
+const HOST = process.env.BACKEND_HOST || "127.0.0.1";
+
+app.listen(PORT, HOST, () => {
+  console.log(`Server running on ${HOST}:${PORT}`);
 });
