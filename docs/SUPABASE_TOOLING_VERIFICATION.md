@@ -41,7 +41,7 @@ npm:
 
 Supabase CLI:
 
-- 2.58.7
+- 2.98.2
 
 PostgreSQL client tooling:
 
