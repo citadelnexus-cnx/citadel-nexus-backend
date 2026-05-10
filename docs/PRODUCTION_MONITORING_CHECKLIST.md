@@ -18,7 +18,7 @@ pm2 status
 curl -i https://api.citadelnexus.app/health -H "Origin: https://citadelnexus.app"
 curl -i https://api.citadelnexus.app/health/db -H "Origin: https://citadelnexus.app"
 git status
-
+```
 Expected result:
 
 citadel-backend is online.
@@ -30,9 +30,9 @@ API /health/db returns status: connected.
 Git working tree is clean.
 
 Run:
-
+```bash
 pm2 logs citadel-ascension --lines 30
-
+```
 Expected result:
 
 No active startup errors.
@@ -49,8 +49,9 @@ Backend API Log Check
 
 Run:
 
+```bash
 pm2 logs citadel-backend --lines 40
-
+```
 Expected result:
 
 Backend server is running on port 3001.
@@ -63,8 +64,9 @@ PM2 Reboot Persistence Check
 
 Run:
 
+```bash
 systemctl status pm2-deploy --no-pager
-
+```
 Expected result:
 
 Service is loaded.
@@ -76,11 +78,12 @@ Public Frontend Check
 
 Open:
 
+```bash
 https://citadelnexus.app
 https://www.citadelnexus.app
 https://www.citadelnexus.app/app
 https://www.citadelnexus.app/dev-login
-
+```
 Expected result:
 
 Public frontend loads.
@@ -95,12 +98,15 @@ When /dev-login is disabled, unauthenticated API session routes should return no
 
 Run:
 
+```bash
 curl -i https://api.citadelnexus.app/session/me \
   -H "Origin: https://citadelnexus.app"
+```
 
+```bash
 curl -i https://api.citadelnexus.app/member-state/me \
   -H "Origin: https://citadelnexus.app"
-
+```
 Expected result when no browser session cookie is supplied:
 
 401 Unauthorized
