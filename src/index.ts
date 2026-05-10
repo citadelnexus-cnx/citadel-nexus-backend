@@ -1,7 +1,8 @@
 //backend/src/index.ts
+import "dotenv/config";
 import express, { Request, Response } from "express";
-import dotenv from "dotenv";
 import cors from "cors";
+import { prisma } from "./lib/prisma";
 
 import tokenRoutes from "./routes/tokenRoutes";
 import userRoutes from "./routes/userRoutes";
@@ -14,8 +15,6 @@ import discordSyncWorkerRoutes from "./routes/discordSyncWorkerRoutes";
 import sessionRoutes from "./routes/sessionRoutes";
 import memberStateRoutes from "./routes/memberStateRoutes";
 import ascensionSummaryRoutes from "./routes/ascensionSummaryRoutes";
-
-dotenv.config();
 
 const app = express();
 
@@ -62,6 +61,30 @@ app.get("/health", (_req: Request, res: Response) => {
     timestamp: new Date().toISOString(),
     environment: process.env.NODE_ENV || "unknown",
   });
+});
+
+app.get("/health/db", async (_req: Request, res: Response) => {
+  try {
+    await prisma.$queryRaw`SELECT 1`;
+
+    res.status(200).json({
+      ok: true,
+      service: "citadel-database",
+      status: "connected",
+      timestamp: new Date().toISOString(),
+      environment: process.env.NODE_ENV || "unknown",
+    });
+  } catch (error) {
+    console.error("Database health check failed:", error);
+
+    res.status(503).json({
+      ok: false,
+      service: "citadel-database",
+      status: "unavailable",
+      timestamp: new Date().toISOString(),
+      environment: process.env.NODE_ENV || "unknown",
+    });
+  }
 });
 
 app.use("/user", userRoutes);
