@@ -210,3 +210,32 @@ Confirmed:
 - Database health endpoint active
 - Git working tree clean
 - /dev-login disabled
+
+---
+
+## Nginx Security Header Baseline
+
+Status: PASS
+
+Confirmed:
+
+- API reverse proxy remains active.
+- Nginx syntax test passes.
+- Nginx reload completes successfully.
+- Backend health endpoint remains online.
+- Database health endpoint remains online.
+- HTTPS API responses include security headers.
+
+Active security headers:
+
+- X-Frame-Options: DENY
+- X-Content-Type-Options: nosniff
+- Referrer-Policy: no-referrer
+- Permissions-Policy: camera=(), microphone=(), geolocation=(), payment=()
+- Strict-Transport-Security: max-age=31536000; includeSubDomains
+
+Nginx API boundary:
+
+- api.citadelnexus.app proxies to local backend service on 127.0.0.1:3001.
+- Backend CORS remains controlled by the Express API.
+- Certbot-managed SSL files must not be manually edited.
