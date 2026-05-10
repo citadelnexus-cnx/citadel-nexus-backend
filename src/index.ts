@@ -53,6 +53,17 @@ app.get("/", (_req: Request, res: Response) => {
   res.send("Citadel Nexus Backend Running");
 });
 
+app.get("/health", (_req: Request, res: Response) => {
+  res.status(200).json({
+    ok: true,
+    service: "citadel-backend",
+    status: "healthy",
+    uptime: process.uptime(),
+    timestamp: new Date().toISOString(),
+    environment: process.env.NODE_ENV || "unknown",
+  });
+});
+
 app.use("/user", userRoutes);
 app.use("/payout", payoutRoutes);
 app.use("/token", tokenRoutes);
