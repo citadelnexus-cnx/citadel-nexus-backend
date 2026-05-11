@@ -48,7 +48,7 @@ Reason:
 | BLK-011 | RLS/direct frontend access decision | OPEN | Confirm direct Supabase table access remains disabled, or complete tested user-scoped policies. |
 | BLK-012 | Recovery time SLA decision | OPEN | Accept manual same-day recovery or upgrade Supabase backup strategy before public launch. |
 | BLK-013 | Monitoring cadence undefined | OPEN | Define daily/weekly checks for API, bot, Supabase, logs, and Git status. |
-| BLK-014 | Incident operator checklist missing | OPEN | Create short emergency checklist for outage/security/restore events. |
+| BLK-014 | Incident operator checklist missing | RESOLVED | Incident operator checklist documented in docs/INCIDENT_OPERATOR_CHECKLIST.md. |
 | BLK-015 | Restore-test cleanup item | OPEN / NON-PRODUCTION | Decide whether to remove or restrict public.rls_auto_enable() in restore-test. |
 | BLK-016 | Public launch final approval | OPEN | Update final launch gate after blockers are resolved or accepted. |
 
