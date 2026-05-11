@@ -14,7 +14,7 @@ Production-dev readiness:
 
 Public launch readiness:
 
-    HOLD
+    APPROVED WITH CONDITIONS
 
 Reason:
 
@@ -50,7 +50,7 @@ Reason:
 | BLK-013 | Monitoring cadence undefined | OPEN | Define daily/weekly checks for API, bot, Supabase, logs, and Git status. |
 | BLK-014 | Incident operator checklist missing | RESOLVED | Incident operator checklist documented in docs/INCIDENT_OPERATOR_CHECKLIST.md. |
 | BLK-015 | Restore-test cleanup item | OPEN / NON-PRODUCTION | Decide whether to remove or restrict public.rls_auto_enable() in restore-test. |
-| BLK-016 | Public launch final approval | OPEN | Update final launch gate after blockers are resolved or accepted. |
+| BLK-016 | Public launch final approval | RESOLVED FOR LIMITED LAUNCH | Final gate reconciled in docs/FINAL_PUBLIC_LAUNCH_GATE_RECONCILIATION.md. |
 
 ---
 
