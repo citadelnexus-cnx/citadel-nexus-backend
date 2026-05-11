@@ -1,127 +1,89 @@
-# Citadel Nexus Production Launch Gate Review v1.0
+# Citadel Nexus Production Launch Gate Review v2.0
 
 ## Purpose
 
-This document records the production readiness audit for the current Citadel Nexus production-dev system.
+This document reconciles Citadel Nexus production-dev readiness and public launch readiness after the completed infrastructure, security, backup, restore, and recovery baseline work.
 
-This is a launch gate review, not a public launch approval.
-
-The purpose is to confirm which systems are operational, which systems are intentionally deferred, and what must remain blocked before public launch.
+This document is the active launch gate record.
 
 ---
 
-## Review Scope
+## Current Decision
 
-This review covers:
+Production-dev readiness:
 
-- Public frontend availability
-- Backend API availability
-- Database health
-- Discord Ascension runtime
-- PM2 process persistence
-- Log rotation
-- Nginx reverse proxy
-- Security headers
-- Firewall posture
-- Git repository state
-- Disabled development surfaces
-- Deferred utility and automation features
+    PASS
 
----
+Public launch readiness:
 
-## Current Runtime Surfaces
+    HOLD
 
-### Public Frontend
+Reason:
 
-- Domain: https://citadelnexus.app
-- Status: Online
-- Role: Public-facing entry surface
+    Citadel Nexus is approved for controlled production-dev operation, but not yet approved for full public launch.
 
-### Backend API
+The prior backup/restore blocker has been reduced because production export and restore-test validation have now been completed.
 
-- Domain: https://api.citadelnexus.app
-- Local service port: 3001
-- Public access path: Nginx reverse proxy only
-- PM2 process: citadel-backend
-- Status: Online
-
-### Discord Ascension Runtime
-
-- Discord bot: Ascension Command
-- PM2 process: citadel-ascension
-- Status: Online
-
-### PM2 Support Module
-
-- Module: pm2-logrotate
-- Status: Online
+Public launch remains on hold because final security cleanup, launch-scope decisions, and public-facing feature boundaries still need final review.
 
 ---
 
-## Source of Truth Boundaries
+## Evidence Documents
 
-The following boundaries are active:
+This launch gate review depends on the following documentation:
 
-- Backend is the source of truth.
-- Discord is an interface only.
-- Frontend reflects backend-defined state.
-- Discord roles do not define backend truth.
-- Local development machine is not required for runtime operation.
-- Backend API and Discord Ascension runtime run as separate PM2 processes.
-
----
-
-## Operational Pass Criteria
-
-The system is considered production-dev operational when:
-
-- Frontend loads publicly.
-- Backend API `/health` returns HTTP 200.
-- Backend API `/health/db` returns HTTP 200.
-- Database health reports connected.
-- citadel-backend is online in PM2.
-- citadel-ascension is online in PM2.
-- pm2-logrotate is online in PM2.
-- PM2 systemd service is active and enabled.
-- Backend service is bound to localhost only.
-- Nginx proxies public API traffic to localhost.
-- UFW denies inbound by default.
-- UFW allows only SSH and Nginx web traffic.
-- Security headers are present on HTTPS API responses.
-- Git working tree is clean.
-- Git branch is synced with origin/main.
-- Temporary dev-login remains disabled.
+- docs/PRODUCTION_RUNBOOK.md
+- docs/PRODUCTION_LAUNCH_GATE_REVIEW.md
+- docs/BACKUP_RECOVERY_INCIDENT_RESPONSE.md
+- docs/SUPABASE_BACKUP_RESTORE_BASELINE.md
+- docs/SUPABASE_BACKUP_DECISION_RESTORE_TEST_PLAN.md
+- docs/SUPABASE_MANUAL_EXPORT_RESTORE_PREP.md
+- docs/SUPABASE_TOOLING_VERIFICATION.md
+- docs/SUPABASE_SECRET_SAFE_EXPORT_PLAN.md
+- docs/SUPABASE_PRODUCTION_EXPORT_DRY_RUN.md
+- docs/SUPABASE_PRODUCTION_EXPORT_VERIFICATION.md
+- docs/SUPABASE_RESTORE_TEST_IMPORT_VERIFICATION.md
+- docs/SUPABASE_RECOVERY_OBJECTIVES_AND_WARNINGS.md
+- docs/SUPABASE_SECURITY_BASELINE.md
+- docs/RLS_ACCESS_MODEL.md
+- docs/PUBLIC_LAUNCH_BLOCKER_REGISTER.md
 
 ---
 
-## Current Validation Status
+## Infrastructure Gate
 
-Status: PASS
+Status:
+
+    PASS
 
 Confirmed:
 
-- Public frontend is online.
-- Backend API is online.
-- Backend health endpoint is active.
-- Database health endpoint is active.
-- Database reports connected.
-- Discord Ascension runtime is online.
+- Backend API is online behind Nginx.
+- HTTPS API route is live.
+- Nginx configuration validates successfully.
+- UFW is active.
+- Only SSH and HTTPS are publicly exposed.
+- Backend app port is bound to localhost.
+- PM2 manages backend and Ascension runtime.
 - PM2 process list is saved.
-- PM2 systemd service is enabled and running.
-- pm2-logrotate is installed and online.
-- Nginx reverse proxy is active.
-- Security headers are present.
-- Backend service listens on 127.0.0.1:3001.
-- Firewall is active.
-- Git working tree is clean.
-- Repository is synced with origin/main.
-- Temporary dev-login is disabled.
+- Health endpoint returns healthy.
+- Database health endpoint returns connected.
+- GitHub main branch is current.
+- Production runbook exists.
+
+Current infrastructure decision:
+
+    Approved for production-dev.
 
 ---
 
-## Security Header Baseline
+## API Security Header Gate
 
-Expected public API security headers:
+Status:
+
+    PASS
+
+Confirmed active security headers:
 
 - X-Frame-Options: DENY
 - X-Content-Type-Options: nosniff
@@ -129,91 +91,343 @@ Expected public API security headers:
 - Permissions-Policy: camera=(), microphone=(), geolocation=(), payment=()
 - Strict-Transport-Security: max-age=31536000; includeSubDomains
 
-Status: PASS
+Current security header decision:
+
+    Approved for production-dev.
 
 ---
 
-## Network Exposure Baseline
+## Network Exposure Gate
 
-Expected exposed inbound services:
+Status:
 
-- 22/tcp for SSH
-- 80/tcp for HTTP redirect
-- 443/tcp for HTTPS
+    PASS
 
-Expected backend binding:
+Confirmed:
 
-- 127.0.0.1:3001 only
+- Public exposed ports are limited to SSH and HTTPS.
+- Backend API runtime is bound to localhost.
+- Nginx proxies public API traffic to local backend.
+- Direct public access to backend port is blocked by binding and firewall posture.
 
-Status: PASS
+Current network decision:
 
----
-
-## Deferred Systems
-
-The following systems remain deferred and may not be activated without separate Command approval:
-
-- CNX utility enforcement
-- Wallet entitlement logic
-- Payout automation
-- Automatic Discord role mutation
-- NFT-gated access
-- Production public launch claims
-- Paid access logic
-- Token-based gating
-- Public reward guarantees
-- Automated treasury movement
-
-Status: BLOCKED UNTIL AUTHORIZED
+    Approved for production-dev.
 
 ---
 
-## Launch Gate Result
+## Runtime Gate
 
-Current system status:
+Status:
 
-PASS FOR CONTROLLED PRODUCTION-DEV OPERATION
+    PASS
 
-Current public launch status:
+Confirmed:
 
-NOT YET APPROVED FOR FULL PUBLIC LAUNCH
+- citadel-backend PM2 process is online.
+- citadel-ascension PM2 process is online.
+- Ascension logs confirm bot online.
+- Ascension logs confirm Prisma/Supabase connection verified.
+- Ascension logs confirm Phase 1 caps active.
+
+Current runtime decision:
+
+    Approved for production-dev.
+
+---
+
+## Supabase Project Gate
+
+Status:
+
+    PASS FOR PRODUCTION-DEV
+
+Confirmed:
+
+- Production Supabase project is healthy.
+- Restore-test Supabase project is healthy.
+- Production database version is PostgreSQL 17.x.
+- Restore-test database version is PostgreSQL 17.x.
+- Supabase dashboard usage is within free-plan limits at time of review.
+- Supabase account owner authenticator app is configured.
+- Classic Supabase access tokens are not currently created.
+- Account audit logs are visible.
+- Supabase telemetry sharing is disabled.
+- Project-level GitHub integration is not active.
+
+Current Supabase decision:
+
+    Approved for production-dev.
+
+Public launch note:
+
+    Free-plan backup limitations must remain accepted intentionally or be upgraded before a higher-risk public launch.
+
+---
+
+## Backup Gate
+
+Status:
+
+    PASS FOR PRODUCTION-DEV
+
+Confirmed:
+
+- Backup and recovery baseline documented.
+- Manual export preparation documented.
+- Secret-safe export process documented.
+- PostgreSQL 17 client tooling installed and verified.
+- Production database manual export completed.
+- Export file was created successfully.
+- Export file was verified as PostgreSQL custom database dump.
+- pg_restore could list dump contents.
+- Backup artifacts are ignored by Git.
+- Production connection string was not committed.
+- Production connection string was not documented.
+- Temporary production database URL variable was cleared.
+- Shell history was checked after cleanup.
+
+Current backup decision:
+
+    Approved for production-dev.
+
+---
+
+## Restore Gate
+
+Status:
+
+    PASS FOR PRODUCTION-DEV
+
+Confirmed:
+
+- Restore-test project exists and is separate from production.
+- Production dump was imported into restore-test.
+- Restore-test database was queryable after import.
+- Citadel Nexus application tables restored.
+- Application row counts were validated.
+- Prisma migration table restored.
+- Restore-test connection string was not committed.
+- Restore-test connection string was not documented.
+- Temporary restore-test database URL variable was cleared.
+- Restore logs are ignored by Git.
+
+Validated restored public application tables:
+
+| Table | Status | Row Count |
+|---|---:|---:|
+| public.AccessState | PASS | 3 |
+| public.AscensionAdminAction | PASS | 13 |
+| public.AscensionAdminSnapshot | PASS | 0 |
+| public.AscensionPrizePool | PASS | 1 |
+| public.AscensionProfile | PASS | 2 |
+| public.DiscordRoleSyncAudit | PASS | 0 |
+| public.Entitlement | PASS | 0 |
+| public.User | PASS | 3 |
+| public._prisma_migrations | PASS | 7 |
+
+Current restore decision:
+
+    Approved for production-dev.
+
+---
+
+## Recovery Objective Gate
+
+Status:
+
+    PASS FOR PRODUCTION-DEV
+
+Confirmed:
+
+- Recovery Point Objective is documented.
+- Recovery point is proven by successful restore-test import.
+- Recovery Time Objective is documented.
+- RTO is not yet SLA-grade.
+- Current production-dev target is same-day manual recovery.
+- Operational target is 2-4 hours once operator is available.
+- Public SLA is not approved.
+
+Current recovery decision:
+
+    Approved for production-dev.
+
+Public launch note:
+
+    Public launch may proceed only if the project accepts manual same-day recovery or upgrades to stronger backup automation.
+
+---
+
+## Supabase Restore Warning Classification Gate
+
+Status:
+
+    PASS WITH DOCUMENTED LIMITATION
+
+Confirmed:
+
+- Restore log contained Supabase-managed object warnings/errors.
+- Warnings were documented as accepted managed-platform limitations for production-dev.
+- Citadel Nexus application tables restored despite managed-platform warnings.
+- Supabase-managed internal object restore perfection is not required for the current production-dev recovery baseline.
+
+Accepted warning categories:
+
+- Existing schema warnings.
+- Existing extension warnings.
+- Supabase-managed role ownership warnings.
+- Supabase-managed trigger warnings.
+- Storage object warnings while storage is not production-used.
+- Realtime/internal object warnings.
+- Managed-platform permission limitations.
+
+Current warning classification decision:
+
+    Accepted for production-dev.
+
+---
+
+## RLS and Direct Database Access Gate
+
+Status:
+
+    PASS FOR PRODUCTION-DEV / HOLD FOR PUBLIC DIRECT ACCESS
+
+Confirmed:
+
+- Current architecture is backend-driven.
+- Direct public browser access to Supabase application tables is not authorized.
+- Public anonymous Supabase table access is not part of the architecture.
+- Authenticated direct table access is deferred until identity mapping and RLS policy testing are complete.
+- RLS access model is documented.
+- RLS enabled with no policy is currently restrictive, not permissive.
+- User-scoped policies are future work only.
+
+Current RLS decision:
+
+    Approved for production-dev because backend/runtime credentials control database access.
+
+Public launch note:
+
+    Do not enable direct frontend Supabase table access until RLS policies are designed, tested in non-production, and approved.
+
+---
+
+## Restore-Test Security Advisor Gate
+
+Status:
+
+    REVIEW REQUIRED BEFORE PUBLIC LAUNCH
+
+Restore-test advisor warning:
+
+    public.rls_auto_enable()
+
+Classification:
+
+    Restore-test cleanup item
 
 Reason:
 
-The runtime is operational and hardened, but several governance, legal, economic, wallet, role mutation, payout, and public-claims boundaries remain deferred.
+    Restore-test Security Advisor reported the function as a SECURITY DEFINER function executable by anon and authenticated roles.
 
-This system may remain online for controlled validation, internal testing, Discord command testing, and infrastructure monitoring.
+Current decision:
 
-It should not yet be marketed as a fully launched public economy, token utility system, NFT entitlement system, payout system, or automated role-gated platform.
+    Not a blocker to the recovery baseline.
 
----
+Public launch decision:
 
-## Required Before Public Launch
+    Must be reviewed before public launch.
 
-Before public launch, complete:
+Required action:
 
-1. Public claims review
-2. Terms and disclaimers review
-3. Privacy policy review
-4. Discord public onboarding review
-5. Wallet trust-boundary review
-6. CNX utility activation review
-7. Role mutation authorization review
-8. Payout automation authorization review
-9. Incident response procedure
-10. Backup and restore procedure
-11. Admin access review
-12. Monitoring escalation procedure
+    Confirm whether public.rls_auto_enable() exists in production.
+    Confirm whether it is needed.
+    If not needed, remove it.
+    If needed, revoke EXECUTE from anon and authenticated roles.
+    Document the final result in the Supabase security baseline.
 
 ---
 
-## Final Review Determination
+## Git and Documentation Gate
 
-Production-dev runtime: PASS
+Status:
 
-Public launch gate: HOLD
+    PASS
 
-Recommended next status:
+Confirmed:
 
-Controlled Online Validation
+- Production runbook committed.
+- Backup/recovery baseline committed.
+- Supabase backup/restore baseline committed.
+- Supabase manual export preparation committed.
+- Supabase tooling verification committed.
+- Supabase secret-safe export plan committed.
+- Supabase production export dry-run committed.
+- Supabase production export verification committed.
+- Supabase restore-test import verification committed.
+- Supabase recovery objectives and warnings committed.
+- Public launch blocker register committed.
+- Git working tree clean after each phase.
 
+Current Git/documentation decision:
+
+    Approved for production-dev.
+
+---
+
+## Public Launch Blocker Register
+
+Current blocker status:
+
+    REDUCED BUT NOT CLEARED
+
+Resolved or reduced blockers:
+
+- BLK-001 database restore test: RESOLVED FOR PRODUCTION-DEV
+- BLK-002 backup strategy: RESOLVED FOR PRODUCTION-DEV
+- Recovery point proof: RESOLVED
+- Manual export process: RESOLVED
+- Restore-test application-table validation: RESOLVED
+
+Remaining launch blockers:
+
+| Blocker | Status | Required Before Public Launch |
+|---|---:|---|
+| Final security review | OPEN | Review production Security Advisor, restore-test warnings, and any exposed functions. |
+| RLS public/direct access decision | OPEN | Confirm no direct frontend table access or complete RLS policy test. |
+| Recovery time SLA decision | OPEN | Accept same-day/manual recovery or upgrade backup strategy. |
+| Supabase plan decision | OPEN | Stay free with accepted limitations or upgrade for scheduled backups. |
+| Public-facing feature scope | OPEN | Define exactly what is publicly enabled at launch. |
+| Monitoring cadence | OPEN | Define daily/weekly checks after launch. |
+| Incident operator checklist | OPEN | Finalize short emergency checklist. |
+
+---
+
+## Final Decision
+
+Production-dev status:
+
+    PASS
+
+Public launch status:
+
+    HOLD
+
+Citadel Nexus may continue controlled production-dev operations.
+
+Citadel Nexus is not yet approved for full public launch.
+
+Reason public launch remains on hold:
+
+    The backup/restore blocker has been resolved for production-dev, but final public launch still requires security review, public feature-scope confirmation, RLS/direct-access confirmation, recovery-time acceptance, and monitoring cadence documentation.
+
+---
+
+## Recommended Next Step
+
+Step 33 — Public Launch Security Cleanup and Final Advisor Review
+
+Goal:
+
+    Review the production Supabase Security Advisor, classify any remaining warnings, resolve or document the restore-test rls_auto_enable warning, and update the public launch blocker register.
