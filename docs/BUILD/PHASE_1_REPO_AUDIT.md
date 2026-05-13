@@ -1491,17 +1491,208 @@ Goal:
 
 Identify admin commands, admin services, reset controls, and audit records.
 
-Commands to run:
+Commands run:
 
-grep -RInE "admin|Admin|founder|FOUNDER|reset|lock|unlock|snapshot|audit" src prisma | head -n 250
+grep -RInE "admin|Admin|founder|FOUNDER|reset|lock|unlock|snapshot|audit|ALLOW_GLOBAL_RESET|ADMIN_MODE" src prisma docs/ARCHITECTURE docs/DOCTRINE | head -n 300
+
+sed -n '1,360p' src/modules/ascension/admin/admin-handler.js
+
+sed -n '361,760p' src/modules/ascension/admin/admin-handler.js
+
+sed -n '761,1200p' src/modules/ascension/admin/admin-handler.js
+
+sed -n '1,420p' src/modules/ascension/admin/admin-service.js
+
+sed -n '421,840p' src/modules/ascension/admin/admin-service.js
+
+sed -n '841,1200p' src/modules/ascension/admin/admin-service.js
+
+sed -n '1160,1240p' src/modules/ascension/admin/admin-service.js
+
+grep -RInE "ADMIN HANDLER|ADMIN SERVICE|MIN SERVICE|sed -n|echo \"" src/modules/ascension/admin/admin-handler.js src/modules/ascension/admin/admin-service.js || true
 
 Status:
 
-NOT_TESTED
+PASS WITH HIGH-RISK REVIEW NOTES
+
+Verified admin files surfaced:
+
+- src/modules/ascension/admin/admin-handler.js
+- src/modules/ascension/admin/admin-service.js
+- src/modules/ascension/admin/admin-schema.js
+- src/modules/ascension/admin/prize-pool-schema.js
+- src/services/ascensionAdminService.ts
+- src/services/ascensionAuditService.ts
+- src/services/ascensionPrizePoolService.ts
+- prisma/schema.prisma
+- src/modules/ascension/docs/ASCENSION_MODULE_STATUS.md
+
+Verified admin permission boundary:
+
+- admin-handler.js reads FOUNDER_IDS from environment.
+- FOUNDER_IDS is comma-split, trimmed, and filtered.
+- isFounder checks whether interaction.user.id is included in FOUNDER_IDS.
+- every inspected admin handler begins with founder check.
+- unauthorized users receive an ephemeral Unauthorized response.
+- admin responses use ephemeral replies through flags: 64.
+
+Verified admin command groups:
+
+Inspection commands:
+
+- admin_help
+- admin_player_view
+- admin_inventory_view
+
+Direct XP commands:
+
+- admin_add_xp
+- admin_remove_xp
+- admin_set_xp
+
+Direct resource commands:
+
+- admin_grant_resource
+- admin_remove_resource
+- admin_set_resource
+
+Destructive/player state commands:
+
+- admin_reset_player
+- admin_delete_player
+- admin_reset_all
+- admin_recalc_player
+- admin_lock_player
+- admin_unlock_player
+- admin_restore_player
+
+Prize/bulk award commands:
+
+- admin_prize_pool_view
+- admin_prize_pool_add
+- admin_prize_pool_award
+- admin_prize_pool_remove
+- admin_award_all
+- admin_award_top
+
+Verified admin router behavior:
+
+- handleAdminCommand routes all known admin command names to dedicated handler functions.
+- unknown admin commands return without action.
+- each handler catches service errors and returns the error message to the admin interaction.
+
+Verified confirmation requirements:
+
+- admin_reset_player requires confirm value RESET.
+- admin_delete_player requires confirm_phrase value DELETE_PLAYER.
+- admin_reset_all requires confirm_phrase value RESET_ALL_PLAYERS.
+
+Verified service controls:
+
+- admin-service.js defines RATE_LIMIT_MS as 2000.
+- admin-service.js rate limits commands by adminId and commandKey.
+- admin-service.js defines MAX_XP_GRANT as 100,000.
+- admin-service.js defines MAX_RESOURCE_GRANT as 1,000,000.
+- admin-service.js defines VALID_RESOURCES as credits, intel, power, node_score.
+- admin-service.js defines starter state values for reset operations.
+- admin-service.js defines phase caps for phases 1 through 4.
+- admin-service.js defines rank ladder thresholds matching the Ascension rank ladder.
+- admin-service.js defines evolution stage thresholds matching Ascension stages.
+- admin-service.js reads ADMIN_MODE from environment and defaults to dev.
+- admin-service.js reads STRICT_ECONOMY from environment.
+- admin-service.js reads ALLOW_GLOBAL_RESET from environment.
+- getAdminModeStatus exposes adminMode, currentPhase, strictEconomy, allowGlobalReset, and phaseCaps.
+
+Verified mutation restrictions:
+
+- destructive actions are blocked outside dev mode.
+- reset_player is classified as destructive.
+- delete_player is classified as destructive.
+- reset_all is classified as destructive.
+- direct node_score admin mutation is disabled outside dev mode.
+- STRICT_ECONOMY blocks direct add_xp, remove_xp, set_xp, grant_resource, and set_resource.
+- STRICT_ECONOMY error message directs use of admin_prize_pool_award instead.
+- reset_all additionally requires ALLOW_GLOBAL_RESET=true.
+
+Verified admin audit behavior:
+
+- admin-service.js log function writes to AscensionAdminAction.
+- log records adminUserId, adminUsername, targetUserId, targetUsername, actionType, resourceType, amount, valueBefore, valueAfter, reason, and metadataJson.
+- snapshot function writes to AscensionAdminSnapshot.
+- resetPlayer creates an admin action and pre_reset snapshot.
+- deletePlayer creates an admin action and pre_delete snapshot.
+- resetAll creates an admin action and pre_bulk_reset snapshot for each profile.
+- restorePlayer restores from pre_reset or pre_delete snapshot and logs restore_player.
+- XP/resource/prize/bulk operations write admin action logs.
+
+Verified admin economy mutation behavior:
+
+- addXP mutates AscensionProfile.xp and rank.
+- removeXP mutates AscensionProfile.xp and rank.
+- setXP mutates AscensionProfile.xp and rank.
+- grantResource mutates credits, intel, power, or nodeScore.
+- removeResource mutates credits, intel, power, or nodeScore.
+- setResource mutates credits, intel, power, or nodeScore.
+- node_score mutation recalculates stage.
+- power grants/sets are capped by maxPower.
+- prizePoolAdd increases AscensionPrizePool totalXpAvailable and totalXpAdded.
+- prizePoolAward transfers XP from prize pool to a player and updates rank.
+- prizePoolRemove reduces totalXpAvailable and increases totalXpRemoved.
+- bulkAwardAll awards XP to all unlocked players from prize pool.
+- bulkAwardTop awards XP to top unlocked players by nodeScore through bulkAwardGroup.
+- bulkAwardGroup skips locked or unresolved players.
+
+Verified lock/recovery behavior:
+
+- lockPlayer sets isLocked true and lockReason.
+- unlockPlayer sets isLocked false and clears lockReason.
+- restorePlayer upserts AscensionProfile from latest pre_reset or pre_delete snapshot.
+- gameplay handlers surfaced by search check lock state before claim and mission/build actions.
+
+Artifact verification:
+
+- Terminal output showed pasted-command fragments during admin inspection.
+- Artifact grep found no matching strings in admin-handler.js or admin-service.js.
+- Targeted raw checks confirmed key reset/reset-all/recalc/export sections are readable.
+- git status remained clean.
 
 Findings:
 
-PENDING.
+The Discord admin surface is founder-gated through FOUNDER_IDS and exposes broad operational control over Ascension profiles, XP, resources, prize pools, locks, resets, deletes, restores, and bulk awards.
+
+The admin service includes useful safety controls: founder gate at handler level, confirmation phrases for destructive commands, rate limiting, STRICT_ECONOMY restrictions, ADMIN_MODE restrictions, ALLOW_GLOBAL_RESET requirement, audit logs, and snapshots.
+
+The admin surface is powerful enough to change gameplay outcomes and should remain tightly controlled.
+
+High-risk review notes:
+
+- FOUNDER_IDS is the critical admin authorization control for Discord admin commands.
+- ADMIN_MODE defaults to dev, which permits destructive actions unless environment configuration says otherwise.
+- ALLOW_GLOBAL_RESET enables full-player reset capability and must remain false unless intentionally testing recovery paths.
+- STRICT_ECONOMY should be enabled when direct XP/resource injection must be blocked.
+- Direct admin XP/resource mutations still exist and can bypass ordinary gameplay pacing when allowed.
+- admin_reset_all can affect every Ascension profile.
+- admin_delete_player deletes AscensionProfile records after snapshot.
+- admin_restore_player can recreate/update AscensionProfile from stored snapshots.
+- bulkAwardAll and bulkAwardTop can move large XP amounts from prize pool to many players.
+- prizePoolAdd can create prize pool XP supply and depends on admin trust and audit discipline.
+- Prize pool operations and direct mutation operations should be separated in policy and future UI.
+- Rate limiting is in-memory and may reset on process restart.
+- Admin logs exist but should be reviewed for completeness, retention, and operator review workflow.
+- Error messages are returned directly to admin users; this is acceptable for founder-only use but should still avoid leaking sensitive internals.
+
+Follow-up required:
+
+- confirm production ADMIN_MODE value
+- confirm production STRICT_ECONOMY value
+- confirm production ALLOW_GLOBAL_RESET value
+- confirm FOUNDER_IDS contains only approved founder/operator Discord IDs
+- confirm Discord command permissions do not expose admin commands broadly in a confusing way
+- review admin-service.js against src/services/ascensionAdminService.ts for duplicate/legacy logic
+- review ASCENSION_MODULE_STATUS.md for stale admin command documentation
+- consider making destructive actions require a second approval path before production
+- consider adding command-level audit exports or dashboard review views
+- do not change admin logic during this audit
 
 ---
 
