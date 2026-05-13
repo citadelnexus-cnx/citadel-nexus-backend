@@ -252,18 +252,74 @@ Goal:
 
 Identify available npm scripts and confirm what commands exist before using them.
 
-Commands to run:
+Commands run:
 
 cat package.json
+
 npm run
 
 Status:
 
-NOT_TESTED
+PASS WITH FOLLOW-UP REVIEW NOTE
+
+Verified package metadata:
+
+- package name: backend
+- version: 1.0.0
+- description: Citadel Nexus backend services and gameplay modules
+- main entry: dist/index.js
+- module type: commonjs
+- package is marked private as the string value "true"
+
+Verified npm scripts:
+
+- dev: nodemon --watch src --ext ts --exec ts-node src/index.ts
+- build: tsc
+- start: node dist/index.js
+- ascension:start: node src/modules/ascension/runtime/bot-entry.js
+- ascension:dev: nodemon src/modules/ascension/runtime/bot-entry.js
+- ascension:deploy: node src/modules/ascension/runtime/deploy-commands.js
+
+Verified major runtime dependencies:
+
+- @hashgraph/sdk
+- @prisma/adapter-pg
+- @prisma/client
+- cors
+- discord.js
+- dotenv
+- express
+- mongoose
+- pg
+- prisma
+
+Verified major dev dependencies:
+
+- @types/cors
+- @types/express
+- @types/node
+- nodemon
+- ts-node
+- typescript
 
 Findings:
 
-PENDING.
+The backend has scripts for local API development, TypeScript build, compiled production start, Ascension bot start/dev, and Discord command deployment.
+
+No npm test script is currently listed.
+
+No npm lint script is currently listed.
+
+The build command exists and should be used later for safe validation.
+
+The ascension:deploy script exists and must be treated as approval-gated because it deploys Discord commands.
+
+Follow-up required:
+
+- confirm whether "private" should be boolean true instead of string "true"
+- confirm whether mongoose is actively used or legacy/deprecated
+- consider adding test/lint scripts in a future approved implementation task
+- do not run ascension:deploy without explicit approval
 
 ---
 
