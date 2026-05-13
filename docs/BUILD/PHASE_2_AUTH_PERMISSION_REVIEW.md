@@ -865,3 +865,223 @@ Follow-up required:
 - do not execute live role mutation during this audit
 - do not change code during this review
 
+
+---
+
+## 8. Phase 2 Implementation Plan
+
+Status:
+
+READY FOR REVIEW.
+
+Implementation branch required:
+
+Do not implement on this audit branch.
+
+Recommended implementation branch:
+
+feature/http-auth-permission-layer
+
+Primary goal:
+
+Add a centralized HTTP authentication and permission layer before production exposure of high-risk API routes.
+
+Implementation principles:
+
+- services keep business-rule validation
+- middleware verifies caller identity and authority
+- routes apply the correct permission class before calling services
+- no route should trust body-provided adminId as proof of authority
+- no worker route should be public
+- owner-scoped routes must verify session ownership
+- development-only routes must be disabled in production
+- high-risk changes require tests before merge
+
+Recommended implementation order:
+
+1. Add shared HTTP auth types.
+
+Create authenticated request typing for:
+
+- session user id
+- admin/founder identity
+- internal worker identity
+- auth source
+- request permission class
+
+2. Extract session parsing.
+
+Move session parsing out of sessionRoutes.ts into a reusable helper or middleware module.
+
+Required helpers:
+
+- getSessionUserIdFromRequest
+- requireSession
+- optionalSession
+
+3. Add owner authorization middleware.
+
+Required middleware:
+
+- requireOwnerParam(paramName)
+- requireOwnerOrAdmin(paramName)
+
+Use for:
+
+- /user/:id
+- /user/:id/balance
+- /user/:id/payout-ready
+- /user/:id/discord
+- /user/:id/wallet
+- /access/:userId
+- /access/:userId/modifiers
+- /access/:userId/refresh
+- /entitlements/user/:userId
+- /entitlements/user/:userId/active
+- /member-state/:userId
+- /ascension-summary/user/:userId
+
+4. Add admin authorization middleware.
+
+Required middleware:
+
+- requireAdmin
+- requireFounder for destructive or treasury-like actions if needed
+
+Use for:
+
+- POST /user/:id/xp
+- all payout mutation routes
+- payout log read routes
+- all-record access state routes
+- all-record entitlement routes
+- internal/member-safe summary lookup by Discord id unless intentionally public
+- any future HTTP admin action
+
+5. Add internal worker authorization middleware.
+
+Required middleware:
+
+- requireInternalWorker
+
+Preferred protection:
+
+- internal worker secret header
+- strict constant-time comparison
+- no secret logging
+- environment variable required in production
+
+Use for:
+
+- POST /access/expire/run
+- GET /role-sync
+- GET /role-sync/:userId
+- POST /role-sync/:userId/mark-synced
+- GET /discord-sync-worker
+- GET /discord-sync-worker/:userId
+- POST /discord-sync-worker/:userId/mark-synced
+
+6. Disable or guard development login.
+
+POST /session/dev-login should be one of:
+
+- disabled when NODE_ENV is production
+- protected behind explicit DEV_LOGIN_ENABLED=true
+- removed after real auth is implemented
+
+Recommended minimum:
+
+- block in production unless DEV_LOGIN_ENABLED=true
+- document that it is not production authentication
+
+7. Fix temporary access route async behavior.
+
+POST /temp-access/:id/purchase should:
+
+- require session ownership or admin authority
+- await purchaseTemporaryAccess
+- return safe error output
+- never allow spending CNX for another user without authorization
+
+8. Replace body-provided adminId trust.
+
+Payout routes should:
+
+- derive admin id from authenticated principal
+- ignore or reject body-provided adminId as authority
+- keep reason/txId as request body fields where appropriate
+- log authenticated admin identity
+
+9. Add route-level tests.
+
+Minimum tests:
+
+- unauthenticated requests fail for protected routes
+- wrong-user requests fail for owner-only routes
+- same-user requests pass for owner-only routes
+- admin requests pass for admin routes
+- non-admin requests fail for admin routes
+- missing worker secret fails for worker routes
+- invalid worker secret fails for worker routes
+- valid worker secret passes for worker routes
+- dev-login is blocked in production mode
+- temp-access purchase awaits async result and blocks wrong-user spend
+
+10. Add safe documentation update.
+
+Update docs after implementation:
+
+- route classification table
+- middleware description
+- production environment requirements
+- internal worker secret policy
+- dev-login production behavior
+- admin authority source
+
+Recommended route permission matrix:
+
+| Route group | Required permission |
+|---|---|
+| /health | public |
+| /health/db | public-with-review or internal |
+| /token/info | public |
+| /session/me | session-user |
+| /session/logout | session-user |
+| /session/dev-login | disabled-in-production |
+| /user/:id read routes | owner-or-admin |
+| /user/:id mutation routes | owner-or-admin except XP |
+| /user/:id/xp | admin-only |
+| /payout/* | admin-only |
+| /access all-record routes | admin-only |
+| /access/expire/run | internal-worker-only |
+| /access/:userId routes | owner-or-admin |
+| /temp-access/:id/purchase | owner-or-admin |
+| /entitlements all-record routes | admin-only |
+| /entitlements/user/:userId routes | owner-or-admin |
+| /role-sync/* | internal-worker-only |
+| /discord-sync-worker/* | internal-worker-only |
+| /member-state/me | session-user |
+| /member-state/:userId | owner-or-admin |
+| /ascension-summary/me | session-user |
+| /ascension-summary/public/discord/:discordId | public |
+| /ascension-summary/user/:userId | owner-or-admin |
+| /ascension-summary/discord/:discordId | admin-only or owner-resolved |
+
+High-risk implementation blockers:
+
+- final admin authority source must be selected
+- internal worker secret variable name must be selected
+- production behavior for dev-login must be selected
+- route classification must be approved before code changes
+- no secrets should be pasted into docs or chat
+
+Recommended environment variables:
+
+- INTERNAL_WORKER_SECRET
+- DEV_LOGIN_ENABLED
+- HTTP_ADMIN_DISCORD_IDS or future dashboard/admin identity source
+
+Approval required before implementation:
+
+YES.
+
