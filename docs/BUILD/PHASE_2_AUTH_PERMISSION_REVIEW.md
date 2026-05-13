@@ -1085,3 +1085,79 @@ Approval required before implementation:
 
 YES.
 
+
+---
+
+## 9. Final Phase 2 Review Summary
+
+Status:
+
+COMPLETE.
+
+Final result:
+
+Phase 2 Auth & Permission Review is complete as documentation-only / inspection-only work.
+
+No application behavior was changed.
+
+No middleware was implemented on this branch.
+
+No route behavior was changed.
+
+No migrations were created or run.
+
+No Discord commands were deployed.
+
+No Discord role mutation was executed.
+
+No secrets were printed into this document.
+
+Primary conclusion:
+
+The backend needs a centralized HTTP authentication and authorization layer before production exposure of high-risk API routes.
+
+Highest-priority implementation risks:
+
+- unauthenticated mutation routes
+- public read-all routes
+- body-provided adminId trust
+- internal worker routes without visible worker authentication
+- owner-scoped routes without ownership enforcement
+- production-accessible dev login
+- temporary access route async/ownership issue
+- inconsistent authority model between Discord bot commands and HTTP API routes
+
+Approved next branch type:
+
+feature branch only.
+
+Recommended next branch:
+
+feature/http-auth-permission-layer
+
+Do not implement on this audit branch.
+
+---
+
+## 10. PR Readiness
+
+Status:
+
+READY FOR PR REVIEW.
+
+PR target:
+
+main
+
+PR source:
+
+audit/phase-2-auth-permission-review
+
+Merge guidance:
+
+Review before merge.
+
+Do not merge if any non-documentation files changed.
+
+Do not begin implementation work until this audit PR is reviewed and merged.
+
