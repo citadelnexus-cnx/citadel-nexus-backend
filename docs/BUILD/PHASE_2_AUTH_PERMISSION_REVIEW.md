@@ -261,3 +261,119 @@ Follow-up required:
 - fix tempAccessRoutes async behavior only in an implementation branch after audit approval
 - do not change route behavior during this review
 
+
+---
+
+## 7.3 Middleware and Session Infrastructure Review
+
+Status:
+
+PASS WITH HIGH-RISK FINDINGS.
+
+Commands run:
+
+find src -type f | sort
+
+git grep -nE "function .*middleware|const .*middleware|app.use|router.use|next\\(|RequestHandler|express.Router|req.headers|req.cookies|getSessionUserIdFromRequest|SESSION_COOKIE_NAME" -- src | head -n 300
+
+sed -n '1,130p' src/index.ts
+
+sed -n '1,240p' src/routes/sessionRoutes.ts
+
+git status
+
+Verified source structure:
+
+- no dedicated src/middleware directory was present
+- no dedicated src/auth directory was present
+- no dedicated HTTP permission guard file was surfaced by filename search
+- route files are mounted directly from src/index.ts
+- session helper is currently implemented inside src/routes/sessionRoutes.ts
+
+Verified global Express middleware:
+
+- CORS middleware is configured globally
+- express.json() is configured globally
+- no global auth middleware was visible in src/index.ts
+- no global admin middleware was visible in src/index.ts
+- no global internal-worker middleware was visible in src/index.ts
+- no route-level router.use middleware was surfaced by grep
+
+Verified CORS behavior:
+
+- CORS origins are loaded from CORS_ORIGINS or FRONTEND_ORIGIN
+- fallback origin is http://localhost:3000
+- no-origin requests are allowed
+- credentials are enabled
+
+Verified public status routes:
+
+- GET /
+- GET /health
+- GET /health/db
+
+Verified route mounts:
+
+- /user
+- /payout
+- /token
+- /access
+- /temp-access
+- /entitlements
+- /role-sync
+- /discord-sync-worker
+- /session
+- /member-state
+- /ascension-summary
+
+Verified session implementation:
+
+- session cookie name is cnx_session
+- session TTL is 7 days
+- session records are stored in an in-memory Map
+- session tokens are generated with crypto.randomBytes(32).toString("hex")
+- session cookies are HttpOnly
+- session cookies use SameSite=Lax
+- session cookies use Secure only when NODE_ENV is production
+- session lookup reads the Cookie header manually
+- expired sessions are deleted from the in-memory store
+- getSessionUserIdFromRequest returns the userId from a valid session record
+- POST /session/dev-login creates a session from userId or username
+- POST /session/dev-login can create a new user when username does not exist
+- GET /session/me requires a valid session cookie
+- POST /session/logout clears the cookie and deletes the session token if present
+
+Verified session usage:
+
+- memberStateRoutes imports getSessionUserIdFromRequest
+- ascensionSummaryRoutes imports getSessionUserIdFromRequest
+- /member-state/me uses session lookup
+- /ascension-summary/me uses session lookup
+
+High-risk findings:
+
+- HTTP route protection is not centralized.
+- There is no visible reusable requireAuth middleware.
+- There is no visible reusable requireOwnerOrAdmin middleware.
+- There is no visible reusable requireAdmin middleware for HTTP routes.
+- There is no visible reusable requireInternalWorker middleware.
+- The dev session system is in-memory and will reset on process restart.
+- POST /session/dev-login is reachable as an HTTP route and can create a session without external identity verification.
+- POST /session/dev-login can create a user by username.
+- The session cookie is not visibly signed.
+- The session cookie does not visibly include CSRF protection.
+- CORS allows no-origin requests, which may be acceptable for server-to-server/local checks but should be reviewed for production API exposure.
+- Credentials are enabled in CORS, so session-cookie routes should be protected carefully.
+- Health routes expose environment value and should remain intentionally public or be reviewed.
+
+Follow-up required:
+
+- design a centralized HTTP auth middleware layer
+- decide whether dev-login should be disabled in production
+- decide whether sessions should move from in-memory Map to database-backed or signed token-backed storage
+- decide whether CSRF protection is required for cookie-authenticated mutation routes
+- decide whether no-origin CORS requests should remain allowed
+- decide whether /health/db should expose environment value publicly
+- classify every route before implementation
+- do not change middleware or session behavior during this review
+
