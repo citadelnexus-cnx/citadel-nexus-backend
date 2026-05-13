@@ -142,18 +142,107 @@ Goal:
 
 Map the repository structure and identify major code/documentation areas.
 
-Commands to run:
+Commands run:
 
 find . -maxdepth 2 -type d | sort
-find . -maxdepth 3 -type f | sort | sed 's#^\./##' | head -n 250
+
+find . -maxdepth 3 -type f | sort | sed 's#^\\./##' | head -n 250
+
+find . \
+  -path "./node_modules" -prune -o \
+  -path "./.git" -prune -o \
+  -path "./dist" -prune -o \
+  -type f -print | sort | sed 's#^\\./##' | head -n 300
+
+find . -maxdepth 1 -type f | sort | sed 's#^\\./##'
+
+find src prisma docs -maxdepth 3 -type d | sort
 
 Status:
 
-NOT_TESTED
+PASS WITH SECURITY REVIEW NOTE
+
+Verified major directories:
+
+- backups/
+- dist/
+- docs/
+- docs/ARCHITECTURE/
+- docs/BUILD/
+- docs/DASHBOARD/
+- docs/DOCTRINE/
+- docs/QA/
+- docs/SECURITY/
+- node_modules/
+- prisma/
+- prisma/migrations/
+- src/
+- src/config/
+- src/lib/
+- src/modules/
+- src/modules/ascension/
+- src/modules/ascension/admin/
+- src/modules/ascension/docs/
+- src/modules/ascension/handlers/
+- src/modules/ascension/loot/
+- src/modules/ascension/runtime/
+- src/routes/
+- src/services/
+
+Verified top-level files:
+
+- .env
+- .env.backup-step8-db
+- .env.backup-step8a-sslmode
+- .env.example
+- .gitignore
+- AGENTS.md
+- CLAUDE.md
+- README.txt
+- package-lock.json
+- package.json
+- prisma.config.ts
+- test-run-01.http
+- test.http
+- tsconfig.json
+
+Verified source areas:
+
+- src/config contains Discord/Hedera configuration files.
+- src/lib contains Prisma client helper files.
+- src/routes contains backend route files.
+- src/services contains backend service files.
+- src/modules/ascension contains Discord/Ascension module runtime, handlers, admin files, loot files, and module documentation.
+- prisma contains schema and migrations.
+- docs contains existing operational docs plus the v3 Knowledge Core docs.
+- dist contains compiled JavaScript output.
+- backups contains database backup/export/restore artifacts.
+
+Security review note:
+
+Local environment files exist:
+
+- .env
+- .env.backup-step8-db
+- .env.backup-step8a-sslmode
+- .env.example
+
+The audit did not print secret contents.
+
+Follow-up required:
+
+- verify which .env files are tracked versus ignored
+- confirm .env backup files are not committed
+- confirm .gitignore protects local secret files
+- review backup artifacts handling policy
 
 Findings:
 
-PENDING.
+The repository is organized into expected backend areas: source code, Prisma schema/migrations, compiled dist output, documentation, backups, and dependencies.
+
+The v3 Knowledge Core documentation exists in the expected docs subfolders.
+
+No application logic was changed during this file tree audit.
 
 ---
 
