@@ -329,22 +329,71 @@ Goal:
 
 Review environment templates without exposing secrets.
 
-Commands to run:
+Commands run:
 
 find . -maxdepth 3 -name ".env*" -type f -print
+
 find . -maxdepth 3 -iname "*example*" -type f -print
+
+git ls-files | grep -E '(^|/)\\.env' || true
+
+cat .gitignore
 
 Status:
 
-NOT_TESTED
+PASS WITH SECURITY REVIEW NOTE
+
+Verified local environment files present:
+
+- .env
+- .env.backup-step8-db
+- .env.backup-step8a-sslmode
+- .env.example
+
+Verified tracked environment files:
+
+- .env.example
+
+Verified ignored environment patterns:
+
+- .env
+- .env.*
+- node_modules
+- dist
+- backups/
+- *.dump
+- *.backup
+- *.sql
+- *.tar
+
+Verified allowlist exception:
+
+- !.env.example
 
 Findings:
 
-PENDING.
+Only .env.example is tracked by Git.
 
-Security rule:
+Local real environment files and backup environment files exist on the server but are ignored by .gitignore.
 
-Do not print real .env secret values.
+The audit did not print secret contents.
+
+The .gitignore file is correctly configured to ignore local env files while allowing .env.example.
+
+Backup and restore artifacts are ignored by .gitignore.
+
+Security review note:
+
+The local .env backup files should be kept out of Git and treated as sensitive.
+
+The repository currently contains local backup/export artifacts under backups/, and .gitignore is configured to ignore backups/.
+
+Follow-up required:
+
+- confirm .env.example contains placeholders only
+- confirm backup env files are still needed
+- confirm local backup artifacts retention policy
+- avoid printing .env contents during future audits
 
 ---
 
