@@ -1,6 +1,6 @@
 import express, { Request, Response } from "express";
 import { getMemberState } from "../services/memberStateService";
-import { getSessionUserIdFromRequest } from "./sessionRoutes";
+import { getSessionUserIdFromRequest } from "../services/sessionService";
 
 const router = express.Router();
 

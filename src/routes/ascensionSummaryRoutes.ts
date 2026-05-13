@@ -1,7 +1,7 @@
 //backend/src/routes/ascensionSummaryRoutes.ts
 // backend/src/routes/ascensionSummaryRoutes.ts
 import express, { Request, Response } from "express";
-import { getSessionUserIdFromRequest } from "./sessionRoutes";
+import { getSessionUserIdFromRequest } from "../services/sessionService";
 import {
   getAscensionMemberSummaryByDiscordId,
   getAscensionMemberSummaryByUserId,

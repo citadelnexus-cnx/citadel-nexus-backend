@@ -96,5 +96,4 @@ router.post("/logout", async (req: Request, res: Response) => {
   }
 });
 
-export { getSessionUserIdFromRequest };
 export default router;
