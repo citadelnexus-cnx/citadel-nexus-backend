@@ -503,17 +503,159 @@ Goal:
 
 List backend routes and compare them against the v3 architecture docs.
 
-Commands to run:
+Commands run:
 
-find src -type f | grep -Ei "route|routes|controller|index" | sort
+find src/routes -maxdepth 1 -type f | sort
+
+grep -RInE "router\\.|Router\\(|app\\.use|export default" src/routes src/index.ts
+
+for f in src/routes/*.ts; do
+  echo "===== $f ====="
+  sed -n '1,220p' "$f"
+done
 
 Status:
 
-NOT_TESTED
+PASS WITH HIGH-RISK REVIEW NOTES
+
+Verified route files:
+
+- src/routes/accessRoutes.ts
+- src/routes/ascensionSummaryRoutes.ts
+- src/routes/discordSyncWorkerRoutes.ts
+- src/routes/entitlementRoutes.ts
+- src/routes/memberStateRoutes.ts
+- src/routes/payoutRoutes.ts
+- src/routes/roleSyncRoutes.ts
+- src/routes/sessionRoutes.ts
+- src/routes/tempAccessRoutes.ts
+- src/routes/tokenRoutes.ts
+- src/routes/userRoutes.ts
+
+Verified mounted route prefixes from src/index.ts:
+
+- /user
+- /payout
+- /token
+- /access
+- /temp-access
+- /entitlements
+- /role-sync
+- /discord-sync-worker
+- /session
+- /member-state
+- /ascension-summary
+
+Verified route endpoint groups:
+
+accessRoutes:
+
+- GET /access
+- POST /access/expire/run
+- GET /access/:userId/modifiers
+- POST /access/:userId/refresh
+- GET /access/:userId
+
+ascensionSummaryRoutes:
+
+- GET /ascension-summary/me
+- GET /ascension-summary/discord/:discordId
+- GET /ascension-summary/user/:userId
+- GET /ascension-summary/public/discord/:discordId
+
+discordSyncWorkerRoutes:
+
+- GET /discord-sync-worker
+- GET /discord-sync-worker/:userId
+- POST /discord-sync-worker/:userId/mark-synced
+
+entitlementRoutes:
+
+- GET /entitlements
+- GET /entitlements/user/:userId
+- GET /entitlements/user/:userId/active
+- GET /entitlements/:id
+
+memberStateRoutes:
+
+- GET /member-state/me
+- GET /member-state/:userId
+
+payoutRoutes:
+
+- GET /payout/log/all
+- POST /payout/:userId/queue
+- POST /payout/:payoutId/approve
+- POST /payout/:payoutId/reject
+- POST /payout/:payoutId/send
+- POST /payout/:payoutId/confirm
+- POST /payout/:payoutId/fail
+- GET /payout/:payoutId
+
+roleSyncRoutes:
+
+- GET /role-sync
+- GET /role-sync/:userId
+- POST /role-sync/:userId/mark-synced
+
+sessionRoutes:
+
+- POST /session/dev-login
+- GET /session/me
+- POST /session/logout
+
+tempAccessRoutes:
+
+- POST /temp-access/:id/purchase
+
+tokenRoutes:
+
+- GET /token/info
+
+userRoutes:
+
+- POST /user/create
+- POST /user/:id/discord
+- POST /user/:id/wallet
+- GET /user/:id/payout-ready
+- GET /user/:id
+- POST /user/:id/xp
+- GET /user/:id/balance
 
 Findings:
 
-PENDING.
+The route files match the mounted route groups documented in the v3 Knowledge Core.
+
+Most route handlers are service-backed and call functions from src/services.
+
+Routes include safe validation patterns for missing IDs, required body fields, and common 404/500 responses.
+
+High-risk review notes:
+
+- POST /user/:id/xp mutates XP and appears route-accessible without visible auth/permission checks in the route.
+- Payout routes mutate payout lifecycle state and appear route-accessible without visible auth/permission checks in the route.
+- POST /session/dev-login exists and should be reviewed before production exposure.
+- Role sync and Discord sync worker mark-synced routes mutate sync timestamps and should be permission-reviewed.
+- POST /access/expire/run triggers entitlement expiration logic and should be permission-reviewed.
+- POST /temp-access/:id/purchase may affect CNX/access state and should be economy/CNX reviewed.
+- GET /access and GET /entitlements expose all records through route handlers and should be reviewed for production access control.
+- GET /payout/log/all exposes payout log data and should be reviewed for production access control.
+- GET /member-state/:userId and internal ascension summary routes should be reviewed for intended public/private data boundaries.
+
+Documentation/cleanup notes:
+
+- src/routes/entitlementRoutes.ts contains a header typo: backend/src/rputes/entitlementRoutes.ts.
+- src/routes/ascensionSummaryRoutes.ts contains duplicate header comments.
+- sessionRoutes uses an in-memory devSessionStore, so session persistence may not survive process restarts.
+
+Follow-up required:
+
+- perform dedicated service boundary audit
+- perform dedicated permission/auth audit
+- perform dedicated economy mutation audit for XP/access/CNX-related routes
+- perform dedicated payout/prize risk review
+- confirm which routes are intended to be public, member-only, admin-only, or internal worker-only
+- do not change route behavior during this audit
 
 ---
 
