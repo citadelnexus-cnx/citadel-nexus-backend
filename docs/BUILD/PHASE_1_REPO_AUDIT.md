@@ -783,23 +783,201 @@ Goal:
 
 Compare current Prisma schema to DATABASE_SCHEMA_REFERENCE.md.
 
-Commands to run:
+Commands run:
 
 ls -la prisma
-sed -n '1,260p' prisma/schema.prisma
+
+sed -n '1,320p' prisma/schema.prisma
+
 find prisma/migrations -maxdepth 2 -type f | sort
 
 Status:
 
-NOT_TESTED
+PASS WITH HIGH-RISK REVIEW NOTES
+
+Verified Prisma directory contents:
+
+- prisma/migrations/
+- prisma/prisma.config.ts
+- prisma/schema.prisma
+
+Verified datasource:
+
+- provider: postgresql
+
+Verified generator:
+
+- provider: prisma-client-js
+
+Verified Prisma models:
+
+- User
+- AccessState
+- Entitlement
+- DiscordRoleSyncAudit
+- AscensionProfile
+- AscensionPrizePool
+- AscensionAdminAction
+- AscensionAdminSnapshot
+
+Verified migrations:
+
+- prisma/migrations/20260402020723_init_core/migration.sql
+- prisma/migrations/20260402100719_expand_persistence_models/migration.sql
+- prisma/migrations/20260406081731_add_entitlement_model/migration.sql
+- prisma/migrations/20260416103711_make_username_unique/migration.sql
+- prisma/migrations/20260417110430_add_ascension_profile/migration.sql
+- prisma/migrations/20260418214028_add_ascension_admin_and_prize_pool/migration.sql
+- prisma/migrations/20260419091330_add_ascension_admin_and_prize_pool/migration.sql
+- prisma/migrations/migration_lock.toml
+
+Verified User model areas:
+
+- identity: id, username, discordId, discordTag, wallet
+- progression/economy: xp, level, cnxBalance, reservedCnx
+- status: isVerified, payoutEligible
+- timestamps: joinedAt, lastActiveAt, createdAt, updatedAt
+- rewardLog Json
+- relations to AccessState, AscensionProfile, DiscordRoleSyncAudit, Entitlement
+
+Verified AccessState model areas:
+
+- userId unique relation
+- tier
+- active
+- isCnxHolder
+- holderTierInternal
+- xpBoost
+- cooldownReduction
+- temporary access fields
+- lastEvaluatedAt
+- lastRoleSyncAt
+- timestamps
+
+Verified Entitlement model areas:
+
+- userId
+- entitlementType
+- entitlementKey
+- status
+- source
+- grantedAt
+- expiresAt
+- updatedAt
+- metadataJson
+- indexes on userId/grantedAt and status/expiresAt
+
+Verified DiscordRoleSyncAudit model areas:
+
+- userId
+- contractVersion
+- executionSource
+- status
+- canExecute
+- reasonsBlocked
+- warnings
+- unsupportedTempAccessType
+- unresolvedRoleKeys
+- desired/current/final role ID arrays
+- payloadJson
+- verificationPassed
+- rollbackSnapshotJson
+- errorMessage
+- idempotencyKey unique
+- executionHash unique
+- rateLimitBucket
+- executionDurationMs
+- attemptCount
+- timestamps
+- index on userId/createdAt
+
+Verified AscensionProfile model areas:
+
+- userId unique relation
+- discordId unique optional
+- username
+- guardian default nova
+- stage default 1
+- rank default initiate
+- xp default 0
+- level default 1
+- nodeScore default 0
+- sessionCount
+- missionsCompleted
+- lock state and reason
+- power and maxPower
+- credits
+- intel
+- lastClaimAt
+- buildingsJson default starter building JSON
+- timestamps
+- index on stage/rank
+
+Verified AscensionPrizePool model areas:
+
+- poolName unique default main
+- totalXpAvailable
+- totalXpAdded
+- totalXpAwarded
+- totalXpRemoved
+- notes
+- seasonId
+- timestamps
+
+Verified AscensionAdminAction model areas:
+
+- adminUserId
+- adminUsername
+- targetUserId
+- targetUsername
+- actionType
+- resourceType
+- amount
+- valueBefore Json
+- valueAfter Json
+- reason
+- metadataJson
+- createdAt
+- indexes on adminUserId/createdAt, targetUserId/createdAt, actionType/createdAt
+
+Verified AscensionAdminSnapshot model areas:
+
+- actionId
+- targetUserId
+- snapshotType
+- profileState Json
+- inventoryState Json
+- createdAt
+- indexes on actionId and targetUserId/createdAt
 
 Findings:
 
-PENDING.
+The Prisma schema matches the expected core backend, access, entitlement, Discord role sync, Ascension progression, prize pool, and admin audit domains.
 
-Rule:
+The schema includes 8 current models.
 
-Do not edit schema or migrations during this audit.
+The repository currently contains 7 timestamped migration folders plus migration_lock.toml.
+
+No Prisma schema or migration changes were made during this audit.
+
+High-risk review notes:
+
+- User.cnxBalance and User.reservedCnx are Float values and should be reviewed before any financial/token-like accounting is treated as production-grade.
+- User.xp and User.level exist alongside AscensionProfile.xp and AscensionProfile.level, so the distinction between platform/user XP and Ascension game XP must remain clearly documented.
+- AccessState contains isCnxHolder, holderTierInternal, xpBoost, and cooldownReduction fields, so CNX utility behavior must remain locked/approval-gated until reviewed.
+- AscensionProfile contains gameplay economy fields such as xp, level, nodeScore, power, credits, intel, lastClaimAt, and buildingsJson. These require economy pacing and anti-abuse review.
+- AscensionPrizePool stores XP pool state and requires prize/economy separation review.
+- AscensionAdminAction and AscensionAdminSnapshot provide audit/snapshot infrastructure and should not be deleted or bypassed.
+- DiscordRoleSyncAudit stores role sync execution evidence and should be preserved for auditability.
+
+Follow-up required:
+
+- compare schema against docs/ARCHITECTURE/DATABASE_SCHEMA_REFERENCE.md
+- review duplicate migration names for Ascension admin/prize pool additions
+- run npx prisma validate later as a safe validation check if approved
+- review whether Float is acceptable for CNX balance/reserved accounting or should later become integer base units/Decimal
+- do not edit prisma/schema.prisma during this audit
+- do not create or run migrations during this audit
 
 ---
 
