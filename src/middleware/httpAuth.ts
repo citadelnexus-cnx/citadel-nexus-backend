@@ -2,7 +2,7 @@
 import crypto from "crypto";
 import type { NextFunction, Response } from "express";
 import type { AuthenticatedRequest, HttpAuthPrincipal } from "../types/httpAuth";
-import { getSessionUserIdFromRequest } from "../routes/sessionRoutes";
+import { getSessionUserIdFromRequest } from "../services/sessionService";
 
 function splitCsv(value: string | undefined): string[] {
   return (value || "")
