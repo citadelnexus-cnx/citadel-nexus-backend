@@ -1,5 +1,7 @@
 // backend/src/routes/payoutRoutes.ts
 import { Router, Request, Response } from "express";
+import { requireAdmin } from "../middleware/httpAuth";
+import type { AuthenticatedRequest } from "../types/httpAuth";
 import {
   queuePayout,
   approvePayout,
@@ -13,7 +15,11 @@ import {
 
 const router = Router();
 
-router.get("/log/all", async (_req: Request, res: Response) => {
+function getAuthenticatedAdminId(req: Request): string | null {
+  return (req as AuthenticatedRequest).auth?.adminId ?? null;
+}
+
+router.get("/log/all", requireAdmin, async (_req: Request, res: Response) => {
   try {
     const log = await getPayoutLog();
     return res.json(log);
@@ -23,7 +29,7 @@ router.get("/log/all", async (_req: Request, res: Response) => {
   }
 });
 
-router.post("/:userId/queue", async (req: Request, res: Response) => {
+router.post("/:userId/queue", requireAdmin, async (req: Request, res: Response) => {
   try {
     const userId = String(req.params.userId ?? "");
 
@@ -46,17 +52,17 @@ router.post("/:userId/queue", async (req: Request, res: Response) => {
   }
 });
 
-router.post("/:payoutId/approve", async (req: Request, res: Response) => {
+router.post("/:payoutId/approve", requireAdmin, async (req: Request, res: Response) => {
   try {
     const payoutId = String(req.params.payoutId ?? "");
-    const { adminId } = req.body;
+    const adminId = getAuthenticatedAdminId(req);
 
     if (!payoutId) {
       return res.status(400).json({ error: "Payout ID is required" });
     }
 
-    if (!adminId || typeof adminId !== "string") {
-      return res.status(400).json({ error: "Valid adminId is required" });
+    if (!adminId) {
+      return res.status(403).json({ error: "Admin permission required" });
     }
 
     const result = await approvePayout(payoutId, adminId);
@@ -76,24 +82,25 @@ router.post("/:payoutId/approve", async (req: Request, res: Response) => {
   }
 });
 
-router.post("/:payoutId/reject", async (req: Request, res: Response) => {
+router.post("/:payoutId/reject", requireAdmin, async (req: Request, res: Response) => {
   try {
     const payoutId = String(req.params.payoutId ?? "");
-    const { reason, adminId } = req.body;
+    const { reason } = req.body;
+    const adminId = getAuthenticatedAdminId(req);
 
     if (!payoutId) {
       return res.status(400).json({ error: "Payout ID is required" });
+    }
+
+    if (!adminId) {
+      return res.status(403).json({ error: "Admin permission required" });
     }
 
     if (!reason || typeof reason !== "string") {
       return res.status(400).json({ error: "Valid rejection reason is required" });
     }
 
-    const result = await rejectPayout(
-      payoutId,
-      reason,
-      typeof adminId === "string" ? adminId : undefined
-    );
+    const result = await rejectPayout(payoutId, reason, adminId);
 
     if (!result) {
       return res.status(404).json({ error: "Payout not found" });
@@ -110,7 +117,7 @@ router.post("/:payoutId/reject", async (req: Request, res: Response) => {
   }
 });
 
-router.post("/:payoutId/send", async (req: Request, res: Response) => {
+router.post("/:payoutId/send", requireAdmin, async (req: Request, res: Response) => {
   try {
     const payoutId = String(req.params.payoutId ?? "");
     const { txId } = req.body;
@@ -140,7 +147,7 @@ router.post("/:payoutId/send", async (req: Request, res: Response) => {
   }
 });
 
-router.post("/:payoutId/confirm", async (req: Request, res: Response) => {
+router.post("/:payoutId/confirm", requireAdmin, async (req: Request, res: Response) => {
   try {
     const payoutId = String(req.params.payoutId ?? "");
 
@@ -165,7 +172,7 @@ router.post("/:payoutId/confirm", async (req: Request, res: Response) => {
   }
 });
 
-router.post("/:payoutId/fail", async (req: Request, res: Response) => {
+router.post("/:payoutId/fail", requireAdmin, async (req: Request, res: Response) => {
   try {
     const payoutId = String(req.params.payoutId ?? "");
     const { reason } = req.body;
@@ -195,7 +202,7 @@ router.post("/:payoutId/fail", async (req: Request, res: Response) => {
   }
 });
 
-router.get("/:payoutId", async (req: Request, res: Response) => {
+router.get("/:payoutId", requireAdmin, async (req: Request, res: Response) => {
   try {
     const payoutId = String(req.params.payoutId ?? "");
 
