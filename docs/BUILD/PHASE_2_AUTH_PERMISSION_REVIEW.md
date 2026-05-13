@@ -528,3 +528,199 @@ Follow-up required:
 - confirm final route classification before implementation
 - do not change route behavior during this audit
 
+
+---
+
+## 7.5 Service-Level Authorization Gap Review
+
+Status:
+
+PASS WITH HIGH-RISK FINDINGS.
+
+Commands run:
+
+git status
+
+git log --oneline -5
+
+git grep -nE "export async function|async function|\\$transaction|prisma\\.|update\\(|create\\(|delete\\(|findMany|adminId|isVerified|payoutEligible|reservedCnx|cnxBalance|markRoleSync|expireExpiredEntitlements|purchaseTemporaryAccess" -- src/services | head -n 500
+
+sed -n '1,420p' src/services/userService.ts
+
+sed -n '1,320p' src/services/payoutService.ts
+
+sed -n '1,340p' src/services/accessStateService.ts
+
+sed -n '1,220p' src/services/entitlementExpiryService.ts
+
+sed -n '1,220p' src/services/tempAccessService.ts
+
+sed -n '1,220p' src/services/roleSyncService.ts
+
+sed -n '1,180p' src/services/discordSyncWorkerService.ts
+
+git status
+
+Verified working state:
+
+- branch was audit/phase-2-auth-permission-review
+- working tree was clean before review
+- working tree was clean after review
+- latest audit commits were present on the branch
+
+Service-level authorization summary:
+
+The inspected services perform business logic and persistence operations, but they do not appear to enforce HTTP caller identity, route ownership, admin authority, or internal-worker authority directly.
+
+This means route/middleware authorization is required before exposing these services through HTTP routes.
+
+Verified userService behavior:
+
+- createUser creates a user and initializes access state.
+- getUserByUsername returns a user by username.
+- getUser returns a user by id.
+- addXP mutates user XP, level, CNX balance, and access state.
+- createUserWithDiscord creates a verified user with Discord identity.
+- ensureUserForDiscord links or creates Discord-backed users.
+- linkDiscord mutates Discord identity fields and verification state.
+- bindWallet mutates wallet and payout eligibility.
+- getPayoutReadyUser checks verification, wallet, CNX balance, and reserved CNX.
+- deductCnxBalance mutates CNX balance and payout eligibility inside a transaction.
+- reserveCnx mutates reserved CNX inside a transaction.
+- releaseReservedCnx mutates reserved CNX inside a transaction.
+- finalizeReservedCnx mutates reserved CNX, CNX balance, and payout eligibility inside a transaction.
+
+userService high-risk notes:
+
+- addXP can indirectly award CNX through level rewards.
+- linkDiscord can mark a user verified.
+- bindWallet can make payout eligibility true if the user is verified.
+- balance reservation/finalization functions are powerful and must be called only through approved flows.
+- no caller authorization or ownership check is visible inside these service functions.
+
+Verified payoutService behavior:
+
+- payout records are stored in an in-memory payoutLog array.
+- queuePayout checks payout readiness and reserves available CNX.
+- queuePayout creates a queued payout record.
+- approvePayout changes a queued payout to approved and records adminId.
+- rejectPayout releases reserved CNX and records reason/adminId.
+- markPayoutSent records txId and marks payout as sent.
+- confirmPayout finalizes reserved CNX and marks payout confirmed.
+- failPayout releases reserved CNX and marks payout failed.
+- getPayoutLog returns the payout log.
+- getPayoutById returns a payout by id.
+
+payoutService high-risk notes:
+
+- payoutLog is in-memory and may reset on process restart.
+- approvePayout trusts the adminId argument.
+- rejectPayout trusts the optional adminId argument.
+- markPayoutSent trusts the txId argument.
+- payout lifecycle functions do not authenticate the caller.
+- payout lifecycle functions do not verify admin/founder authority.
+- payout lifecycle functions must be protected by route middleware or replaced by an approved admin command path.
+
+Verified accessStateService behavior:
+
+- updateAccessState evaluates access state from user CNX balance and active temp entitlements.
+- refreshAccessState calls updateAccessState.
+- getAccessModifiers can create access state if missing.
+- markRoleSync mutates lastRoleSyncAt.
+- getAllAccessStates returns all access states.
+
+accessStateService high-risk notes:
+
+- CNX thresholds are used to derive holder/tier/modifier state.
+- getAccessModifiers can initialize state as a side effect.
+- markRoleSync mutates role sync metadata.
+- getAllAccessStates exposes all access states.
+- no caller authorization, ownership, admin, or worker check is visible inside these functions.
+
+Verified entitlementExpiryService behavior:
+
+- expireExpiredEntitlements expires due entitlements.
+- it refreshes access state for affected users.
+- it returns expired counts, entitlement ids, and affected user ids.
+
+entitlementExpiryService high-risk notes:
+
+- expiration is a system/worker operation.
+- it should not be public-triggerable without internal-worker authorization.
+- service function itself does not authenticate the caller.
+
+Verified tempAccessService behavior:
+
+- supported temporary access types include premium_alpha and partner_offers.
+- purchaseTemporaryAccess validates user existence.
+- purchaseTemporaryAccess validates supported access type.
+- purchaseTemporaryAccess blocks purchase if active temporary access already exists.
+- purchaseTemporaryAccess deducts CNX balance.
+- purchaseTemporaryAccess creates a temporary_access entitlement.
+- purchaseTemporaryAccess updates access state.
+- purchaseTemporaryAccess returns remaining CNX balance and entitlement id.
+
+tempAccessService high-risk notes:
+
+- purchaseTemporaryAccess spends user CNX.
+- purchaseTemporaryAccess creates entitlement records.
+- purchaseTemporaryAccess updates access state.
+- service function does not authenticate caller ownership.
+- route layer must ensure caller owns the userId or has approved admin authority.
+
+Verified roleSyncService behavior:
+
+- builds role sync payload from access state.
+- builds all role sync payloads from all access states.
+- maps CNX holder tiers to backend role keys.
+- maps premium_alpha temporary access to temp_premium_alpha.
+- returns warnings and unsupported temp access type signals.
+
+roleSyncService high-risk notes:
+
+- all-role payload generation can expose role sync state for all users.
+- service function does not authenticate caller.
+- route layer must make all-payload access internal-worker-only or admin-only.
+
+Verified discordSyncWorkerService behavior:
+
+- builds Discord sync decision from role sync payload and current member role ids.
+- resolves backend role keys to Discord role ids.
+- calculates desired add/remove role ids.
+- blocks execution if unsupported temp access type exists.
+- blocks execution if warnings exist.
+- blocks execution if role keys cannot resolve to Discord role ids.
+- exposes role-key-to-role-id preview.
+
+discordSyncWorkerService high-risk notes:
+
+- service builds executable role mutation decisions.
+- service does not authenticate caller.
+- route layer must ensure worker-only or admin-only access.
+- this service should remain planning/decision-only unless called through approved execution flow.
+
+Core finding:
+
+The backend needs a centralized HTTP permission layer because service functions are not designed to be the trust boundary.
+
+Recommended boundary:
+
+- services validate business rules
+- middleware validates caller identity and permissions
+- routes connect authenticated callers to allowed service actions
+- worker routes require internal-worker authentication
+- admin routes require verified admin/founder authority
+- owner routes require session ownership checks
+
+Follow-up required:
+
+- add middleware design section
+- define AuthenticatedRequest principal shape
+- define requireSession middleware
+- define requireOwnerOrAdmin middleware
+- define requireAdmin middleware
+- define requireInternalWorker middleware
+- decide production behavior for dev-login
+- decide persistence model for payout log and session store
+- do not change service behavior during this audit
+
