@@ -403,20 +403,97 @@ Goal:
 
 Identify backend runtime entry points and confirm current source-of-truth flow.
 
-Possible files to inspect:
+Commands run:
 
-- src/index.ts
-- src/app.ts
-- src/server.ts
-- package.json
+ls -la src
+
+find src -maxdepth 2 -type f | sort
+
+grep -n '"main"\|"dev"\|"start"\|"build"' package.json
+
+sed -n '1,260p' src/index.ts
 
 Status:
 
-NOT_TESTED
+PASS WITH FOLLOW-UP REVIEW NOTE
+
+Verified entry files:
+
+- src/index.ts
+- dist/index.js through package.json main/start script
+
+Verified package entry references:
+
+- main: dist/index.js
+- dev: nodemon --watch src --ext ts --exec ts-node src/index.ts
+- build: tsc
+- start: node dist/index.js
+
+Verified API runtime behavior:
+
+- src/index.ts imports dotenv/config.
+- src/index.ts creates an Express app.
+- src/index.ts loads Prisma from src/lib/prisma.
+- src/index.ts configures CORS from CORS_ORIGINS, FRONTEND_ORIGIN, or fallback http://localhost:3000.
+- src/index.ts enables express.json().
+- src/index.ts exposes root GET /.
+- src/index.ts exposes GET /health.
+- src/index.ts exposes GET /health/db.
+- src/index.ts starts on BACKEND_HOST or fallback 127.0.0.1.
+- src/index.ts starts on BACKEND_PORT, PORT, or fallback 3001.
+
+Verified mounted route prefixes:
+
+- /user
+- /payout
+- /token
+- /access
+- /temp-access
+- /entitlements
+- /role-sync
+- /discord-sync-worker
+- /session
+- /member-state
+- /ascension-summary
+
+Verified route imports:
+
+- tokenRoutes
+- userRoutes
+- payoutRoutes
+- accessRoutes
+- tempAccessRoutes
+- entitlementRoutes
+- roleSyncRoutes
+- discordSyncWorkerRoutes
+- sessionRoutes
+- memberStateRoutes
+- ascensionSummaryRoutes
+
+Verified bot/API boundary:
+
+- Ascension Discord runtime is not started from src/index.ts.
+- src/index.ts includes a comment stating the bot runtime is disabled for the API production host.
+- src/index.ts states Ascension should be started separately with its own PM2 process after backend API is stable.
+- The bot-entry require line is commented out.
 
 Findings:
 
-PENDING.
+The backend API entry point is src/index.ts for development and dist/index.js for compiled runtime.
+
+The API host mounts the expected route groups and keeps the Discord bot runtime separate from the API process.
+
+The database health endpoint performs a Prisma SELECT 1 check.
+
+The root and health routes are public status routes.
+
+Follow-up required:
+
+- confirm production CORS_ORIGINS/FRONTEND_ORIGIN values are configured securely
+- confirm production BACKEND_HOST and BACKEND_PORT values match deployment expectations
+- review whether /health/db should expose environment value publicly
+- review database health error logging for safe production behavior
+- verify each mounted route in the dedicated route audit section
 
 ---
 
