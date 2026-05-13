@@ -1,6 +1,6 @@
 // backend/src/routes/sessionRoutes.ts
 import express, { Request, Response } from "express";
-import { requireProductionDisabled } from "../middleware/httpAuth";
+import { requireProductionDisabled, requireSession } from "../middleware/httpAuth";
 import { createUser, getUser, getUserByUsername } from "../services/userService";
 import {
   SESSION_TTL_MS,
@@ -82,7 +82,7 @@ router.get("/me", async (req: Request, res: Response) => {
   }
 });
 
-router.post("/logout", async (req: Request, res: Response) => {
+router.post("/logout", requireSession, async (req: Request, res: Response) => {
   try {
     deleteSessionFromRequest(req);
 
