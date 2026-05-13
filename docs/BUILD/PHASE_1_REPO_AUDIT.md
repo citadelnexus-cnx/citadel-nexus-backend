@@ -115,22 +115,31 @@ Do not mark PASS unless verified.
 
 Status:
 
-NEEDS_REVIEW
+PASS
 
-Known starting point:
+Verified starting point:
 
-- v3 Knowledge Core merged into main.
-- local main synced with origin/main.
-- new audit branch created from main.
-- working tree clean at audit start.
+- v3 Knowledge Core was merged into main before this audit branch was created.
+- local main was synced with origin/main before the audit branch was created.
+- audit branch was created from main.
+- audit branch name: audit/phase-1-repo-audit.
+- audit scaffold was committed and pushed.
+- audit sections 7.1 through 7.13 were completed.
+- no application logic changes were intentionally made.
+- no Prisma schema changes were made.
+- no migrations were created or run.
+- no bot runtime behavior was changed.
+- no Discord role mutation was executed.
+- no token, wallet, treasury, payout, or economy constants were changed.
+- working tree was clean after final section commit.
 
-Verification command:
+Final audit log entry:
 
-git status
+Phase 1 Repo Audit completed as documentation-only / inspection-only work.
 
-Result:
+Important incident note:
 
-PENDING FINAL AUDIT LOG ENTRY.
+A local secret exposure occurred during section 7.12 because ignored .env files were included in a broad grep scan. The exposed Discord bot token and Supabase database password were rotated, local .env backup files were deleted, services were restarted with updated environment values, and health checks returned healthy afterward.
 
 ---
 
@@ -1947,17 +1956,28 @@ Follow-up required:
 
 | ID | Risk | Severity | Status |
 |---|---|---|---|
-| R-001 | Unknown current route/service gaps | MEDIUM | OPEN |
-| R-002 | Economy mutation points not fully mapped | HIGH | OPEN |
-| R-003 | Admin command surfaces need review | HIGH | OPEN |
-| R-004 | Role sync mutation paths need review | HIGH | OPEN |
-| R-005 | Future-phase docs may describe locked systems that are not live | MEDIUM | OPEN |
+| R-001 | Unknown current route/service gaps | MEDIUM | CLOSED — mapped in route and service audits |
+| R-002 | Economy mutation points not fully mapped | HIGH | CLOSED FOR PHASE 1 — mapped; follow-up review required |
+| R-003 | Admin command surfaces need review | HIGH | CLOSED FOR PHASE 1 — mapped; production hardening review required |
+| R-004 | Role sync mutation paths need review | HIGH | CLOSED FOR PHASE 1 — planning path mapped; live mutation services still require dedicated review |
+| R-005 | Future-phase docs may describe locked systems that are not live | MEDIUM | CLOSED FOR PHASE 1 — documentation alignment notes added |
+| R-006 | Local secret exposure during audit | CRITICAL | CONTAINED — Discord token and database password rotated; backup env files removed; services restarted; health checks passed |
+| R-007 | Unauthenticated/high-risk routes may exist | HIGH | OPEN FOLLOW-UP |
+| R-008 | CNX balances use Float fields | HIGH | OPEN FOLLOW-UP |
+| R-009 | User XP/CNX economy and Ascension XP economy are separate but could be confused | HIGH | OPEN FOLLOW-UP |
+| R-010 | Admin destructive controls exist and depend on environment configuration | HIGH | OPEN FOLLOW-UP |
+| R-011 | Legacy/duplicate admin logic may exist between JS admin module and TS service files | MEDIUM | OPEN FOLLOW-UP |
+| R-012 | Older public/Discord launch docs contain PENDING items and may be stale | MEDIUM | OPEN FOLLOW-UP |
 
 ---
 
 ## 9. Audit Output Requirements
 
-This audit must produce:
+Required output status:
+
+PASS
+
+Produced outputs:
 
 - verified repo map
 - route list
@@ -1972,19 +1992,78 @@ This audit must produce:
 - recommended next tasks
 - approval-gated action list
 
+Key audit outputs:
+
+- repository structure confirmed
+- package scripts confirmed
+- environment file handling reviewed
+- backend API entry point reviewed
+- route groups reviewed
+- service boundary reviewed
+- Prisma models and migrations reviewed
+- Discord Ascension runtime reviewed
+- role sync planning path reviewed
+- economy mutation points reviewed
+- admin action surface reviewed
+- secret exposure incident documented and contained
+- documentation alignment reviewed
+
+Recommended next tasks:
+
+1. Open PR for audit branch.
+2. Review audit findings before merge.
+3. Create follow-up implementation branch only after PR review.
+4. Prioritize auth/permission review for high-risk routes.
+5. Prioritize economy boundary review for User XP/CNX vs Ascension XP.
+6. Prioritize role sync live mutation service review.
+7. Prioritize admin production environment hardening review.
+8. Reconcile stale public/Discord launch docs.
+9. Add safer secret scanning instructions or tooling.
+10. Add source-of-truth hierarchy documentation if not already explicit enough.
+
+Approval-gated action list:
+
+- route behavior changes
+- auth/permission implementation
+- Prisma schema changes
+- migrations
+- Discord command deployment
+- Discord role mutation execution
+- bot restart outside incident recovery
+- production deployment
+- economy constant changes
+- CNX automation changes
+- payout/prize execution
+- admin destructive control changes
+- treasury/wallet/key handling
+
 ---
 
 ## 10. Completion Criteria
 
-This audit is complete only when:
+Completion status:
 
-- all checklist sections are filled
+PASS
+
+Verified criteria:
+
+- all checklist sections 7.1 through 7.13 are filled
 - findings are separated from recommendations
 - high-risk items are clearly flagged
-- no application logic was changed
-- git status is clean after commit
-- audit document is committed and pushed
+- no application logic was intentionally changed
+- no Prisma schema was changed
+- no migrations were created or run
+- no bot command deployment was run
+- no Discord role mutation was executed
+- no production deployment changes were made
+- secret exposure incident was contained and documented
+- git status was clean after final section commit
+- audit document changes were committed and pushed section by section
 - next tasks are listed in safe order
+
+Known exception:
+
+A secret exposure occurred during the audit and was contained. The audit should preserve the incident record without repeating exposed values.
 
 ---
 
@@ -1992,9 +2071,25 @@ This audit is complete only when:
 
 Status:
 
-IN PROGRESS.
+COMPLETE.
+
+Final result:
+
+Phase 1 Repo Audit is complete as documentation-only / inspection-only work.
+
+Final branch:
+
+audit/phase-1-repo-audit
+
+Final merge readiness:
+
+READY FOR PR REVIEW.
+
+Do not merge without human review.
+
+Do not begin implementation work on this branch.
 
 Next action:
 
-Run the first audit command group and update this file with verified findings.
+Open a pull request from audit/phase-1-repo-audit into main.
 
