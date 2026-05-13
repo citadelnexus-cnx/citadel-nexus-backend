@@ -144,3 +144,120 @@ Follow-up required:
 - classify every route as public, session-user, admin-only, internal-worker-only, or disabled-in-production
 - do not change route behavior during this review
 
+
+---
+
+## 7.2 Remaining Route Permission Review
+
+Status:
+
+PASS WITH HIGH-RISK FINDINGS.
+
+Commands run:
+
+sed -n '1,180p' src/routes/accessRoutes.ts
+sed -n '1,120p' src/routes/tempAccessRoutes.ts
+sed -n '1,120p' src/routes/roleSyncRoutes.ts
+sed -n '1,120p' src/routes/discordSyncWorkerRoutes.ts
+sed -n '1,140p' src/routes/entitlementRoutes.ts
+sed -n '1,100p' src/routes/memberStateRoutes.ts
+sed -n '1,190p' src/routes/ascensionSummaryRoutes.ts
+npm run build
+git status
+
+Verified route files reviewed:
+
+- src/routes/accessRoutes.ts
+- src/routes/tempAccessRoutes.ts
+- src/routes/roleSyncRoutes.ts
+- src/routes/discordSyncWorkerRoutes.ts
+- src/routes/entitlementRoutes.ts
+- src/routes/memberStateRoutes.ts
+- src/routes/ascensionSummaryRoutes.ts
+
+Verified build result:
+
+- npm run build completed successfully.
+
+Route permission findings:
+
+accessRoutes:
+
+- GET /access returns all access states.
+- POST /access/expire/run triggers entitlement expiration.
+- GET /access/:userId/modifiers returns access modifiers by userId.
+- POST /access/:userId/refresh refreshes access state by userId.
+- GET /access/:userId returns access state by userId.
+- No visible route-level authentication middleware was present.
+- No visible route-level authorization checks were present.
+
+tempAccessRoutes:
+
+- POST /temp-access/:id/purchase attempts to purchase temporary access for a route-provided user id.
+- accessType is accepted from request body.
+- No visible route-level authentication middleware was present.
+- No visible route-level authorization check confirms the caller owns the user id.
+- Important implementation note: purchaseTemporaryAccess is async, but the inspected route does not await it. This should be reviewed before implementation work.
+
+roleSyncRoutes:
+
+- GET /role-sync returns all role sync payloads.
+- GET /role-sync/:userId returns role sync payload by userId.
+- POST /role-sync/:userId/mark-synced mutates lastRoleSyncAt.
+- No visible route-level authentication middleware was present.
+- No visible route-level authorization checks were present.
+
+discordSyncWorkerRoutes:
+
+- GET /discord-sync-worker returns all role sync payloads.
+- GET /discord-sync-worker/:userId returns role sync payload by userId.
+- POST /discord-sync-worker/:userId/mark-synced mutates lastRoleSyncAt.
+- No visible route-level authentication middleware was present.
+- No visible internal-worker authorization checks were present.
+
+entitlementRoutes:
+
+- GET /entitlements returns all entitlements.
+- GET /entitlements/user/:userId returns all entitlements for a user.
+- GET /entitlements/user/:userId/active returns active entitlements for a user.
+- GET /entitlements/:id returns entitlement by id.
+- No visible route-level authentication middleware was present.
+- No visible route-level authorization checks were present.
+- Header comment contains path typo: backend/src/rputes/entitlementRoutes.ts.
+
+memberStateRoutes:
+
+- GET /member-state/me uses session cookie through getSessionUserIdFromRequest.
+- GET /member-state/:userId returns member state by userId.
+- /me has a session requirement.
+- /:userId has no visible route-level ownership/admin check.
+
+ascensionSummaryRoutes:
+
+- GET /ascension-summary/me uses session cookie through getSessionUserIdFromRequest.
+- GET /ascension-summary/discord/:discordId returns internal/member-safe summary by Discord ID.
+- GET /ascension-summary/user/:userId returns internal/member-safe summary by platform userId.
+- GET /ascension-summary/public/discord/:discordId returns public-safe card by Discord ID.
+- /me has a session requirement.
+- /discord/:discordId and /user/:userId have no visible route-level session, ownership, or admin check despite comments describing them as internal/member-safe.
+- /public/discord/:discordId appears intentionally public-facing.
+
+High-risk findings:
+
+- All-record routes exist for access states, entitlements, role sync payloads, and Discord sync worker payloads.
+- Multiple mutation routes exist without visible route-level auth: access refresh, entitlement expiration runner, role-sync mark-synced, discord-sync-worker mark-synced, and temporary access purchase.
+- Internal/worker routes are exposed as HTTP routes without visible internal-worker guard.
+- Member-safe/internal summary routes can be queried by route param without visible session ownership checks.
+- Temporary access purchase can be requested for any route-provided id unless protected elsewhere.
+- The temp access route may have an async handling issue because purchaseTemporaryAccess is not awaited.
+
+Follow-up required:
+
+- classify each route as public, session-user, owner-only, admin-only, internal-worker-only, or disabled-in-production
+- design a shared auth/permission middleware strategy
+- decide whether all-record routes should be admin-only or disabled in production
+- decide whether worker routes require an internal secret, local-only binding, allowlist, or removal
+- decide whether member-safe routes require session ownership or admin permission
+- fix tempAccessRoutes async behavior only in an implementation branch after audit approval
+- do not change route behavior during this review
+
