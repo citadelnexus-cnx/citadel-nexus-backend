@@ -1702,21 +1702,120 @@ Goal:
 
 Check for obvious committed secret patterns without printing real secrets into reports.
 
-Commands to run:
+Commands run:
 
-grep -RInE "BOT_TOKEN|DATABASE_URL|PRIVATE KEY|BEGIN.*KEY|seed phrase|service_role|SUPABASE|DISCORD_TOKEN" . --exclude-dir=node_modules --exclude-dir=.git || true
+grep -RInE "BOT_TOKEN|DATABASE_URL|PRIVATE KEY|BEGIN.*KEY|seed phrase|service_role|SUPABASE|DISCORD_TOKEN|CLIENT_SECRET|PRIVATE_KEY|MNEMONIC" . \
+  --exclude-dir=node_modules \
+  --exclude-dir=.git \
+  --exclude-dir=dist \
+  --exclude='*.log' || true
+
+git ls-files | grep -Ei '\\.env|secret|key|credential|token|backup|dump|sql|tar' || true
+
+git ls-files .env .env.backup-step8-db .env.backup-step8a-sslmode
+
+git status
+
+pm2 list
+
+npm run build
+
+curl -s http://127.0.0.1:3001/health
+
+curl -s http://127.0.0.1:3001/health/db
 
 Status:
 
-NOT_TESTED
+PASS AFTER CONTAINMENT
+
+Incident summary:
+
+During the secret exposure audit, the broad grep command printed live-looking local secret values from ignored local environment files into terminal/chat context.
+
+Exposed local files:
+
+- .env
+- .env.backup-step8-db
+- .env.backup-step8a-sslmode
+
+Exposed secret categories:
+
+- database connection string
+- Discord bot token
+
+Containment actions completed:
+
+- Discord bot token rotated.
+- Supabase database password rotated.
+- .env updated manually without printing new values.
+- .env.backup-step8-db removed.
+- .env.backup-step8a-sslmode removed.
+- .env permissions set to 600.
+- citadel-backend restarted with --update-env.
+- citadel-ascension restarted with --update-env.
+- npm run build completed successfully.
+- /health returned ok true.
+- /health/db returned ok true and status connected.
+- git status returned clean.
+
+Verified tracked-file status:
+
+git ls-files did not show .env, .env.backup-step8-db, or .env.backup-step8a-sslmode as tracked files.
+
+Verified PM2 process status after restart:
+
+- citadel-backend online
+- citadel-ascension online
+- pm2-logrotate online
+
+Tracked secret-sensitive file scan findings:
+
+The tracked-file scan surfaced documentation, migration SQL files, token-related source filenames, and security policy docs.
+
+No tracked .env file was shown.
+
+No tracked local env backup file was shown.
 
 Findings:
 
-PENDING.
+The secret exposure was from ignored local environment files, not tracked Git files.
 
-Rule:
+The old exposed values must be treated as compromised.
 
-If real secrets are found, stop and do not repeat them in this document.
+The exposed Discord bot token and database password were rotated.
+
+The backend and Ascension bot were restarted using updated environment values.
+
+Database connectivity was restored after process restart.
+
+High-risk review notes:
+
+- Broad grep commands must not scan ignored local secret files.
+- Future secret scans must exclude .env and .env.* explicitly.
+- Secret scans should prefer git-tracked files only unless performing a controlled local secret inventory.
+- Local backup env files should not be kept in the repo working directory.
+- The current audit document should record this incident without repeating exposed values.
+- No future response, commit, report, or audit note should include the exposed secret values.
+
+Follow-up required:
+
+- avoid running grep over .env or .env.* files
+- use git grep for tracked-file secret checks
+- keep .env backup files deleted
+- keep .env file permission restricted
+- consider adding a local operational note that secret scans must exclude ignored files
+- consider running future secret scans with a tool configured to redact values
+- do not paste secret values into chat or documentation
+
+Safe future tracked-file scan command:
+
+git grep -nE "BOT_TOKEN|DATABASE_URL|PRIVATE KEY|BEGIN.*KEY|seed phrase|service_role|SUPABASE|DISCORD_TOKEN|CLIENT_SECRET|PRIVATE_KEY|MNEMONIC" -- . ':!*.log' || true
+
+Safe future local env presence check:
+
+find . -maxdepth 1 -name ".env*" -type f -print
+
+Do not print local env file contents.
 
 ---
 
