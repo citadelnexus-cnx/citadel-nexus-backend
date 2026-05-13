@@ -1,6 +1,6 @@
 // backend/src/routes/userRoutes.ts
 import { Router, Request, Response } from "express";
-import { requireOwnerOrAdmin } from "../middleware/httpAuth";
+import { requireAdmin, requireOwnerOrAdmin } from "../middleware/httpAuth";
 import {
   createUser,
   getUser,
@@ -127,7 +127,7 @@ router.get("/:id", requireOwnerOrAdmin("id"), async (req: Request, res: Response
   }
 });
 
-router.post("/:id/xp", async (req: Request, res: Response) => {
+router.post("/:id/xp", requireAdmin, async (req: Request, res: Response) => {
   try {
     const id = String(req.params.id ?? "");
     const { amount } = req.body;
