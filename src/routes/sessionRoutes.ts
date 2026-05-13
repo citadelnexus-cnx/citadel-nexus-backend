@@ -1,5 +1,6 @@
 // backend/src/routes/sessionRoutes.ts
 import express, { Request, Response } from "express";
+import { requireProductionDisabled } from "../middleware/httpAuth";
 import { createUser, getUser, getUserByUsername } from "../services/userService";
 import {
   SESSION_TTL_MS,
@@ -12,7 +13,7 @@ import {
 
 const router = express.Router();
 
-router.post("/dev-login", async (req: Request, res: Response) => {
+router.post("/dev-login", requireProductionDisabled, async (req: Request, res: Response) => {
   try {
     const body = req.body ?? {};
     const providedUserId =
