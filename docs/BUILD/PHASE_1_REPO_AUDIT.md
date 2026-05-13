@@ -987,21 +987,140 @@ Goal:
 
 Confirm Discord bot runtime files, command structure, and admin surfaces.
 
-Commands to run:
+Commands run:
 
-find src -type f | grep -Ei "discord|bot|command|ascension" | sort
+find src/modules/ascension -maxdepth 4 -type f | sort
+
+sed -n '1,260p' src/modules/ascension/runtime/bot-entry.js
+
+sed -n '1,260p' src/modules/ascension/runtime/deploy-commands.js
+
+sed -n '1,260p' src/modules/ascension/index.js
+
+grep -n "sed -n\|ASCENSION INDEX\|new SlashCommandBuilder()" src/modules/ascension/runtime/deploy-commands.js | head -n 80
+
+nl -ba src/modules/ascension/runtime/deploy-commands.js | sed -n '100,190p'
 
 Status:
 
-NOT_TESTED
+PASS WITH HIGH-RISK REVIEW NOTES
+
+Verified Ascension module files:
+
+- src/modules/ascension/admin/admin-handler.js
+- src/modules/ascension/admin/admin-schema.js
+- src/modules/ascension/admin/admin-service.js
+- src/modules/ascension/admin/prize-pool-schema.js
+- src/modules/ascension/docs/ASCENSION_MODULE_STATUS.md
+- src/modules/ascension/handlers/claim-handler.js
+- src/modules/ascension/handlers/mission-handler.js
+- src/modules/ascension/handlers/player-service.js
+- src/modules/ascension/handlers/start-handler.js
+- src/modules/ascension/handlers/status-handler.js
+- src/modules/ascension/index.js
+- src/modules/ascension/loot/pie-service.js
+- src/modules/ascension/loot/pie.js
+- src/modules/ascension/loot/schema.js
+- src/modules/ascension/runtime/bot-entry.js
+- src/modules/ascension/runtime/deploy-commands.js
+
+Verified bot runtime:
+
+- bot-entry.js loads dotenv.
+- bot-entry.js registers ts-node with transpileOnly true and skipProject true.
+- bot-entry.js uses discord.js Client, GatewayIntentBits, and Events.
+- bot-entry.js loads Prisma from src/lib/prisma through relative require.
+- bot-entry.js imports player handlers: start, guardian select, claim, mission, build, status.
+- bot-entry.js imports handleAdminCommand.
+- bot-entry.js creates a Discord client with Guilds and GuildMessages intents.
+- bot-entry.js checks Prisma/Supabase connectivity on ClientReady with SELECT 1.
+- bot-entry.js logs current phase from CURRENT_PHASE or fallback 1.
+- bot-entry.js logs player commands and admin commands separately.
+- bot-entry.js routes admin command names through handleAdminCommand.
+- bot-entry.js routes player commands through switch cases.
+- bot-entry.js handles guardian button interactions by customId prefix guardian_.
+- bot-entry.js logs in with BOT_TOKEN.
+
+Verified player commands in runtime/deploy command registration:
+
+- start
+- claim
+- mission
+- build
+- status
+
+Verified admin command set in bot-entry.js:
+
+- admin_help
+- admin_player_view
+- admin_inventory_view
+- admin_add_xp
+- admin_remove_xp
+- admin_set_xp
+- admin_grant_resource
+- admin_remove_resource
+- admin_set_resource
+- admin_reset_player
+- admin_delete_player
+- admin_reset_all
+- admin_recalc_player
+- admin_lock_player
+- admin_unlock_player
+- admin_restore_player
+- admin_award_all
+- admin_award_top
+- admin_prize_pool_view
+- admin_prize_pool_add
+- admin_prize_pool_award
+- admin_prize_pool_remove
+
+Verified deploy-commands behavior:
+
+- deploy-commands.js loads dotenv.
+- deploy-commands.js uses REST, Routes, and SlashCommandBuilder from discord.js.
+- deploy-commands.js defines 5 player commands.
+- deploy-commands.js defines admin commands for player view, inventory view, XP changes, resource changes, reset/delete/recalc/lock/unlock/restore, awards, and prize pool operations.
+- deploy-commands.js registers commands using Routes.applicationGuildCommands with CLIENT_ID and GUILD_ID.
+- deploy-commands.js uses BOT_TOKEN for REST auth.
+
+Verified Ascension index:
+
+- src/modules/ascension/index.js exports runtime.botEntry requiring ./runtime/bot-entry.
+
+Artifact verification:
+
+- A suspected pasted-command artifact appeared in terminal output during initial inspection.
+- Follow-up grep and numbered file inspection confirmed the artifact is not present in deploy-commands.js.
+- deploy-commands.js mid-section cleanly flows from admin_delete_player to admin_reset_all.
 
 Findings:
 
-PENDING.
+The Discord Ascension bot is a separate runtime from the backend API and is started through npm scripts, not src/index.ts.
 
-Rule:
+The bot runtime can execute player gameplay commands and a broad admin command surface.
 
-Do not deploy or restart bot during this audit.
+The command deployment script registers both player and admin slash commands to a guild.
+
+High-risk review notes:
+
+- ascension:deploy registers Discord slash commands and must remain approval-gated.
+- BOT_TOKEN, CLIENT_ID, and GUILD_ID are required for bot/deploy command operation and must remain secret-managed.
+- Admin commands include XP mutation, resource mutation, reset, delete, lock/unlock, restore, award all, award top, and prize pool mutation.
+- Admin command authorization must be verified in the dedicated admin action audit.
+- Prize pool commands affect XP awards and require prize/economy separation review.
+- admin_reset_all exists and must remain protected by confirmation and environment flag controls.
+- bot-entry.js uses ts-node runtime registration with strict false and skipProject true; this should be reviewed before production hardening.
+- bot-entry.js requests GuildMessages intent even though slash commands are interaction-based; required intents should be reviewed for least privilege.
+- command registration includes admin commands, so accidental deployment could expose commands if Discord permissions or handler authorization are misconfigured.
+
+Follow-up required:
+
+- inspect admin-handler.js and admin-service.js in the admin action audit
+- inspect gameplay handlers in the economy mutation audit
+- inspect deploy-commands.js command registration controls before any use of ascension:deploy
+- confirm Discord command permissions and visibility expectations
+- confirm PM2/process separation between backend API and Ascension bot
+- do not run ascension:start, ascension:dev, or ascension:deploy during this audit without explicit approval
 
 ---
 
