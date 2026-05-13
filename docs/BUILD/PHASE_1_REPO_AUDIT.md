@@ -665,17 +665,115 @@ Goal:
 
 Confirm business logic is organized in service files and identify any route-heavy logic.
 
-Commands to run:
+Commands run:
 
-find src -type f | grep -Ei "service|store|repository|manager" | sort
+find src/services -maxdepth 1 -type f | sort
+
+grep -RInE "export async function|export function|export const|export type" src/services | sort
+
+grep -RInE "from \"../services|from '../services" src/routes | sort
 
 Status:
 
-NOT_TESTED
+PASS WITH HIGH-RISK REVIEW NOTES
+
+Verified service files:
+
+- src/services/accessStateService.ts
+- src/services/ascensionAdminService.ts
+- src/services/ascensionAuditService.ts
+- src/services/ascensionGameplayService.ts
+- src/services/ascensionPrizePoolService.ts
+- src/services/ascensionProfileService.ts
+- src/services/ascensionSummaryService.ts
+- src/services/discordRoleMutationService.ts
+- src/services/discordRoleSyncAuditStore.ts
+- src/services/discordRoleSyncExecutionService.ts
+- src/services/discordRoleSyncVerificationService.ts
+- src/services/discordSyncWorkerService.ts
+- src/services/entitlementExpiryService.ts
+- src/services/entitlementStore.ts
+- src/services/memberStateService.ts
+- src/services/payoutService.ts
+- src/services/roleSyncService.ts
+- src/services/tempAccessService.ts
+- src/services/tokenService.ts
+- src/services/userService.ts
+
+Verified route-to-service imports:
+
+- accessRoutes imports accessStateService and entitlementExpiryService.
+- ascensionSummaryRoutes imports ascensionSummaryService.
+- discordSyncWorkerRoutes imports roleSyncService and accessStateService.
+- entitlementRoutes imports entitlementStore.
+- memberStateRoutes imports memberStateService.
+- payoutRoutes imports payoutService.
+- roleSyncRoutes imports roleSyncService and accessStateService.
+- sessionRoutes imports userService.
+- tempAccessRoutes imports tempAccessService.
+- tokenRoutes imports tokenService.
+- userRoutes imports userService.
+
+Verified major service boundary areas:
+
+Access and entitlement services:
+
+- accessStateService exports AccessState, AccessModifiers, updateAccessState, getAccessState, getOrCreateAccessState, refreshAccessState, getAccessModifiers, markRoleSync, and getAllAccessStates.
+- entitlementStore exports entitlement/access record types and create/update/get/expire/upsert functions.
+- entitlementExpiryService exports expireExpiredEntitlements.
+
+Ascension services:
+
+- ascensionGameplayService exports rank/stage/cooldown helper functions, player profile functions, applyDelta, and actor resolution.
+- ascensionProfileService exports profile record and get/create/upsert profile functions.
+- ascensionSummaryService exports member and public card summary functions.
+- ascensionAdminService exports player view, lock, unlock, reset, delete, and restore functions.
+- ascensionAuditService exports admin action and snapshot record functions.
+- ascensionPrizePoolService exports prize pool get/create, add XP, remove XP, and award XP functions.
+
+Discord role sync services:
+
+- roleSyncService exports backend role keys and role sync payload builders.
+- discordSyncWorkerService exports Discord sync decision builders and role key preview.
+- discordRoleMutationService exports Discord role mutation result type and mutation function.
+- discordRoleSyncExecutionService exports execution attempt result type and execution function.
+- discordRoleSyncVerificationService exports verification result type and verification function.
+- discordRoleSyncAuditStore exports role sync audit types, hash/idempotency helpers, snapshot helpers, create/update/get/find audit functions, and user record lookup functions.
+
+Member, payout, token, temp access, and user services:
+
+- memberStateService exports member state response types and getMemberState.
+- payoutService exports payout record/status types and queue/approve/reject/send/confirm/fail/get functions.
+- tokenService exports getTokenInfo.
+- tempAccessService exports temp access purchase result type and purchaseTemporaryAccess.
+- userService exports user/reward types and create/get/addXP/linkDiscord/bindWallet/CNX balance and reserve/finalize functions.
 
 Findings:
 
-PENDING.
+Routes are generally thin and call service-layer functions for business logic.
+
+The repository has a clear service layer for access, entitlements, Ascension gameplay/admin/audit/prize pool, Discord role sync, member state, payout, temporary access, token, and user operations.
+
+High-risk review notes:
+
+- userService exports addXP and CNX balance/reserve/release/finalize functions. These require economy/CNX review.
+- ascensionGameplayService exports applyDelta, calcRank, calcStage, claim cooldown helpers, and profile mutation functions. These require economy pacing review.
+- ascensionAdminService exports lock, unlock, reset, delete, restore functions. These require admin permission and audit review.
+- ascensionPrizePoolService exports add/remove/award XP functions. These require prize/economy review.
+- payoutService exports payout lifecycle mutation functions. These require permission and payout risk review.
+- tempAccessService exports purchaseTemporaryAccess. This requires CNX/access review.
+- accessStateService and entitlementStore export state mutation functions. These require access-control review.
+- discordRoleMutationService and discordRoleSyncExecutionService indicate live Discord role mutation capability exists and must remain approval-gated.
+- discordRoleSyncAuditStore appears to define role sync audit storage/helpers and requires persistence/retention review in the role sync audit section.
+
+Follow-up required:
+
+- perform dedicated economy mutation audit for addXP, applyDelta, prize pool XP, temp access, and CNX balance functions
+- perform dedicated admin action audit for Ascension admin functions
+- perform dedicated role sync audit for Discord mutation/execution/audit services
+- perform dedicated payout/prize review for payoutService and ascensionPrizePoolService
+- confirm whether service functions are protected by route-level auth, service-level checks, or both
+- do not change service logic during this audit
 
 ---
 
