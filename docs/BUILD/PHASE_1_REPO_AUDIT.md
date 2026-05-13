@@ -1309,21 +1309,179 @@ Goal:
 
 Identify where XP, resources, claims, missions, builds, and admin economy changes happen.
 
-Commands to run:
+Commands run:
 
-grep -RInE "xp|XP|credits|intel|power|claim|mission|build|rank|stage|level" src prisma docs/ARCHITECTURE docs/DOCTRINE | head -n 250
+grep -RInE "xp|XP|credits|intel|power|claim|mission|build|rank|stage|level|cnxBalance|reservedCnx|addXP|applyDelta|award|prize" src prisma docs/ARCHITECTURE docs/DOCTRINE | head -n 300
+
+sed -n '1,320p' src/services/ascensionGameplayService.ts
+
+sed -n '1,460p' src/services/userService.ts
+
+sed -n '1,180p' src/services/tempAccessService.ts
 
 Status:
 
-NOT_TESTED
+PASS WITH HIGH-RISK REVIEW NOTES
+
+Verified economy/progression files surfaced by search:
+
+- src/services/ascensionGameplayService.ts
+- src/services/ascensionPrizePoolService.ts
+- src/services/userService.ts
+- src/services/tempAccessService.ts
+- src/services/accessStateService.ts
+- src/services/memberStateService.ts
+- src/services/entitlementStore.ts
+- src/services/entitlementExpiryService.ts
+- src/services/roleSyncService.ts
+- src/services/ascensionSummaryService.ts
+- prisma/schema.prisma
+- docs/ARCHITECTURE/
+- docs/DOCTRINE/
+
+Verified Ascension rank ladder:
+
+- initiate: 0 XP
+- operator: 500 XP
+- builder: 1,500 XP
+- architect: 5,000 XP
+- warden: 15,000 XP
+- sentinel: 40,000 XP
+
+Verified Ascension evolution stages:
+
+- Stage 1 Dormant Node: 0 nodeScore
+- Stage 2 Stabilized Core: 50 nodeScore
+- Stage 3 Emerging Citadel: 200 nodeScore
+- Stage 4 Developed Citadel: 750 nodeScore
+- Stage 5 Ascended Citadel: 2,500 nodeScore
+
+Verified starter buildings:
+
+- knowledge_core: 1
+- trade_hub: 1
+- power_reactor: 1
+- security_layer: 1
+
+Verified Ascension claim/cooldown logic:
+
+- checkClaimCooldown uses an 8-hour cooldown.
+- lastClaimAt controls claim cooldown status.
+- formatCooldown formats remaining cooldown time.
+- checkLocked blocks gameplay when profile.isLocked is true.
+
+Verified Ascension profile mutation logic:
+
+- applyDelta mutates AscensionProfile fields.
+- applyDelta can change xp.
+- applyDelta can change credits.
+- applyDelta can change intel.
+- applyDelta can change nodeScore.
+- applyDelta can change power.
+- applyDelta can change missionsCompleted.
+- applyDelta can change sessionCount.
+- applyDelta can change lastClaimAt.
+- applyDelta can change buildingsJson.
+- applyDelta recalculates rank from XP.
+- applyDelta recalculates stage from nodeScore.
+- applyDelta prevents negative xp, nodeScore, credits, intel, missionsCompleted, and power.
+- applyDelta caps power at maxPower.
+- applyDelta does not visibly enforce rate limits itself beyond caller-provided logic.
+
+Verified platform user economy logic:
+
+- userService manages User.xp, User.level, User.cnxBalance, and User.reservedCnx.
+- createUser initializes xp 0, level 1, cnxBalance 0, reservedCnx 0.
+- createUserWithDiscord initializes verified user state with xp 0, level 1, cnxBalance 0, reservedCnx 0.
+- addXP increases User.xp by amount.
+- addXP levels up while nextXp is greater than or equal to nextLevel * 100.
+- calculateLevelReward returns level * 5.
+- addXP increases cnxBalance by calculateLevelReward(nextLevel) on level-up.
+- addXP calls updateAccessState after updating the user.
+- getPayoutReadyUser requires isVerified, wallet, cnxBalance greater than zero, and available balance greater than zero.
+- deductCnxBalance uses a database transaction.
+- deductCnxBalance checks available cnxBalance minus reservedCnx before deducting.
+- deductCnxBalance updates cnxBalance and payoutEligible.
+- deductCnxBalance calls updateAccessState after successful deduction.
+- reserveCnx uses a database transaction.
+- reserveCnx checks available balance before increasing reservedCnx.
+- releaseReservedCnx uses a database transaction.
+- releaseReservedCnx prevents release when reservedCnx is lower than amount.
+- finalizeReservedCnx uses a database transaction.
+- finalizeReservedCnx reduces reservedCnx and cnxBalance.
+- finalizeReservedCnx calls updateAccessState after successful finalize.
+
+Verified temporary access economy logic:
+
+- tempAccessService defines premium_alpha at 25 CNX for 24 hours.
+- tempAccessService defines partner_offers at 15 CNX for 24 hours.
+- purchaseTemporaryAccess requires a valid user.
+- purchaseTemporaryAccess rejects unsupported access types.
+- purchaseTemporaryAccess rejects purchase when the user already has active temporary access.
+- purchaseTemporaryAccess deducts CNX through deductCnxBalance.
+- purchaseTemporaryAccess creates a temporary_access entitlement with source cnx_spend.
+- purchaseTemporaryAccess writes cost to metadataJson.
+- purchaseTemporaryAccess calls updateAccessState after entitlement creation.
+
+Verified access/CNX utility logic surfaced by search:
+
+- accessStateService evaluates CNX balance into isCnxHolder.
+- accessStateService evaluates holderTierInternal.
+- accessStateService evaluates xpBoost.
+- accessStateService evaluates cooldownReduction.
+- accessStateService evaluates temporary access state.
+- roleSyncService turns AccessState into backend role sync payloads.
+
+Verified member state readout logic surfaced by search:
+
+- memberStateService calculates xpToNextLevel using level * 100.
+- memberStateService calculates availableCnx as cnxBalance minus reservedCnx.
+- memberStateService exposes xpBoost and tempAccessExpiresAt.
+- memberStateService exposes level, xp, cnxBalance, reservedCnx, and progression status text.
 
 Findings:
 
-PENDING.
+There are two separate progression/economy surfaces:
 
-Rule:
+- platform User economy: User.xp, User.level, User.cnxBalance, User.reservedCnx
+- Ascension gameplay economy: AscensionProfile.xp, rank, stage, nodeScore, power, credits, intel, missionsCompleted, sessionCount, buildingsJson
 
-Do not change economy constants during this audit.
+The platform User economy can generate CNX balance through addXP level-up rewards.
+
+The Ascension gameplay economy can mutate gameplay XP/resources through applyDelta.
+
+Temporary access currently spends CNX balance and creates entitlements.
+
+AccessState converts CNX balance and entitlements into utility modifiers and role sync eligibility.
+
+High-risk review notes:
+
+- POST /user/:id/xp can reach userService.addXP from a route and may indirectly mint CNX balance through level rewards.
+- addXP rewards CNX on level-up, so XP mutation is also CNX balance mutation.
+- CNX values are stored as Float in Prisma and should be reviewed before production-grade accounting.
+- User.xp/User.level and AscensionProfile.xp/level are separate and must not be confused.
+- AscensionProfile.level exists in the schema but applyDelta recalculates rank/stage, not level.
+- applyDelta is a general-purpose mutation function and requires caller-side controls for rate limits, mission rules, and anti-abuse.
+- temporary access currently deducts CNX and creates entitlements, so this is a real CNX spend path.
+- premium_alpha is mapped to role sync temp_premium_alpha, but partner_offers does not appear in the inspected role sync temp access map.
+- accessStateService CNX holder thresholds and boost behavior require dedicated review before live CNX utility activation.
+- prize pool XP mutation appeared in the economy search and requires separate prize/economy audit.
+- payout readiness depends on cnxBalance and wallet verification, so payout/economy boundaries require dedicated review.
+- Economy mutations do not appear centralized under one audit/event table yet, except specific admin/prize audit paths surfaced elsewhere.
+- Route-level and service-level authorization for economy mutations must be reviewed before production exposure.
+
+Follow-up required:
+
+- inspect accessStateService thresholds and boost logic in detail
+- inspect mission-handler.js and claim-handler.js for gameplay reward amounts and cooldown enforcement
+- inspect ascensionPrizePoolService.ts for prize XP award controls
+- inspect userRoutes.ts authorization around POST /user/:id/xp
+- inspect tempAccessRoutes.ts authorization around CNX spend
+- define whether User.xp/CNX rewards remain active, deprecated, admin-only, or separated from Ascension
+- decide whether CNX balances should be integer base units or Decimal instead of Float
+- confirm partner_offers temporary access behavior and whether it should map to any role
+- confirm economy event logging requirements before new live economy features
+- do not change economy values during this audit
 
 ---
 
