@@ -724,3 +724,144 @@ Follow-up required:
 - decide persistence model for payout log and session store
 - do not change service behavior during this audit
 
+
+---
+
+## 7.6 Admin, Worker, and Role Execution Review
+
+Status:
+
+PASS WITH HIGH-RISK FINDINGS.
+
+Commands run:
+
+sed -n '1,260p' src/services/discordRoleMutationService.ts
+
+sed -n '1,260p' src/services/discordRoleSyncExecutionService.ts
+
+sed -n '1,240p' src/services/discordRoleSyncVerificationService.ts
+
+sed -n '1,220p' src/services/discordRoleSyncAuditStore.ts
+
+sed -n '1,220p' src/services/ascensionAdminService.ts
+
+sed -n '1,240p' src/services/ascensionPrizePoolService.ts
+
+git grep -nE "discordRole|executeDiscord|mutateDiscord|admin|prize|FOUNDER|worker|mark-synced|canExecute" -- src/routes src/services src/modules/ascension | head -n 400
+
+npm run build
+
+git status
+
+Verified build result:
+
+- npm run build completed successfully.
+
+Verified git state:
+
+- working tree was clean after review.
+
+Verified Discord role mutation service behavior:
+
+- mutateDiscordRolesForUser calls executeDiscordRoleSyncAttempt.
+- mutation result includes before roles, added roles, removed roles, final roles, audit id, execution source, and mutation status.
+- mutation blocks when decision.canExecute is false.
+- no-op detection is performed before recording mutation as applied.
+- audit status is updated to blocked, no_op, or mutated.
+- service does not authenticate caller authority.
+- service does not verify internal worker identity.
+- service does not verify Discord bot permission hierarchy.
+- service appears to simulate/record role mutation state, but actual Discord API mutation should still be treated as high-risk if connected elsewhere.
+
+Verified Discord role sync execution behavior:
+
+- executeDiscordRoleSyncAttempt builds a Discord sync decision.
+- execution hash is built from decision inputs.
+- idempotency key reuse is supported.
+- execution hash reuse is supported.
+- audit attempt count increments on reuse.
+- rollback snapshot JSON is created from current member roles.
+- audit record status can be blocked, no_op, or executed.
+- service does not authenticate caller authority.
+- service does not verify internal worker identity.
+
+Verified Discord role sync verification behavior:
+
+- verifyDiscordRoleSyncResult compares expected final roles against actual member role ids.
+- verification updates audit status to verified or failed.
+- verification service does not authenticate caller authority.
+- verification service does not verify internal worker identity.
+
+Verified Discord role sync audit store behavior:
+
+- audit records are stored in an in-memory object.
+- audit records include idempotency key, execution hash, rate limit bucket, final roles, current roles, desired add/remove roles, warnings, and rollback snapshot.
+- audit store has execution source values: manual, worker, scheduler, retry, verification, rollback.
+- audit store does not persist to database.
+- audit store does not authenticate caller authority.
+- audit store does not enforce route/worker permission.
+
+Verified Ascension admin service behavior:
+
+- admin service includes rate limiting by adminId and command key.
+- lock player mutates isLocked and lockReason.
+- unlock player clears lock state.
+- reset player creates audit action and pre-reset snapshot.
+- delete player creates audit action and pre-delete snapshot.
+- restore player restores from snapshots.
+- service accepts adminUserId/adminUsername as input.
+- service does not itself prove that adminUserId is founder/admin.
+- caller layer must verify admin authority before calling these methods.
+
+Verified Ascension prize pool service behavior:
+
+- getOrCreateAscensionPrizePool upserts the main prize pool.
+- addXpToPrizePool mutates total available/added XP and logs admin action.
+- removeXpFromPrizePool mutates total available/removed XP and logs admin action.
+- awardXpFromPrizePoolToUser mutates prize pool and target player XP/rank in a transaction.
+- service accepts adminUserId/adminUsername as input.
+- service does not itself prove that adminUserId is founder/admin.
+- caller layer must verify admin authority before calling these methods.
+
+Verified Discord admin command boundary:
+
+- src/modules/ascension/admin/admin-handler.js loads FOUNDER_IDS from environment.
+- isFounder checks interaction.user.id against FOUNDER_IDS.
+- admin command handler denies non-founder users at the Discord command layer.
+- Discord admin command protection is separate from HTTP route protection.
+- HTTP routes should not rely on Discord command handler checks.
+
+High-risk findings:
+
+- HTTP admin/worker route protection is still not centralized.
+- Role sync worker routes must not be public because they can expose or mutate sync metadata.
+- Discord role sync execution/mutation services rely on caller authorization.
+- Discord role sync audit store is in-memory and may reset on process restart.
+- Ascension admin/prize services rely on caller authorization.
+- Prize pool mutation can alter gameplay XP and ranks.
+- Destructive Ascension admin actions can lock, reset, delete, or restore players.
+- Payout admin routes currently trust body-provided adminId, while Ascension Discord commands use environment-gated founder checks.
+- Authority model is inconsistent across HTTP API and Discord bot surfaces.
+- Any future HTTP admin action should use authenticated principal authority, not body-provided adminId.
+
+Recommended authority model:
+
+- Discord bot admin commands: keep FOUNDER_IDS check at command handler boundary.
+- HTTP admin routes: require authenticated admin/founder principal.
+- Internal worker routes: require internal-worker secret or service identity.
+- Role sync execution: require internal-worker or founder/admin authority.
+- Prize/payout execution: require founder/admin authority and audit logging.
+- Destructive actions: require founder/admin authority, reason, audit record, and confirmation phrase where appropriate.
+
+Follow-up required:
+
+- define a single HTTP authority model
+- decide whether HTTP admin authority maps to Discord user id, internal admin allowlist, or future dashboard auth
+- add internal-worker authentication design
+- protect role sync worker endpoints before production exposure
+- protect payout routes before production exposure
+- protect Ascension admin HTTP services if exposed later
+- persist role sync audit records if they become production-critical
+- do not execute live role mutation during this audit
+- do not change code during this review
+
