@@ -377,3 +377,154 @@ Follow-up required:
 - classify every route before implementation
 - do not change middleware or session behavior during this review
 
+
+---
+
+## 7.4 Route Classification Draft
+
+Status:
+
+PASS WITH HIGH-RISK FINDINGS.
+
+Commands run:
+
+git grep -nE "router\\.(get|post|put|patch|delete)" -- src/routes
+
+git grep -nE "getSessionUserIdFromRequest|cnx_session|dev-login" -- src/routes src/services
+
+git grep -nE "router\\.post|router\\.put|router\\.patch|router\\.delete" -- src/routes
+
+git grep -nE "getAll|buildAll|getPayoutLog|router\\.get\\(\"/\"" -- src/routes src/services
+
+git status
+
+Verified session-using routes:
+
+- GET /session/me
+- GET /member-state/me
+- GET /ascension-summary/me
+
+Verified mutation routes:
+
+- POST /access/expire/run
+- POST /access/:userId/refresh
+- POST /discord-sync-worker/:userId/mark-synced
+- POST /payout/:userId/queue
+- POST /payout/:payoutId/approve
+- POST /payout/:payoutId/reject
+- POST /payout/:payoutId/send
+- POST /payout/:payoutId/confirm
+- POST /payout/:payoutId/fail
+- POST /role-sync/:userId/mark-synced
+- POST /session/dev-login
+- POST /session/logout
+- POST /temp-access/:id/purchase
+- POST /user/create
+- POST /user/:id/discord
+- POST /user/:id/wallet
+- POST /user/:id/xp
+
+Verified read-all routes:
+
+- GET /access
+- GET /discord-sync-worker
+- GET /entitlements
+- GET /payout/log/all
+- GET /role-sync
+
+Draft route classification:
+
+Public-safe candidates:
+
+- GET /
+- GET /health
+- GET /token/info
+- GET /ascension-summary/public/discord/:discordId
+
+Public-with-review candidates:
+
+- GET /health/db
+
+Session-user routes:
+
+- GET /session/me
+- POST /session/logout
+- GET /member-state/me
+- GET /ascension-summary/me
+
+Owner-only route candidates:
+
+- GET /user/:id
+- GET /user/:id/balance
+- GET /user/:id/payout-ready
+- POST /user/:id/discord
+- POST /user/:id/wallet
+- GET /access/:userId
+- GET /access/:userId/modifiers
+- POST /access/:userId/refresh
+- GET /entitlements/user/:userId
+- GET /entitlements/user/:userId/active
+- GET /member-state/:userId
+- GET /ascension-summary/user/:userId
+
+Admin-only route candidates:
+
+- POST /user/:id/xp
+- GET /payout/log/all
+- GET /payout/:payoutId
+- POST /payout/:userId/queue
+- POST /payout/:payoutId/approve
+- POST /payout/:payoutId/reject
+- POST /payout/:payoutId/send
+- POST /payout/:payoutId/confirm
+- POST /payout/:payoutId/fail
+- GET /access
+- GET /entitlements
+- GET /entitlements/:id
+- GET /ascension-summary/discord/:discordId
+
+Internal-worker-only route candidates:
+
+- POST /access/expire/run
+- GET /role-sync
+- GET /role-sync/:userId
+- POST /role-sync/:userId/mark-synced
+- GET /discord-sync-worker
+- GET /discord-sync-worker/:userId
+- POST /discord-sync-worker/:userId/mark-synced
+
+Disabled-in-production candidate:
+
+- POST /session/dev-login
+
+High-risk classification findings:
+
+- POST /user/:id/xp should not remain public because it mutates XP and can indirectly affect CNX rewards.
+- Payout routes should not trust adminId from the request body without an authenticated admin principal.
+- Read-all routes should not remain public because they expose access states, entitlements, payout logs, and role sync payloads.
+- Worker routes should not remain public because they expose and mutate role sync state.
+- Owner-scoped routes need an authenticated session user and an ownership check.
+- Internal/member-safe Ascension summary routes need session ownership or admin permission.
+- POST /session/dev-login should be disabled in production or replaced with real identity authentication.
+- POST /temp-access/:id/purchase should require authenticated ownership and should await the async service call.
+- Public-safe route classification must be intentionally narrow.
+
+Recommended permission model:
+
+- public: no auth required, read-only, safe for public exposure
+- session-user: requires valid session
+- owner-only: requires valid session and session userId must match route userId
+- admin-only: requires verified admin/founder authority
+- internal-worker-only: requires internal worker secret, local-only access, or trusted service identity
+- disabled-in-production: blocked when NODE_ENV is production
+
+Follow-up required:
+
+- implement shared middleware only after review approval
+- define authenticated principal shape for HTTP requests
+- decide how admin authority is represented for HTTP routes
+- decide how internal worker routes authenticate
+- decide whether dev-login is removed, guarded, or production-disabled
+- confirm final route classification before implementation
+- do not change route behavior during this audit
+
