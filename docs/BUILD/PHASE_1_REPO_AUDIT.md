@@ -1130,17 +1130,176 @@ Goal:
 
 Identify role sync files and confirm role mutation remains approval-gated.
 
-Commands to run:
+Commands run:
 
 find src -type f | grep -Ei "role|sync|mutation" | sort
 
+sed -n '1,260p' src/config/discordRoleRegistry.ts
+
+sed -n '1,260p' src/config/discordRoleMap.ts
+
+sed -n '1,260p' src/services/roleSyncService.ts
+
+sed -n '1,260p' src/services/discordSyncWorkerService.ts
+
+grep -RInE "VICE ----|ER SERVICE ----|DISCORD SYNC WORK|sed -n|echo \"" src/config/discordRoleMap.ts src/services/roleSyncService.ts src/services/discordSyncWorkerService.ts || true
+
+sed -n '92,106p' src/services/roleSyncService.ts
+
+git show HEAD:src/services/roleSyncService.ts | nl -ba | sed -n '92,106p'
+
+git show main:src/services/roleSyncService.ts | nl -ba | sed -n '92,106p'
+
+npm run build
+
 Status:
 
-NOT_TESTED
+PASS WITH HIGH-RISK REVIEW NOTES
+
+Verified role/sync/mutation files:
+
+- src/config/discordRoleMap.ts
+- src/config/discordRoleRegistry.ts
+- src/routes/discordSyncWorkerRoutes.ts
+- src/routes/roleSyncRoutes.ts
+- src/services/discordRoleMutationService.ts
+- src/services/discordRoleSyncAuditStore.ts
+- src/services/discordRoleSyncExecutionService.ts
+- src/services/discordRoleSyncVerificationService.ts
+- src/services/discordSyncWorkerService.ts
+- src/services/roleSyncService.ts
+
+Verified role registry categories:
+
+- authority
+- identity
+- cosmetic
+- progression
+- utility
+- system
+
+Verified authority roles in registry:
+
+- FOUNDER
+- MODERATOR
+
+Verified identity/cosmetic/progression roles in registry:
+
+- MEMBER
+- GENESIS
+- CITIZEN
+- BUILDER
+- GUARDIAN
+- ARCHITECT
+- ELITE
+
+Verified utility roles in registry:
+
+- CNX_HOLDER
+- NEXUS_HOLDER
+- PREMIUM
+- TEMPORARY_ACCESS
+- CNX_HOLDER_TIER_1
+- CNX_HOLDER_TIER_2
+- CNX_HOLDER_TIER_3
+- TEMP_PREMIUM_ALPHA
+
+Verified system roles in registry:
+
+- ARCANE_BOT
+- CARL_BOT
+
+Verified backend-managed roles in registry:
+
+- CNX_HOLDER
+- CNX_HOLDER_TIER_1
+- CNX_HOLDER_TIER_2
+- CNX_HOLDER_TIER_3
+- TEMP_PREMIUM_ALPHA
+
+Verified Discord role map keys:
+
+- cnx_holder
+- cnx_holder_tier_1
+- cnx_holder_tier_2
+- cnx_holder_tier_3
+- temp_premium_alpha
+
+Verified role map helpers:
+
+- getAllMappedBackendRoleKeys
+- getDiscordRoleIdForKey
+- validateDiscordRoleMap
+
+Verified role sync payload behavior:
+
+- roleSyncService builds role sync payloads from AccessState.
+- roleSyncService uses contractVersion role_sync_prep_v1.
+- roleSyncService maps isCnxHolder to cnx_holder.
+- roleSyncService maps holderTierInternal 1 to cnx_holder_tier_1.
+- roleSyncService maps holderTierInternal 2 to cnx_holder_tier_2.
+- roleSyncService maps holderTierInternal 3 to cnx_holder_tier_3.
+- roleSyncService warns on unsupported nonzero holderTierInternal.
+- roleSyncService maps tempAccessType premium_alpha to temp_premium_alpha.
+- roleSyncService warns on unsupported temp access types.
+- roleSyncService normalizes role sets so should-have roles are removed from should-not-have roles.
+- roleSyncService sorts and deduplicates role keys.
+- roleSyncService can build one user payload or all access state payloads.
+
+Verified Discord sync worker behavior:
+
+- discordSyncWorkerService converts backend role keys into Discord role IDs.
+- discordSyncWorkerService compares desired role IDs against current member role IDs.
+- discordSyncWorkerService calculates desiredAddRoleIds.
+- discordSyncWorkerService calculates desiredRemoveRoleIds.
+- discordSyncWorkerService tracks unresolvedRoleKeys.
+- discordSyncWorkerService blocks execution when unsupported temp access types exist.
+- discordSyncWorkerService blocks execution when payload warnings exist.
+- discordSyncWorkerService blocks execution when role keys do not resolve to usable role IDs.
+- discordSyncWorkerService exposes getRoleKeyToRoleIdPreview.
+
+Artifact verification:
+
+- Terminal output previously showed pasted-command fragments during role sync inspection.
+- Targeted grep confirmed those fragments are not present in discordRoleMap.ts, roleSyncService.ts, or discordSyncWorkerService.ts.
+- Raw roleSyncService section is clean.
+- HEAD roleSyncService section is clean.
+- main roleSyncService section is clean.
+- npm run build passed after verification.
+- git status remained clean.
 
 Findings:
 
-PENDING.
+The role sync planning layer is backend-driven and derives desired Discord role state from AccessState.
+
+The role sync service produces role-key payloads, while discordSyncWorkerService resolves those keys into Discord role IDs and creates executable decisions.
+
+The inspected services appear to prepare role sync decisions rather than directly mutating Discord roles.
+
+Live mutation capability exists elsewhere in discordRoleMutationService and discordRoleSyncExecutionService and must remain approval-gated until inspected in detail.
+
+High-risk review notes:
+
+- Backend-managed CNX holder and temporary access roles exist and are mapped to hardcoded Discord role IDs.
+- CNX holder role behavior depends on AccessState.isCnxHolder and AccessState.holderTierInternal.
+- Temporary access role behavior depends on AccessState.tempAccessType.
+- Unsupported holder tiers and unsupported temp access types create warnings/blocks, which supports fail-closed behavior.
+- There are two role definition sources: discordRoleRegistry.ts and discordRoleMap.ts. These must remain synchronized.
+- roleSyncRoutes and discordSyncWorkerRoutes include mark-synced endpoints that mutate lastRoleSyncAt and require permission review.
+- Live mutation services must be inspected before any role sync execution is considered production-ready.
+- Discord role IDs are not secrets, but changing them can break live Discord role behavior.
+
+Follow-up required:
+
+- inspect discordRoleMutationService.ts
+- inspect discordRoleSyncExecutionService.ts
+- inspect discordRoleSyncVerificationService.ts
+- inspect discordRoleSyncAuditStore.ts
+- confirm role registry and role map consistency
+- confirm which roles are intentionally backend-managed
+- confirm role sync route permissions
+- confirm Discord bot permissions for role mutation
+- do not execute live role mutation during this audit
 
 ---
 
