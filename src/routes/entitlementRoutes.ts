@@ -1,5 +1,6 @@
-//backend/src/rputes/entitlementRoutes.ts
+// backend/src/routes/entitlementRoutes.ts
 import { Router, Request, Response } from "express";
+import { requireAdmin, requireOwnerOrAdmin } from "../middleware/httpAuth";
 import {
   getAllEntitlements,
   getEntitlementById,
@@ -9,7 +10,7 @@ import {
 
 const router = Router();
 
-router.get("/", async (_req: Request, res: Response) => {
+router.get("/", requireAdmin, async (_req: Request, res: Response) => {
   try {
     const entitlements = await getAllEntitlements();
     return res.json(entitlements);
@@ -19,7 +20,7 @@ router.get("/", async (_req: Request, res: Response) => {
   }
 });
 
-router.get("/user/:userId", async (req: Request, res: Response) => {
+router.get("/user/:userId", requireOwnerOrAdmin("userId"), async (req: Request, res: Response) => {
   try {
     const userId = String(req.params.userId ?? "");
 
@@ -35,7 +36,7 @@ router.get("/user/:userId", async (req: Request, res: Response) => {
   }
 });
 
-router.get("/user/:userId/active", async (req: Request, res: Response) => {
+router.get("/user/:userId/active", requireOwnerOrAdmin("userId"), async (req: Request, res: Response) => {
   try {
     const userId = String(req.params.userId ?? "");
 
@@ -56,7 +57,7 @@ router.get("/user/:userId/active", async (req: Request, res: Response) => {
   }
 });
 
-router.get("/:id", async (req: Request, res: Response) => {
+router.get("/:id", requireAdmin, async (req: Request, res: Response) => {
   try {
     const id = String(req.params.id ?? "");
 
