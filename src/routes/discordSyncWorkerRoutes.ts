@@ -1,4 +1,6 @@
+// backend/src/routes/discordSyncWorkerRoutes.ts
 import express, { Request, Response } from "express";
+import { requireInternalWorker } from "../middleware/httpAuth";
 import {
   buildRoleSyncPayload,
   buildAllRoleSyncPayloads,
@@ -7,7 +9,7 @@ import { markRoleSync } from "../services/accessStateService";
 
 const router = express.Router();
 
-router.get("/", async (_req: Request, res: Response) => {
+router.get("/", requireInternalWorker, async (_req: Request, res: Response) => {
   try {
     const payloads = await buildAllRoleSyncPayloads();
     return res.json(payloads);
@@ -19,7 +21,7 @@ router.get("/", async (_req: Request, res: Response) => {
   }
 });
 
-router.get("/:userId", async (req: Request, res: Response) => {
+router.get("/:userId", requireInternalWorker, async (req: Request, res: Response) => {
   try {
     const userId = String(req.params.userId ?? "");
 
@@ -42,7 +44,7 @@ router.get("/:userId", async (req: Request, res: Response) => {
   }
 });
 
-router.post("/:userId/mark-synced", async (req: Request, res: Response) => {
+router.post("/:userId/mark-synced", requireInternalWorker, async (req: Request, res: Response) => {
   try {
     const userId = String(req.params.userId ?? "");
 

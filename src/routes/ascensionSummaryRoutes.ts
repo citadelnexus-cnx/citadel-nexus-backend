@@ -1,7 +1,11 @@
-//backend/src/routes/ascensionSummaryRoutes.ts
 // backend/src/routes/ascensionSummaryRoutes.ts
 import express, { Request, Response } from "express";
-import { getSessionUserIdFromRequest } from "./sessionRoutes";
+import {
+  requireAdmin,
+  requireOwnerOrAdmin,
+  requireSession,
+} from "../middleware/httpAuth";
+import { getSessionUserIdFromRequest } from "../services/sessionService";
 import {
   getAscensionMemberSummaryByDiscordId,
   getAscensionMemberSummaryByUserId,
@@ -29,7 +33,7 @@ function normalizeRouteParam(value: string | string[] | undefined): string | nul
  * GET /ascension-summary/me
  * Internal/member-safe summary for the currently authenticated session user
  */
-router.get("/me", async (req: Request, res: Response) => {
+router.get("/me", requireSession, async (req: Request, res: Response) => {
   try {
     const userId = getSessionUserIdFromRequest(req);
 
@@ -65,9 +69,9 @@ router.get("/me", async (req: Request, res: Response) => {
 
 /**
  * GET /ascension-summary/discord/:discordId
- * Internal/member-safe summary by Discord ID
+ * Internal/admin-safe summary by Discord ID
  */
-router.get("/discord/:discordId", async (req: Request, res: Response) => {
+router.get("/discord/:discordId", requireAdmin, async (req: Request, res: Response) => {
   try {
     const discordId = normalizeRouteParam(req.params.discordId);
 
@@ -105,7 +109,7 @@ router.get("/discord/:discordId", async (req: Request, res: Response) => {
  * GET /ascension-summary/user/:userId
  * Internal/member-safe summary by platform User.id
  */
-router.get("/user/:userId", async (req: Request, res: Response) => {
+router.get("/user/:userId", requireOwnerOrAdmin("userId"), async (req: Request, res: Response) => {
   try {
     const userId = normalizeRouteParam(req.params.userId);
 
