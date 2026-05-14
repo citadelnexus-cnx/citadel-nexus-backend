@@ -57,7 +57,7 @@ router.post("/dev-login", requireProductionDisabled, async (req: Request, res: R
   }
 });
 
-router.get("/me", async (req: Request, res: Response) => {
+router.get("/me", requireSession, async (req: Request, res: Response) => {
   try {
     const userId = getSessionUserIdFromRequest(req);
 
