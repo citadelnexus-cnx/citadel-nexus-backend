@@ -84,7 +84,7 @@ Compiled `dist/` output confirmed presence of:
 
 ## Environment Follow-Ups
 
-The following production environment values are missing and must be configured before positive authorized runtime tests:
+The following production environment values were missing during initial no-auth validation and were later configured securely outside Git before authorized runtime testing:
 
 - `HTTP_ADMIN_DISCORD_IDS`
 - `INTERNAL_WORKER_SECRET`
@@ -98,3 +98,65 @@ The following route has a separate configuration issue unrelated to HTTP route a
 The HTTP route permission layer is active at runtime and fails closed correctly for unauthenticated requests.
 
 Do not test valid admin-header or worker-secret flows until the missing environment variables are configured securely outside Git.
+
+---
+
+## Authorized Read-Only Runtime Validation
+
+## Status
+
+PASSED.
+
+## Date
+
+2026-05-14 UTC
+
+## Purpose
+
+Validate positive authorized read-only access after configuring production HTTP auth environment values outside Git.
+
+## Secure Environment Configuration
+
+Configured outside Git:
+
+- `HTTP_ADMIN_DISCORD_IDS`
+- `INTERNAL_WORKER_SECRET`
+
+Secret values were not printed, committed, or stored in documentation.
+
+## Authorized Admin Read-Only Checks
+
+| Route | Expected | Actual | Result |
+|---|---:|---:|---|
+| GET /access | 200 | 200 | PASS |
+| GET /entitlements | 200 | 200 | PASS |
+| GET /role-sync | 200 | 200 | PASS |
+| GET /payout/log/all | 200 | 200 | PASS |
+
+## Authorized Worker Read-Only Checks
+
+| Route | Expected | Actual | Result |
+|---|---:|---:|---|
+| GET /discord-sync-worker | 200 | 200 | PASS |
+
+## Negative Control Checks
+
+| Route | Expected | Actual | Result |
+|---|---:|---:|---|
+| GET /access with invalid admin header | 403 | 403 | PASS |
+| GET /discord-sync-worker with invalid worker secret | 403 | 403 | PASS |
+
+## Conclusion
+
+HTTP route permission validation is complete for:
+
+- unauthenticated fail-closed behavior
+- production-disabled route behavior
+- owner-route no-session rejection
+- authorized admin read-only access
+- authorized worker read-only access
+- invalid admin/worker rejection
+
+Remaining unrelated follow-up:
+
+- Resolve Hedera/token configuration causing `GET /token/info` to return `500`.
