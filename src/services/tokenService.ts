@@ -1,13 +1,21 @@
 import { TokenInfoQuery } from "@hashgraph/sdk";
-import { getHederaClient } from "../config/hederaClient";
+import { getHederaClient, HederaConfigError } from "../config/hederaClient";
 
-const TOKEN_ID = "0.0.8315924";
+function getTokenId(): string {
+  const tokenId = process.env.HEDERA_TOKEN_ID?.trim();
+
+  if (!tokenId) {
+    throw new HederaConfigError("Missing required Hedera environment variable: HEDERA_TOKEN_ID");
+  }
+
+  return tokenId;
+}
 
 export async function getTokenInfo() {
   const client = getHederaClient();
 
   const info = await new TokenInfoQuery()
-    .setTokenId(TOKEN_ID)
+    .setTokenId(getTokenId())
     .execute(client);
 
   return {
