@@ -1,6 +1,6 @@
 // backend/src/routes/userRoutes.ts
 import { Router, Request, Response } from "express";
-import { requireAdmin, requireOwnerOrAdmin } from "../middleware/httpAuth";
+import { requireAdmin, requireOwnerOrAdmin, requireProductionDisabled } from "../middleware/httpAuth";
 import {
   createUser,
   getUser,
@@ -13,7 +13,7 @@ import {
 
 const router = Router();
 
-router.post("/create", async (req: Request, res: Response) => {
+router.post("/create", requireProductionDisabled, async (req: Request, res: Response) => {
   try {
     const { username } = req.body;
 
