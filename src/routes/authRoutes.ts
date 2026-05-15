@@ -1,7 +1,13 @@
 // backend/src/routes/authRoutes.ts
 import express, { Request, Response } from "express";
+import {
+  consumeOAuthState,
+  createOAuthState,
+} from "../services/oauthStateService";
 
 const router = express.Router();
+
+const DISCORD_AUTHORIZE_URL = "https://discord.com/oauth2/authorize";
 
 const REQUIRED_DISCORD_OAUTH_ENV_KEYS = [
   "DISCORD_CLIENT_ID",
@@ -22,6 +28,10 @@ function getMissingEnvKeys(): string[] {
   });
 }
 
+function getEnvValue(key: (typeof REQUIRED_DISCORD_OAUTH_ENV_KEYS)[number]): string {
+  return String(process.env[key] || "").trim();
+}
+
 function sendFailClosed(
   res: Response,
   status: number,
@@ -40,6 +50,18 @@ function sendFailClosed(
   res.status(status).json(body);
 }
 
+function buildDiscordAuthorizeUrl(state: string): string {
+  const params = new URLSearchParams({
+    client_id: getEnvValue("DISCORD_CLIENT_ID"),
+    redirect_uri: getEnvValue("DISCORD_OAUTH_REDIRECT_URI"),
+    response_type: "code",
+    scope: getEnvValue("DISCORD_OAUTH_SCOPES"),
+    state,
+  });
+
+  return `${DISCORD_AUTHORIZE_URL}?${params.toString()}`;
+}
+
 router.get("/discord/start", (_req: Request, res: Response) => {
   const missingEnvKeys = getMissingEnvKeys();
 
@@ -48,11 +70,10 @@ router.get("/discord/start", (_req: Request, res: Response) => {
     return;
   }
 
-  sendFailClosed(
-    res,
-    501,
-    "Discord OAuth start route is registered, but OAuth state protection is not implemented yet"
-  );
+  const oauthState = createOAuthState();
+  const redirectUrl = buildDiscordAuthorizeUrl(oauthState.state);
+
+  res.redirect(302, redirectUrl);
 });
 
 router.get("/discord/callback", (req: Request, res: Response) => {
@@ -71,10 +92,17 @@ router.get("/discord/callback", (req: Request, res: Response) => {
     return;
   }
 
+  const isValidState = consumeOAuthState(state);
+
+  if (!isValidState) {
+    sendFailClosed(res, 400, "Invalid Discord OAuth state");
+    return;
+  }
+
   sendFailClosed(
     res,
     501,
-    "Discord OAuth callback route is registered, but token exchange is not implemented yet"
+    "Discord OAuth callback state is valid, but token exchange is not implemented yet"
   );
 });
 
