@@ -13,6 +13,7 @@ import entitlementRoutes from "./routes/entitlementRoutes";
 import roleSyncRoutes from "./routes/roleSyncRoutes";
 import discordSyncWorkerRoutes from "./routes/discordSyncWorkerRoutes";
 import sessionRoutes from "./routes/sessionRoutes";
+import authRoutes from "./routes/authRoutes";
 import memberStateRoutes from "./routes/memberStateRoutes";
 import ascensionSummaryRoutes from "./routes/ascensionSummaryRoutes";
 
@@ -95,6 +96,7 @@ app.use("/temp-access", tempAccessRoutes);
 app.use("/entitlements", entitlementRoutes);
 app.use("/role-sync", roleSyncRoutes);
 app.use("/discord-sync-worker", discordSyncWorkerRoutes);
+app.use("/auth", authRoutes);
 app.use("/session", sessionRoutes);
 app.use("/member-state", memberStateRoutes);
 app.use("/ascension-summary", ascensionSummaryRoutes);
