@@ -43,9 +43,10 @@ This update establishes:
 - Agent task and output standards
 - Agent improvement protocol
 
-## Commit
+## Commits
 
-`fe2c248 docs(agents): establish CNMA v4.1 command intelligence layer`
+- `fe2c248 docs(agents): establish CNMA v4.1 command intelligence layer`
+- `2104939 docs(agents): add CNMA v4.1 Obsidian export note`
 
 ## Safety Result
 
@@ -63,4 +64,4 @@ This branch requires Anthony review before merge to `main`.
 
 ## Next Step
 
-Push the branch for review, then repeat a lighter CNMA-v4.1 setup for the frontend app repo after backend review is complete.
+Open a pull request for review. Do not merge until the PR diff is reviewed and any mergeability conflicts are resolved.
