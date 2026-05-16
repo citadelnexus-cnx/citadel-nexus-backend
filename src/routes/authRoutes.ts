@@ -8,6 +8,7 @@ import {
 const router = express.Router();
 
 const DISCORD_AUTHORIZE_URL = "https://discord.com/oauth2/authorize";
+const DISCORD_TOKEN_URL = "https://discord.com/api/oauth2/token";
 
 const REQUIRED_DISCORD_OAUTH_ENV_KEYS = [
   "DISCORD_CLIENT_ID",
@@ -16,6 +17,20 @@ const REQUIRED_DISCORD_OAUTH_ENV_KEYS = [
   "DISCORD_OAUTH_SCOPES",
   "FRONTEND_ORIGIN",
 ] as const;
+
+type RequiredDiscordOAuthEnvKey = (typeof REQUIRED_DISCORD_OAUTH_ENV_KEYS)[number];
+
+type DiscordTokenExchangeResult =
+  | {
+      ok: true;
+      tokenType: string;
+      scope: string;
+      expiresIn: number;
+    }
+  | {
+      ok: false;
+      status: number;
+    };
 
 function isProduction(): boolean {
   return process.env.NODE_ENV === "production";
@@ -28,7 +43,7 @@ function getMissingEnvKeys(): string[] {
   });
 }
 
-function getEnvValue(key: (typeof REQUIRED_DISCORD_OAUTH_ENV_KEYS)[number]): string {
+function getEnvValue(key: RequiredDiscordOAuthEnvKey): string {
   return String(process.env[key] || "").trim();
 }
 
@@ -62,6 +77,70 @@ function buildDiscordAuthorizeUrl(state: string): string {
   return `${DISCORD_AUTHORIZE_URL}?${params.toString()}`;
 }
 
+function isTokenResponseShape(value: unknown): value is {
+  access_token: string;
+  token_type: string;
+  expires_in: number;
+  refresh_token?: string;
+  scope?: string;
+} {
+  if (!value || typeof value !== "object") return false;
+
+  const record = value as Record<string, unknown>;
+
+  return (
+    typeof record.access_token === "string" &&
+    record.access_token.length > 0 &&
+    typeof record.token_type === "string" &&
+    record.token_type.length > 0 &&
+    typeof record.expires_in === "number" &&
+    Number.isFinite(record.expires_in)
+  );
+}
+
+async function exchangeDiscordCodeForToken(
+  code: string
+): Promise<DiscordTokenExchangeResult> {
+  const body = new URLSearchParams({
+    client_id: getEnvValue("DISCORD_CLIENT_ID"),
+    client_secret: getEnvValue("DISCORD_CLIENT_SECRET"),
+    grant_type: "authorization_code",
+    code,
+    redirect_uri: getEnvValue("DISCORD_OAUTH_REDIRECT_URI"),
+  });
+
+  const response = await fetch(DISCORD_TOKEN_URL, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/x-www-form-urlencoded",
+    },
+    body,
+  });
+
+  if (!response.ok) {
+    return {
+      ok: false,
+      status: response.status,
+    };
+  }
+
+  const tokenResponse: unknown = await response.json();
+
+  if (!isTokenResponseShape(tokenResponse)) {
+    return {
+      ok: false,
+      status: 502,
+    };
+  }
+
+  return {
+    ok: true,
+    tokenType: tokenResponse.token_type,
+    scope: tokenResponse.scope || "",
+    expiresIn: tokenResponse.expires_in,
+  };
+}
+
 router.get("/discord/start", (_req: Request, res: Response) => {
   const missingEnvKeys = getMissingEnvKeys();
 
@@ -76,7 +155,7 @@ router.get("/discord/start", (_req: Request, res: Response) => {
   res.redirect(302, redirectUrl);
 });
 
-router.get("/discord/callback", (req: Request, res: Response) => {
+router.get("/discord/callback", async (req: Request, res: Response) => {
   const missingEnvKeys = getMissingEnvKeys();
 
   if (missingEnvKeys.length > 0) {
@@ -99,11 +178,21 @@ router.get("/discord/callback", (req: Request, res: Response) => {
     return;
   }
 
-  sendFailClosed(
-    res,
-    501,
-    "Discord OAuth callback state is valid, but token exchange is not implemented yet"
-  );
+  try {
+    const tokenExchange = await exchangeDiscordCodeForToken(code);
+
+    if (!tokenExchange.ok) {
+      sendFailClosed(res, 502, "Discord OAuth token exchange failed");
+      return;
+    }
+
+    res.status(501).json({
+      message:
+        "Discord OAuth token exchange completed, identity lookup is not implemented yet",
+    });
+  } catch {
+    sendFailClosed(res, 502, "Discord OAuth token exchange failed");
+  }
 });
 
 export default router;
