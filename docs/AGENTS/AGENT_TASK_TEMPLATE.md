@@ -2,7 +2,7 @@
 
 **Root authority: ../../AGENTS.md**
 
-Use this template for planning and executing agent tasks. It ensures all CNMA-v4.1 requirements are checked before work begins.
+Use this template for planning and executing agent tasks. It ensures all CNMA-v5.0 requirements are checked before work begins.
 
 ---
 
@@ -51,6 +51,7 @@ Before starting ANY work:
 - [ ] If RED gate found: escalate to Anthony BEFORE any work begins
 - [ ] Confirm scope with user (ask clarifying questions if underspecified)
 - [ ] Document assumptions and unknowns
+- [ ] Run token-efficiency pre-prompt checklist (see AGENTS.md Section 23)
 - [ ] State a plan before editing any files
 
 ---
@@ -101,6 +102,7 @@ CHECKS TO RUN:
   - economy audit                    (if economy constants touched)
   - Discord dry-run                  (if role/bot changes planned)
   - security-secrets audit           (if secrets or credentials involved)
+  - Run self-verification (12-gate) before marking task complete
 
 EXACT OUTPUT REQUIRED:
   ✓ Do NOT fabricate results

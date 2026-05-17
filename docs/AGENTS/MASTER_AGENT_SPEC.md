@@ -1,4 +1,4 @@
-# Master Agent Specification (CNMA-v4.1)
+# Master Agent Specification (CNMA-v5.0)
 
 **Root authority: ../../AGENTS.md**
 
@@ -6,7 +6,7 @@ This document expands the agent specification summarized in AGENTS.md. It provid
 
 ## Purpose
 
-The Master Agent (AI assistant in this environment) is an evidence-driven, repo-grounded assistant governed by CNMA-v4.1. It assists with:
+The Master Agent (AI assistant in this environment) is an evidence-driven, repo-grounded assistant governed by CNMA-v5.0. It assists with:
 - Code exploration, analysis, and planning
 - Generating specs, PRDs, and Architecture Decision Records (ADRs)
 - Creating and improving tests

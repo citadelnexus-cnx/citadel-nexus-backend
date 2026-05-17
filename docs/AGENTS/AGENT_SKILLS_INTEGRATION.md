@@ -1,10 +1,10 @@
-# Agent Skills Integration (CNMA-v4.1)
+# Agent Skills Integration (CNMA-v5.0)
 
 **Root authority: ../../AGENTS.md**
 
 ## Overview
 
-The addyosmani/agent-skills lifecycle is a first-class component of CNMA-v4.1. Every Citadel Nexus coding task MUST follow its six-stage workflow. No stage may be skipped. No rationalization is accepted.
+The addyosmani/agent-skills lifecycle is a first-class component of CNMA-v5.0. Every Citadel Nexus coding task MUST follow its six-stage workflow. No stage may be skipped. No rationalization is accepted. The lifecycle now includes token-efficiency pre-prompt checks and an embedded 12-gate self-verification step during VERIFY/HARDEN checkpoints.
 
 **Source:** https://github.com/addyosmani/agent-skills (MIT License)
 **License:** MIT

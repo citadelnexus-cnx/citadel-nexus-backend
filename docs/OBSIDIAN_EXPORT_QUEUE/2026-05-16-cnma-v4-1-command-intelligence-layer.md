@@ -1,5 +1,5 @@
 ﻿---
-title: CNMA-v4.1 Command Intelligence Layer Established
+title: CNMA-v4.1 Command Intelligence Layer Established (Superseded by CNMA-v5.0)
 date: 2026-05-16
 repo: citadel-nexus-backend
 branch: docs/cnma-v4-1-agent-constitution
@@ -23,11 +23,11 @@ tags:
   - doctrine
 ---
 
-# CNMA-v4.1 Command Intelligence Layer Established
+# CNMA-v4.1 Command Intelligence Layer Established (Superseded by CNMA-v5.0)
 
 ## Summary
 
-Citadel Nexus backend now has the CNMA-v4.1 agent constitution committed on branch `docs/cnma-v4-1-agent-constitution`.
+Citadel Nexus backend had the CNMA-v4.1 agent constitution committed on branch `docs/cnma-v4-1-agent-constitution`. This constitutional baseline has been superseded by CNMA-v5.0; see AGENTS.md for current doctrine.
 
 This update establishes:
 

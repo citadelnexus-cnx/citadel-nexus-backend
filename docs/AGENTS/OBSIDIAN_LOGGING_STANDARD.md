@@ -132,6 +132,7 @@ If the Obsidian vault is not directly accessible:
    vault at [folder path] and removed from this directory once imported.
    ```
 5. Periodically export queued files to vault (not automated by agent)
+6. Reference diagnostic templates in `docs/AGENTS/DIAGNOSTIC_TEMPLATES.md` for system health, economy audit, and incident report structures when publishing diagnostics.
 
 ---
 

@@ -76,6 +76,8 @@ Specialized skills for Citadel Nexus-specific work.
 | `security-secrets-audit` | Security | Secrets handling, credential rotation, log safety | Secret exposure check, sanitization review | Secrets audit report |
 | `backend-truth-check` | Backend Architecture | Backend changes, service layer, data flow | Source of truth verification, bypass detection | Backend architecture audit |
 | `frontend-surface-check` | Frontend Architecture | Frontend changes, hardcoded values, data storage | Frontend truth leakage audit | Surface layer audit |
+| `token-efficiency` | Prompting | Pre-prompt checks, context packing | Ensure efficient prompts and minimal token usage | Token efficiency checklist report |
+| `self-verification` | Verification | Completion stage, H step in RALPH | Run 12-gate self-verification before marking complete | Self-verification (12-gate) report |
 
 ---
 

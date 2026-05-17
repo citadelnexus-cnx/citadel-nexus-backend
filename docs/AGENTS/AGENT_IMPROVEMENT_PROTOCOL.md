@@ -2,7 +2,7 @@
 
 **Root authority: ../../AGENTS.md**
 
-This document defines how agents may propose, review, and apply improvements to the CNMA-v4.1 system itself, skills, sub-agents, workflows, and tools — while preserving constitutional law and RED-gate safety.
+This document defines how agents may propose, review, and apply improvements to the CNMA-v5.0 system itself, skills, sub-agents, workflows, and tools — while preserving constitutional law and RED-gate safety.
 
 ---
 
