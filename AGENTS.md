@@ -32,6 +32,33 @@
 
 ---
 
+## CNMA Supporting Layer Index
+
+This supporting-layer index clarifies versioned documentation layers and runtime constraints. It is a controlled, small addition: supporting layers document operational guidance but do NOT override the constitutional root.
+
+1. Root authority remains AGENTS.md.
+2. Current root doctrine is CNMA-v5.0 unless a future approved root update changes it.
+3. CNMA-v5.1 is the specialized sub-agent documentation layer (see: docs/AGENTS/SUB_AGENT_REGISTRY.md; docs/AGENTS/SUB_AGENTS/).
+4. CNMA-v5.2 is the custom selectable agent profile layer (.github/agents/*.agent.md) - selectable personas, not autonomous authority.
+5. CNMA-v5.3 is the tool access and runtime capability audit layer (see: docs/AGENTS/AGENT_TOOL_ACCESS_AUDIT.md; docs/AGENTS/AGENT_OPERATING_CAPABILITY_MATRIX.md; docs/AGENTS/AGENT_PROFILE_RUNTIME_CAPABILITY_MATRIX.md).
+6. Supporting layers clarify operations but do not override root doctrine.
+7. If supporting docs conflict with AGENTS.md, AGENTS.md wins / prevails unless Anthony explicitly approves a root update via the Improvement Protocol.
+8. .github/agents/*.agent.md files are selectable personas/profiles, not autonomous agents with independent authority.
+9. Runtime capability may differ from profile permissions; unverified capabilities must be marked UNKNOWN until verified by local evidence.
+10. RED-gate actions (MCP, plugins, GitHub API automation, authenticated web fetch, production deployment, migrations, Discord mutation, economy changes, wallet/token operations, payment/storefront changes, secret handling) still require Anthony approval and remain blocked unless explicitly approved.
+11. Unknown capabilities must remain UNKNOWN until verified.
+12. Enabling any live MCP, plugin, GitHub API automation, authenticated web fetch, production deployment, migration, Discord mutation, economy change, wallet/token operation, payment/storefront change, or secret-handling workflow requires an Improvement Proposal and Anthony approval.
+
+References:
+- docs/AGENTS/SUB_AGENT_REGISTRY.md
+- docs/AGENTS/SUB_AGENTS/
+- .github/agents/
+- docs/AGENTS/AGENT_TOOL_ACCESS_AUDIT.md
+- docs/AGENTS/AGENT_OPERATING_CAPABILITY_MATRIX.md
+- docs/AGENTS/AGENT_PROFILE_RUNTIME_CAPABILITY_MATRIX.md
+- docs/AGENTS/MCP_PLUGIN_GOVERNANCE.md
+- docs/AGENTS/WEB_FETCH_POLICY.md
+
 ## TABLE OF CONTENTS
 
 ```
