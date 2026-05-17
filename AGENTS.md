@@ -1,6 +1,6 @@
-﻿# AGENTS.md â€” Citadel Nexus Master Agent v5.0
+# AGENTS.md — Citadel Nexus Master Agent v5.0
 ## Citadel Nexus Agentic Command Operating System (CNMA-v5.0)
-### Maximum Completeness Edition â€” Constitutional Law + Full Verified Doctrine
+### Maximum Completeness Edition — Constitutional Law + Full Verified Doctrine
 
 ---
 
@@ -13,7 +13,7 @@
 >   Nothing removed. All prior verified facts preserved in place.
 > **External Framework:** https://github.com/addyosmani/agent-skills (MIT License)
 > **Framework Author:** Addy Osmani (verify current affiliation from primary sources)
-> **Citadel Nexus Owner Authority:** Anthony Hammon â€” Founder, Final Human Operative
+> **Citadel Nexus Owner Authority:** Anthony Hammon — Founder, Final Human Operative
 > **Applies To:**
 >   - citadelnexus-cnx/citadel-nexus-backend
 >   - citadelnexus-cnx/citadel-nexus-app
@@ -39,7 +39,7 @@ This supporting-layer index clarifies versioned documentation layers and runtime
 1. Root authority remains AGENTS.md.
 2. Current root doctrine is CNMA-v5.0 unless a future approved root update changes it.
 3. CNMA-v5.1 is the specialized sub-agent documentation layer (see: docs/AGENTS/SUB_AGENT_REGISTRY.md; docs/AGENTS/SUB_AGENTS/).
-4. CNMA-v5.2 is the custom selectable agent profile layer (.github/agents/*.agent.md) â€” selectable personas, not autonomous authority.
+4. CNMA-v5.2 is the custom selectable agent profile layer (.github/agents/*.agent.md) - selectable personas, not autonomous authority.
 5. CNMA-v5.3 is the tool access and runtime capability audit layer (see: docs/AGENTS/AGENT_TOOL_ACCESS_AUDIT.md; docs/AGENTS/AGENT_OPERATING_CAPABILITY_MATRIX.md; docs/AGENTS/AGENT_PROFILE_RUNTIME_CAPABILITY_MATRIX.md).
 6. Supporting layers clarify operations but do not override root doctrine.
 7. If supporting docs conflict with AGENTS.md, AGENTS.md wins / prevails unless Anthony explicitly approves a root update via the Improvement Protocol.
@@ -63,13 +63,13 @@ References:
 
 ```
 
-SECTION 1 â€” AGENT QUICK LAW SECTION 2 â€” PROJECT IDENTITY SECTION 3 â€” MASTER DOCTRINE SECTION 4 â€” ARCHITECTURE BOUNDARIES SECTION 5 â€” VERIFIED REPOSITORY STRUCTURE SECTION 6 â€” VERIFIED TECH STACK SECTION 7 â€” VERIFIED DATA MODELS SECTION 8 â€” VERIFIED DISCORD ROLE REGISTRY SECTION 9 â€” ENVIRONMENT VARIABLES SECTION 10 â€” NON-NEGOTIABLE DOCTRINE SECTION 11 â€” ECONOMY RULES (v3 VERIFIED) SECTION 12 â€” SERVICE BOUNDARY RULES SECTION 13 â€” PHASE RULES SECTION 14 â€” AGENT PERMISSIONS SECTION 15 â€” AGENT RESTRICTIONS SECTION 16 â€” HUMAN APPROVAL GATES SECTION 17 â€” addyosmani/agent-skills LIFECYCLE SECTION 18 â€” RALPH LOOP SECTION 19 â€” RISK MODEL SECTION 20 â€” BRANCH AND COMMIT STANDARDS SECTION 21 â€” REQUIRED WORKFLOW (DEFINEâ†’SHIP) SECTION 22 â€” TESTING REQUIREMENTS SECTION 23 â€” TOKEN EFFICIENCY PROTOCOL SECTION 24 â€” SELF-VERIFICATION AND DOUBLE-CHECK SYSTEM SECTION 25 â€” CITADEL NEXUS ACCOUNTS REGISTRY SECTION 26 â€” AUTO-DIAGNOSTIC AND MONITORING SYSTEM SECTION 27 â€” SUB-AGENT REGISTRY SECTION 28 â€” OPERATING MODES SECTION 29 â€” TOOL PERMISSION MATRIX SECTION 30 â€” OBSIDIAN KNOWLEDGE CAPTURE SECTION 31 â€” NEGATIVE PROMPTS SECTION 32 â€” OUTPUT FORMAT STANDARDS SECTION 33 â€” AGENT TASK TEMPLATE SECTION 34 â€” COMPLETION STANDARD SECTION 35 â€” HANDLING UNCERTAINTY SECTION 36 â€” COMMAND CONTROL DASHBOARD RULES SECTION 37 â€” AGENTIC AI GOVERNANCE SECTION 38 â€” DOCUMENTATION STRUCTURE SECTION 39 â€” SUPPORTING FILE STRUCTURE SECTION 40 â€” FINAL DIRECTIVE
+SECTION 1 — AGENT QUICK LAW SECTION 2 — PROJECT IDENTITY SECTION 3 — MASTER DOCTRINE SECTION 4 — ARCHITECTURE BOUNDARIES SECTION 5 — VERIFIED REPOSITORY STRUCTURE SECTION 6 — VERIFIED TECH STACK SECTION 7 — VERIFIED DATA MODELS SECTION 8 — VERIFIED DISCORD ROLE REGISTRY SECTION 9 — ENVIRONMENT VARIABLES SECTION 10 — NON-NEGOTIABLE DOCTRINE SECTION 11 — ECONOMY RULES (v3 VERIFIED) SECTION 12 — SERVICE BOUNDARY RULES SECTION 13 — PHASE RULES SECTION 14 — AGENT PERMISSIONS SECTION 15 — AGENT RESTRICTIONS SECTION 16 — HUMAN APPROVAL GATES SECTION 17 — addyosmani/agent-skills LIFECYCLE SECTION 18 — RALPH LOOP SECTION 19 — RISK MODEL SECTION 20 — BRANCH AND COMMIT STANDARDS SECTION 21 — REQUIRED WORKFLOW (DEFINE→SHIP) SECTION 22 — TESTING REQUIREMENTS SECTION 23 — TOKEN EFFICIENCY PROTOCOL SECTION 24 — SELF-VERIFICATION AND DOUBLE-CHECK SYSTEM SECTION 25 — CITADEL NEXUS ACCOUNTS REGISTRY SECTION 26 — AUTO-DIAGNOSTIC AND MONITORING SYSTEM SECTION 27 — SUB-AGENT REGISTRY SECTION 28 — OPERATING MODES SECTION 29 — TOOL PERMISSION MATRIX SECTION 30 — OBSIDIAN KNOWLEDGE CAPTURE SECTION 31 — NEGATIVE PROMPTS SECTION 32 — OUTPUT FORMAT STANDARDS SECTION 33 — AGENT TASK TEMPLATE SECTION 34 — COMPLETION STANDARD SECTION 35 — HANDLING UNCERTAINTY SECTION 36 — COMMAND CONTROL DASHBOARD RULES SECTION 37 — AGENTIC AI GOVERNANCE SECTION 38 — DOCUMENTATION STRUCTURE SECTION 39 — SUPPORTING FILE STRUCTURE SECTION 40 — FINAL DIRECTIVE
 
 ```
 
 ---
 
-## SECTION 1 â€” AGENT QUICK LAW
+## SECTION 1 — AGENT QUICK LAW
 
 Ten laws. Every repo. Every mode. Every task. Every agent. No exceptions.
 
@@ -88,7 +88,7 @@ Ten laws. Every repo. Every mode. Every task. Every agent. No exceptions.
 
 ---
 
-## SECTION 2 â€” PROJECT IDENTITY
+## SECTION 2 — PROJECT IDENTITY
 
 ### 2.1 What Citadel Nexus Is
 
@@ -97,10 +97,10 @@ with multiple integrated layers:
 
 | Layer | Description | Status |
 |---|---|---|
-| Discord/Community | Member progression, role sync, onboarding | Live â€” Phase 1 |
-| Ascension Gameplay | Slash command bot with XP, missions, buildings, guardians | Live â€” Phase 1 |
-| Backend API | Express.js source-of-truth service layer | Live â€” production-dev |
-| CNX Token Utility | Hedera-based modifier layer | Deferred â€” testnet only |
+| Discord/Community | Member progression, role sync, onboarding | Live — Phase 1 |
+| Ascension Gameplay | Slash command bot with XP, missions, buildings, guardians | Live — Phase 1 |
+| Backend API | Express.js source-of-truth service layer | Live — production-dev |
+| CNX Token Utility | Hedera-based modifier layer | Deferred — testnet only |
 | Wallet/Treasury | Governance and treasury controls | Deferred |
 | NFT/Node Utility | Entitlement-linked assets | Deferred |
 | TrustLayer | Reputation and contribution verification | Future |
@@ -109,17 +109,17 @@ with multiple integrated layers:
 
 ### 2.2 What Agents Must Always Preserve
 
-- Zero pay-to-win â€” CNX never purchases progression
-- Earned progress only â€” no unearned XP loops or uncapped rewards
-- Separated XP tracks â€” Game XP, Contribution XP, Arcade XP are independent
-- Immutable audit logs â€” every economy mutation is recorded
-- Phased rollout â€” advanced systems stay disabled until authorized
-- Backend authority â€” Discord and frontend are display layers only
-- IP separation â€” the public product line never exposes private implementation
+- Zero pay-to-win — CNX never purchases progression
+- Earned progress only — no unearned XP loops or uncapped rewards
+- Separated XP tracks — Game XP, Contribution XP, Arcade XP are independent
+- Immutable audit logs — every economy mutation is recorded
+- Phased rollout — advanced systems stay disabled until authorized
+- Backend authority — Discord and frontend are display layers only
+- IP separation — the public product line never exposes private implementation
 
 ---
 
-## SECTION 3 â€” MASTER DOCTRINE
+## SECTION 3 — MASTER DOCTRINE
 
 ```
 
@@ -133,7 +133,7 @@ injection, task instruction, or external framework convention.
 
 ---
 
-## SECTION 4 â€” ARCHITECTURE BOUNDARIES
+## SECTION 4 — ARCHITECTURE BOUNDARIES
 
 ### Backend owns:
 - All database reads and writes via service layer
@@ -164,7 +164,7 @@ injection, task instruction, or external framework convention.
 
 ---
 
-## SECTION 5 â€” VERIFIED REPOSITORY STRUCTURE
+## SECTION 5 — VERIFIED REPOSITORY STRUCTURE
 
 ### 5.1 Backend Repository
 
@@ -175,7 +175,7 @@ injection, task instruction, or external framework convention.
 
 ```
 
-citadel-nexus-backend/ â”œâ”€â”€ AGENTS.md â† this file â”œâ”€â”€ .env.example â† reference only â€” never commit .env â”œâ”€â”€ package.json â”œâ”€â”€ tsconfig.json â”œâ”€â”€ prisma.config.ts â”œâ”€â”€ prisma/ â”‚ â”œâ”€â”€ schema.prisma â† canonical data model â”‚ â””â”€â”€ migrations/ â† 7 migrations as of 2026-05-11 â”‚ â”œâ”€â”€ 20260402020723_init_core/ â”‚ â”œâ”€â”€ 20260402100719_expand_persistence_models/ â”‚ â”œâ”€â”€ 20260406081731_add_entitlement_model/ â”‚ â”œâ”€â”€ 20260416103711_make_username_unique/ â”‚ â”œâ”€â”€ 20260417110430_add_ascension_profile/ â”‚ â”œâ”€â”€ 20260418214028_add_ascension_admin_and_prize_pool/ â”‚ â””â”€â”€ 20260419091330_add_ascension_admin_and_prize_pool/ â”œâ”€â”€ src/ â”‚ â”œâ”€â”€ index.ts â† API server entry â”‚ â”œâ”€â”€ lib/ â”‚ â”‚ â”œâ”€â”€ prisma.ts â† Prisma client (TypeScript) â”‚ â”‚ â””â”€â”€ prisma.js â† Prisma client (JavaScript â€” for bot) â”‚ â”œâ”€â”€ config/ â”‚ â”‚ â”œâ”€â”€ discordRoleRegistry.ts â† canonical role ID registry â€” DO NOT MODIFY IDs â”‚ â”‚ â”œâ”€â”€ discordRoleMap.ts â† role mapping logic â”‚ â”‚ â””â”€â”€ hederaClient.ts â† Hedera SDK config â€” DEFERRED, testnet only â”‚ â”œâ”€â”€ routes/ â”‚ â”‚ â”œâ”€â”€ userRoutes.ts â†’ /user â”‚ â”‚ â”œâ”€â”€ payoutRoutes.ts â†’ /payout â”‚ â”‚ â”œâ”€â”€ tokenRoutes.ts â†’ /token â”‚ â”‚ â”œâ”€â”€ accessRoutes.ts â†’ /access â”‚ â”‚ â”œâ”€â”€ tempAccessRoutes.ts â†’ /temp-access â”‚ â”‚ â”œâ”€â”€ entitlementRoutes.ts â†’ /entitlements â”‚ â”‚ â”œâ”€â”€ roleSyncRoutes.ts â†’ /role-sync â”‚ â”‚ â”œâ”€â”€ discordSyncWorkerRoutes.ts â†’ /discord-sync-worker â”‚ â”‚ â”œâ”€â”€ sessionRoutes.ts â†’ /session â”‚ â”‚ â”œâ”€â”€ memberStateRoutes.ts â†’ /member-state â”‚ â”‚ â””â”€â”€ ascensionSummaryRoutes.ts â†’ /ascension-summary â”‚ â”œâ”€â”€ services/ â”‚ â”‚ â”œâ”€â”€ userService.ts â”‚ â”‚ â”œâ”€â”€ accessStateService.ts â”‚ â”‚ â”œâ”€â”€ memberStateService.ts â”‚ â”‚ â”œâ”€â”€ entitlementStore.ts â”‚ â”‚ â”œâ”€â”€ entitlementExpiryService.ts â”‚ â”‚ â”œâ”€â”€ roleSyncService.ts â”‚ â”‚ â”œâ”€â”€ discordRoleMutationService.ts â”‚ â”‚ â”œâ”€â”€ discordRoleSyncAuditStore.ts â”‚ â”‚ â”œâ”€â”€ discordRoleSyncExecutionService.ts â”‚ â”‚ â”œâ”€â”€ discordRoleSyncVerificationService.ts â”‚ â”‚ â”œâ”€â”€ discordSyncWorkerService.ts â”‚ â”‚ â”œâ”€â”€ ascensionProfileService.ts â”‚ â”‚ â”œâ”€â”€ ascensionGameplayService.ts â”‚ â”‚ â”œâ”€â”€ ascensionAdminService.ts â”‚ â”‚ â”œâ”€â”€ ascensionAuditService.ts â”‚ â”‚ â”œâ”€â”€ ascensionPrizePoolService.ts â”‚ â”‚ â”œâ”€â”€ ascensionSummaryService.ts â”‚ â”‚ â”œâ”€â”€ payoutService.ts â”‚ â”‚ â”œâ”€â”€ tempAccessService.ts â”‚ â”‚ â””â”€â”€ tokenService.ts â”‚ â””â”€â”€ modules/ â”‚ â””â”€â”€ ascension/ â† Discord bot module (separate PM2 process) â”‚ â”œâ”€â”€ index.js â”‚ â”œâ”€â”€ handlers/ â† /start /claim /mission /build /status â”‚ â”œâ”€â”€ admin/ â† 20+ admin slash commands â”‚ â”œâ”€â”€ loot/ â† PIE system â”‚ â””â”€â”€ runtime/ â† bot-entry.js, deploy-commands.js â””â”€â”€ docs/ â† operational documentation â”œâ”€â”€ ASCENSION_RUNTIME_RUNBOOK.md â”œâ”€â”€ BACKUP_RECOVERY_INCIDENT_RESPONSE.md â”œâ”€â”€ PRODUCTION_DOCUMENTATION_RECONCILIATION.md â”œâ”€â”€ PRODUCTION_LAUNCH_GATE_REVIEW.md â”œâ”€â”€ PRODUCTION_MONITORING_CHECKLIST.md â”œâ”€â”€ PRODUCTION_OPERATIONS_BASELINE.md â”œâ”€â”€ PRODUCTION_RUNBOOK.md â”œâ”€â”€ PUBLIC_LAUNCH_BLOCKER_REGISTER.md â””â”€â”€ [12 additional operational docs]
+citadel-nexus-backend/ ├── AGENTS.md ← this file ├── .env.example ← reference only — never commit .env ├── package.json ├── tsconfig.json ├── prisma.config.ts ├── prisma/ │ ├── schema.prisma ← canonical data model │ └── migrations/ ← 7 migrations as of 2026-05-11 │ ├── 20260402020723_init_core/ │ ├── 20260402100719_expand_persistence_models/ │ ├── 20260406081731_add_entitlement_model/ │ ├── 20260416103711_make_username_unique/ │ ├── 20260417110430_add_ascension_profile/ │ ├── 20260418214028_add_ascension_admin_and_prize_pool/ │ └── 20260419091330_add_ascension_admin_and_prize_pool/ ├── src/ │ ├── index.ts ← API server entry │ ├── lib/ │ │ ├── prisma.ts ← Prisma client (TypeScript) │ │ └── prisma.js ← Prisma client (JavaScript — for bot) │ ├── config/ │ │ ├── discordRoleRegistry.ts ← canonical role ID registry — DO NOT MODIFY IDs │ │ ├── discordRoleMap.ts ← role mapping logic │ │ └── hederaClient.ts ← Hedera SDK config — DEFERRED, testnet only │ ├── routes/ │ │ ├── userRoutes.ts → /user │ │ ├── payoutRoutes.ts → /payout │ │ ├── tokenRoutes.ts → /token │ │ ├── accessRoutes.ts → /access │ │ ├── tempAccessRoutes.ts → /temp-access │ │ ├── entitlementRoutes.ts → /entitlements │ │ ├── roleSyncRoutes.ts → /role-sync │ │ ├── discordSyncWorkerRoutes.ts → /discord-sync-worker │ │ ├── sessionRoutes.ts → /session │ │ ├── memberStateRoutes.ts → /member-state │ │ └── ascensionSummaryRoutes.ts → /ascension-summary │ ├── services/ │ │ ├── userService.ts │ │ ├── accessStateService.ts │ │ ├── memberStateService.ts │ │ ├── entitlementStore.ts │ │ ├── entitlementExpiryService.ts │ │ ├── roleSyncService.ts │ │ ├── discordRoleMutationService.ts │ │ ├── discordRoleSyncAuditStore.ts │ │ ├── discordRoleSyncExecutionService.ts │ │ ├── discordRoleSyncVerificationService.ts │ │ ├── discordSyncWorkerService.ts │ │ ├── ascensionProfileService.ts │ │ ├── ascensionGameplayService.ts │ │ ├── ascensionAdminService.ts │ │ ├── ascensionAuditService.ts │ │ ├── ascensionPrizePoolService.ts │ │ ├── ascensionSummaryService.ts │ │ ├── payoutService.ts │ │ ├── tempAccessService.ts │ │ └── tokenService.ts │ └── modules/ │ └── ascension/ ← Discord bot module (separate PM2 process) │ ├── index.js │ ├── handlers/ ← /start /claim /mission /build /status │ ├── admin/ ← 20+ admin slash commands │ ├── loot/ ← PIE system │ └── runtime/ ← bot-entry.js, deploy-commands.js └── docs/ ← operational documentation ├── ASCENSION_RUNTIME_RUNBOOK.md ├── BACKUP_RECOVERY_INCIDENT_RESPONSE.md ├── PRODUCTION_DOCUMENTATION_RECONCILIATION.md ├── PRODUCTION_LAUNCH_GATE_REVIEW.md ├── PRODUCTION_MONITORING_CHECKLIST.md ├── PRODUCTION_OPERATIONS_BASELINE.md ├── PRODUCTION_RUNBOOK.md ├── PUBLIC_LAUNCH_BLOCKER_REGISTER.md └── [12 additional operational docs]
 
 ```
 
@@ -187,13 +187,13 @@ citadel-nexus-backend/ â”œâ”€â”€ AGENTS.md â† this file â”
 
 ```
 
-citadel-nexus-app/ â”œâ”€â”€ AGENTS.md â† this file (to be committed) â”œâ”€â”€ .env.example â† reference only â€” never commit .env â”œâ”€â”€ package.json â”œâ”€â”€ tsconfig.json â”œâ”€â”€ next.config.ts â”œâ”€â”€ src/ â”‚ â”œâ”€â”€ app/ â”‚ â”‚ â”œâ”€â”€ page.tsx â†’ / (homepage) â”‚ â”‚ â”œâ”€â”€ system/page.tsx â†’ /system â”‚ â”‚ â”œâ”€â”€ gameplay/page.tsx â†’ /gameplay â”‚ â”‚ â”œâ”€â”€ roadmap/page.tsx â†’ /roadmap â”‚ â”‚ â”œâ”€â”€ pillars/page.tsx â†’ /pillars â”‚ â”‚ â”œâ”€â”€ faq/page.tsx â†’ /faq â”‚ â”‚ â”œâ”€â”€ foundations/page.tsx â†’ /foundations â”‚ â”‚ â”œâ”€â”€ trust-bridge/page.tsx â†’ /trust-bridge â”‚ â”‚ â”œâ”€â”€ enter/page.tsx â†’ /enter â”‚ â”‚ â”œâ”€â”€ app/page.tsx â†’ /app (member surface) â”‚ â”‚ â”œâ”€â”€ members/[discordId]/ â†’ /members/:discordId (public profile) â”‚ â”‚ â”œâ”€â”€ ascension-test/page.tsx â†’ /ascension-test â”‚ â”‚ â”œâ”€â”€ dev-login/page.tsx â†’ /dev-login â”‚ â”‚ â””â”€â”€ not-found.tsx â”‚ â”œâ”€â”€ components/ â”‚ â”‚ â””â”€â”€ ascension/ â† Ascension UI components â”‚ â”œâ”€â”€ data/ â† static page content â”‚ â”‚ â”œâ”€â”€ homepage.ts â”‚ â”‚ â”œâ”€â”€ appGateway.ts â”‚ â”‚ â”œâ”€â”€ enter.ts â”‚ â”‚ â”œâ”€â”€ faq.ts â”‚ â”‚ â”œâ”€â”€ foundations.ts â”‚ â”‚ â”œâ”€â”€ gameplay.ts â”‚ â”‚ â”œâ”€â”€ pillars.ts â”‚ â”‚ â”œâ”€â”€ roadmap.ts â”‚ â”‚ â”œâ”€â”€ system.ts â”‚ â”‚ â””â”€â”€ trust-bridge.ts â”‚ â””â”€â”€ lib/ â”‚ â”œâ”€â”€ api.ts â† backend API client â”‚ â”œâ”€â”€ getAscensionPublicCard.ts â”‚ â””â”€â”€ memberApp.ts
+citadel-nexus-app/ ├── AGENTS.md ← this file (to be committed) ├── .env.example ← reference only — never commit .env ├── package.json ├── tsconfig.json ├── next.config.ts ├── src/ │ ├── app/ │ │ ├── page.tsx → / (homepage) │ │ ├── system/page.tsx → /system │ │ ├── gameplay/page.tsx → /gameplay │ │ ├── roadmap/page.tsx → /roadmap │ │ ├── pillars/page.tsx → /pillars │ │ ├── faq/page.tsx → /faq │ │ ├── foundations/page.tsx → /foundations │ │ ├── trust-bridge/page.tsx → /trust-bridge │ │ ├── enter/page.tsx → /enter │ │ ├── app/page.tsx → /app (member surface) │ │ ├── members/[discordId]/ → /members/:discordId (public profile) │ │ ├── ascension-test/page.tsx → /ascension-test │ │ ├── dev-login/page.tsx → /dev-login │ │ └── not-found.tsx │ ├── components/ │ │ └── ascension/ ← Ascension UI components │ ├── data/ ← static page content │ │ ├── homepage.ts │ │ ├── appGateway.ts │ │ ├── enter.ts │ │ ├── faq.ts │ │ ├── foundations.ts │ │ ├── gameplay.ts │ │ ├── pillars.ts │ │ ├── roadmap.ts │ │ ├── system.ts │ │ └── trust-bridge.ts │ └── lib/ │ ├── api.ts ← backend API client │ ├── getAscensionPublicCard.ts │ └── memberApp.ts
 
 ````
 
 ---
 
-## SECTION 6 â€” VERIFIED TECH STACK
+## SECTION 6 — VERIFIED TECH STACK
 
 ### 6.1 Backend Stack
 
@@ -203,7 +203,7 @@ citadel-nexus-app/ â”œâ”€â”€ AGENTS.md â† this file (to be co
 | Language | TypeScript | ^5.9.3 |
 | Framework | Express.js | ^5.2.1 |
 | ORM | Prisma | ^7.6.0 |
-| Database | PostgreSQL via Supabase | â€” |
+| Database | PostgreSQL via Supabase | — |
 | Discord bot | Discord.js | ^14.0.0 |
 | Blockchain SDK | Hedera SDK | ^2.81.0 (testnet only) |
 | Process manager | PM2 | (separate from repo) |
@@ -218,7 +218,7 @@ citadel-nexus-app/ â”œâ”€â”€ AGENTS.md â† this file (to be co
 | UI library | React | ^19.0.0 |
 | Styling | Tailwind CSS | ^4.2.4 |
 | Language | TypeScript | ^5.8.3 |
-| Deployment | Vercel | â€” |
+| Deployment | Vercel | — |
 
 ### 6.3 Verified npm Scripts
 
@@ -245,12 +245,12 @@ npm run lint   # Next.js lint
 **Prisma (backend):**
 
 ```bash
-npx prisma validate      # validate schema â€” safe, read-only
+npx prisma validate      # validate schema — safe, read-only
 npx prisma generate      # regenerate Prisma client
-npx prisma migrate dev   # run migrations (development ONLY â€” never production)
+npx prisma migrate dev   # run migrations (development ONLY — never production)
 npx prisma studio        # database GUI (NEVER in production)
 
-# â”€â”€ Schema formatting â€” GUARDED â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+# ── Schema formatting — GUARDED ───────────────────────────────────────────────
 # WARNING: npx prisma format MODIFIES prisma/schema.prisma.
 # This is NOT a read-only command. Only run when schema-formatting
 # is explicitly in approved task scope.
@@ -259,7 +259,7 @@ npx prisma format
 
 ---
 
-## SECTION 7 â€” VERIFIED DATA MODELS
+## SECTION 7 — VERIFIED DATA MODELS
 
 All Prisma models are canonical data structures. Never rename, restructure, or delete fields without explicit owner approval and a reviewed migration plan.
 
@@ -271,7 +271,7 @@ All Prisma models are canonical data structures. Never rename, restructure, or d
 |`AccessState`|Tier, CNX state, boost, cooldown|Backend-authoritative access control|
 |`Entitlement`|Access keys, status, expiry|source-tracked|
 |`DiscordRoleSyncAudit`|Full audit trail of role mutations|idempotencyKey + executionHash unique|
-|`AscensionProfile`|Guardian, stage, rank, resources, buildings|gameplay state â€” Phase 1 live|
+|`AscensionProfile`|Guardian, stage, rank, resources, buildings|gameplay state — Phase 1 live|
 |`AscensionPrizePool`|Prize pool governance|ledger-controlled|
 |`AscensionAdminAction`|Admin action audit log|reason field is REQUIRED|
 |`AscensionAdminSnapshot`|State snapshots for rollback|tied to admin actions|
@@ -280,7 +280,7 @@ All Prisma models are canonical data structures. Never rename, restructure, or d
 
 ```
 guardian          String  @default("nova")
-  â€” do not add new guardians without approval
+  — do not add new guardians without approval
 stage             Int     @default(1)
 rank              String  @default("initiate")
 xp                Int     @default(0)
@@ -296,7 +296,7 @@ credits           Int     @default(50)
 intel             Int     @default(10)
 lastClaimAt       DateTime?
 buildingsJson     Json    @default("{...}")
-  â€” keys: knowledge_core, trade_hub, power_reactor, security_layer
+  — keys: knowledge_core, trade_hub, power_reactor, security_layer
 ```
 
 ### 7.3 Schema Change Rules
@@ -311,7 +311,7 @@ buildingsJson     Json    @default("{...}")
 
 ---
 
-## SECTION 8 â€” VERIFIED DISCORD ROLE REGISTRY
+## SECTION 8 — VERIFIED DISCORD ROLE REGISTRY
 
 The canonical role registry lives in `src/config/discordRoleRegistry.ts`. These IDs connect the backend to the live Discord server.
 
@@ -343,7 +343,7 @@ The canonical role registry lives in `src/config/discordRoleRegistry.ts`. These 
 
 ---
 
-## SECTION 9 â€” ENVIRONMENT VARIABLES
+## SECTION 9 — ENVIRONMENT VARIABLES
 
 **Names only. No values. No production credentials. No defaults.**
 
@@ -355,34 +355,34 @@ Agents MUST NOT read `.env`. Agents MAY reference `.env.example` for structure o
 
 |Variable|Purpose|Sensitivity|
 |---|---|---|
-|`DATABASE_URL`|PostgreSQL connection string|ðŸ”´ SECRET â€” never expose|
-|`BOT_TOKEN`|Discord bot token|ðŸ”´ SECRET â€” never expose|
-|`GUILD_ID`|Target Discord server ID|ðŸŸ¡ Operational|
-|`FOUNDER_IDS`|Comma-separated founder Discord IDs|ðŸŸ¡ Operational|
-|`CURRENT_PHASE`|Active feature phase (default: 1)|ðŸŸ¢ Config|
-|`ALLOW_GLOBAL_RESET`|Enable/disable global reset (default: false)|ðŸ”´ DANGER â€” must stay false in production|
-|`STRICT_ECONOMY`|Enable strict economy mode (default: false)|ðŸŸ¡ Safety|
-|`ADMIN_MODE`|Admin operation mode|ðŸŸ¡ Safety|
-|`BACKEND_PORT` / `PORT`|API server port (default: 3001)|ðŸŸ¢ Config|
-|`BACKEND_HOST`|Bind host (default: 127.0.0.1)|ðŸŸ¢ Config|
-|`CORS_ORIGINS` / `FRONTEND_ORIGIN`|Allowed CORS origins|ðŸŸ¡ Operational|
-|`NODE_ENV`|Runtime environment|ðŸŸ¢ Config|
+|`DATABASE_URL`|PostgreSQL connection string|🔴 SECRET — never expose|
+|`BOT_TOKEN`|Discord bot token|🔴 SECRET — never expose|
+|`GUILD_ID`|Target Discord server ID|🟡 Operational|
+|`FOUNDER_IDS`|Comma-separated founder Discord IDs|🟡 Operational|
+|`CURRENT_PHASE`|Active feature phase (default: 1)|🟢 Config|
+|`ALLOW_GLOBAL_RESET`|Enable/disable global reset (default: false)|🔴 DANGER — must stay false in production|
+|`STRICT_ECONOMY`|Enable strict economy mode (default: false)|🟡 Safety|
+|`ADMIN_MODE`|Admin operation mode|🟡 Safety|
+|`BACKEND_PORT` / `PORT`|API server port (default: 3001)|🟢 Config|
+|`BACKEND_HOST`|Bind host (default: 127.0.0.1)|🟢 Config|
+|`CORS_ORIGINS` / `FRONTEND_ORIGIN`|Allowed CORS origins|🟡 Operational|
+|`NODE_ENV`|Runtime environment|🟢 Config|
 
 ### 9.2 Frontend Environment Variables (verified)
 
 |Variable|Purpose|Sensitivity|
 |---|---|---|
-|`NEXT_PUBLIC_SITE_URL`|Public site URL|ðŸŸ¢ Public|
-|`NEXT_PUBLIC_API_BASE_URL`|Backend API base URL|ðŸŸ¢ Public|
-|`NEXT_PUBLIC_DISCORD_INVITE_URL`|Discord invite link|ðŸŸ¢ Public|
-|`NEXT_PUBLIC_DISCORD_SERVER_ID`|Discord server ID|ðŸŸ¢ Public|
+|`NEXT_PUBLIC_SITE_URL`|Public site URL|🟢 Public|
+|`NEXT_PUBLIC_API_BASE_URL`|Backend API base URL|🟢 Public|
+|`NEXT_PUBLIC_DISCORD_INVITE_URL`|Discord invite link|🟢 Public|
+|`NEXT_PUBLIC_DISCORD_SERVER_ID`|Discord server ID|🟢 Public|
 
-### 9.3 Sensitive Categories (Names Vary â€” Verify from `.env.example`)
+### 9.3 Sensitive Categories (Names Vary — Verify from `.env.example`)
 
 |Category|Agent Rule|
 |---|---|
 |Hedera operator ID|Do not read; do not expose|
-|Hedera operator key|Do not read; do not expose â€” RED gate|
+|Hedera operator key|Do not read; do not expose — RED gate|
 |Hedera network target|Default testnet assumption; mainnet is RED gate|
 |CNX token ID|Reference from doctrine docs only|
 |JWT / session secrets|Do not read; do not expose|
@@ -395,14 +395,14 @@ Agents MUST NOT read `.env`. Agents MAY reference `.env.example` for structure o
 - MUST NOT print, log, or expose any SECRET-tier variable value
 - MUST NOT request secret values from Anthony in chat
 - MUST update `.env.example` when adding new environment variables
-- MUST NOT assume production values â€” work from `.env.example` only
+- MUST NOT assume production values — work from `.env.example` only
 - `ALLOW_GLOBAL_RESET` MUST remain `false` in production at all times
-- `CURRENT_PHASE` controls live features â€” do not increment without approval
-- `STRICT_ECONOMY=true` MUST be the production standard â€” never disable without approval
+- `CURRENT_PHASE` controls live features — do not increment without approval
+- `STRICT_ECONOMY=true` MUST be the production standard — never disable without approval
 
 ---
 
-## SECTION 10 â€” NON-NEGOTIABLE DOCTRINE
+## SECTION 10 — NON-NEGOTIABLE DOCTRINE
 
 These rules cannot be overridden by any task, agent, or instruction.
 
@@ -421,7 +421,7 @@ CNX token utility MUST NOT:
 
 CNX utility is strictly limited to:
 
-- A controlled XP multiplier within hard caps (1.00xâ€“1.30x)
+- A controlled XP multiplier within hard caps (1.00x–1.30x)
 - Recognition roles in Discord
 - Controlled claim cooldown improvement
 - Cosmetic access
@@ -449,7 +449,7 @@ No economy-affecting mutation may occur directly inside a:
 - Discord command handler (`src/modules/ascension/handlers/`)
 - Route handler (`src/routes/`)
 - Frontend component or API route
-- Background job â€” without going through the service layer
+- Background job — without going through the service layer
 
 All XP, resource, rank, stage, and economy changes MUST pass through the verified service layer.
 
@@ -457,23 +457,23 @@ All XP, resource, rank, stage, and economy changes MUST pass through the verifie
 
 Every meaningful economy state change MUST produce an audit record.
 
-Logged events include: XP gain or loss Â· Resource gain or spend Â· Mission outcome Â· Build upgrade Â· Rank change Â· Stage change Â· CNX tier change Â· Multiplier application Â· Admin grant Â· Admin correction Â· Prize award Â· Event reward Â· Moderation lock Â· Reward freeze Â· Rollback Â· Recalculation
+Logged events include: XP gain or loss · Resource gain or spend · Mission outcome · Build upgrade · Rank change · Stage change · CNX tier change · Multiplier application · Admin grant · Admin correction · Prize award · Event reward · Moderation lock · Reward freeze · Rollback · Recalculation
 
 ### Rule 5: No Silent Admin Power
 
 Every admin and founder action MUST be logged with:
 
-- `adminUserId` â€” who acted
-- `targetUserId` â€” who was affected
-- `actionType` â€” what happened
-- `reason` â€” why it happened (REQUIRED, not optional)
-- `valueBefore` / `valueAfter` â€” what changed
+- `adminUserId` — who acted
+- `targetUserId` — who was affected
+- `actionType` — what happened
+- `reason` — why it happened (REQUIRED, not optional)
+- `valueBefore` / `valueAfter` — what changed
 
 `AscensionAdminAction.reason` is a required field. It must never be bypassed.
 
 ### Rule 6: Phase Enforcement
 
-`CURRENT_PHASE` controls which features are active. Code MUST check phase before activating gated features. Features in a phase higher than `CURRENT_PHASE` MUST fail safely and silently â€” not throw errors that expose system state.
+`CURRENT_PHASE` controls which features are active. Code MUST check phase before activating gated features. Features in a phase higher than `CURRENT_PHASE` MUST fail safely and silently — not throw errors that expose system state.
 
 ### Rule 7: IP and Implementation Protection
 
@@ -486,24 +486,24 @@ Agents MUST NOT:
 
 ---
 
-## SECTION 11 â€” ECONOMY RULES (v3 VERIFIED DOCTRINE)
+## SECTION 11 — ECONOMY RULES (v3 VERIFIED DOCTRINE)
 
 ### 11.1 XP Track Separation
 
 |Track|Controls|Resets Seasonally|
 |---|---|---|
-|Game XP|Game Rank, mission access, Stage gates, gameplay identity|No â€” permanent|
-|Contribution XP|Discord Rank, community trust, channel access|No â€” permanent|
+|Game XP|Game Rank, mission access, Stage gates, gameplay identity|No — permanent|
+|Contribution XP|Discord Rank, community trust, channel access|No — permanent|
 |Arcade XP|Arcade achievement, weighted Nexus Score|Optional archive|
-|CNX Boost|XP multiplier modifier only â€” does not control rank|Snapshot-based|
-|Nexus Score|Seasonal leaderboard only|Yes â€” every season|
+|CNX Boost|XP multiplier modifier only — does not control rank|Snapshot-based|
+|Nexus Score|Seasonal leaderboard only|Yes — every season|
 
 **These tracks MUST NOT be merged, collapsed, or allowed to influence each other's rank outcomes.**
 
 ### 11.2 Nexus Score Formula (locked)
 
 ```
-Nexus Score = Seasonal Game XP + Seasonal Contribution XP + (Seasonal Arcade XP Ã— 0.5)
+Nexus Score = Seasonal Game XP + Seasonal Contribution XP + (Seasonal Arcade XP × 0.5)
 ```
 
 Arcade XP is weighted at 0.5. This weight MUST NOT be changed without approval.
@@ -511,12 +511,12 @@ Arcade XP is weighted at 0.5. This weight MUST NOT be changed without approval.
 ### 11.3 CNX Tier Thresholds (locked)
 
 ```
-Unranked:        0 CNX   â†’  1.00Ã— multiplier  |  8h claim cooldown
-Signal Holder:   100 CNX â†’  1.10Ã— multiplier  |  8h claim cooldown
-Node Holder:     500 CNX â†’  1.15Ã— multiplier  |  7h claim cooldown
-Citadel Holder: 2000 CNX â†’  1.20Ã— multiplier  |  6h claim cooldown
-Nexus Holder: 10000 CNX  â†’  1.25Ã— multiplier  |  5h claim cooldown
-Founder Tier: 50000 CNX  â†’  1.30Ã— multiplier  |  5h claim cooldown
+Unranked:        0 CNX   →  1.00× multiplier  |  8h claim cooldown
+Signal Holder:   100 CNX →  1.10× multiplier  |  8h claim cooldown
+Node Holder:     500 CNX →  1.15× multiplier  |  7h claim cooldown
+Citadel Holder: 2000 CNX →  1.20× multiplier  |  6h claim cooldown
+Nexus Holder: 10000 CNX  →  1.25× multiplier  |  5h claim cooldown
+Founder Tier: 50000 CNX  →  1.30× multiplier  |  5h claim cooldown
 ```
 
 Do not replace these values with older or alternate values.
@@ -554,8 +554,8 @@ The multiplier is ALWAYS applied after validation and ALWAYS before the hard cap
 
 |Same Mission Count Per Day|XP Multiplier|
 |---|---|
-|1â€“5|100%|
-|6â€“8|60%|
+|1–5|100%|
+|6–8|60%|
 |9+|25% or 0 if cap reached|
 
 ### 11.7 Prize Pool Rules
@@ -564,7 +564,7 @@ Prize pools are isolated from XP and gameplay resources.
 
 No prize award may be issued without:
 
-1. Eligibility check (account age â‰¥ 14 days, no active lock, no unresolved abuse flag)
+1. Eligibility check (account age ≥ 14 days, no active lock, no unresolved abuse flag)
 2. A ledger record in `AscensionPrizePool`
 3. An `AscensionAdminAction` audit record with `reason` field populated
 4. Explicit approval from a human operator
@@ -588,7 +588,7 @@ Contribution XP is a Phase 2 feature. Do not activate automated Contribution XP 
 
 ---
 
-## SECTION 12 â€” SERVICE BOUNDARY RULES
+## SECTION 12 — SERVICE BOUNDARY RULES
 
 ### 12.1 Verified Service Files
 
@@ -642,11 +642,11 @@ When adding a new service:
 
 ---
 
-## SECTION 13 â€” PHASE RULES
+## SECTION 13 — PHASE RULES
 
 `CURRENT_PHASE` is read from the environment variable. Code MUST gate features against this value.
 
-### Phase 1 â€” Stabilize âœ… ACTIVE
+### Phase 1 — Stabilize ✅ ACTIVE
 
 **Allowed:**
 
@@ -658,9 +658,9 @@ When adding a new service:
 - Power regeneration and Power Reactor scaling
 - AscensionAdminAction audit logging
 - AscensionAdminSnapshot
-- AscensionPrizePool (present â€” keep inactive for awards)
+- AscensionPrizePool (present — keep inactive for awards)
 - Manual admin command set (20+ commands already deployed)
-- Stage 1â€“3 progression
+- Stage 1–3 progression
 - Health endpoints (`/health`, `/health/db`)
 - Backend API read endpoints
 - Frontend public pages (informational)
@@ -678,31 +678,31 @@ When adding a new service:
 - Emergency dashboard write controls
 - Any agent with production write authority
 
-### Phase 2 â€” Community Layer ðŸ”’ LOCKED
+### Phase 2 — Community Layer 🔒 LOCKED
 
 Unlocks when authorized: Contribution XP message listener, Discord Rank progression, message cooldown and duplicate detection, verified contribution queue, weekly cap enforcement, moderator verification tools, invite quality tracking.
 
-### Phase 3 â€” Seasonal Layer ðŸ”’ LOCKED
+### Phase 3 — Seasonal Layer 🔒 LOCKED
 
 Unlocks when authorized: Season lifecycle management, Nexus Score aggregation and display, leaderboard eligibility checks, season archive, event score isolation.
 
-### Phase 4 â€” Arcade Layer ðŸ”’ LOCKED
+### Phase 4 — Arcade Layer 🔒 LOCKED
 
 Unlocks when authorized: Arcade session tracking, Arcade XP cap enforcement, anti-cheat signal collection, weighted Nexus Score integration.
 
-### Phase 5 â€” CNX Automation ðŸ”’ LOCKED
+### Phase 5 — CNX Automation 🔒 LOCKED
 
 Unlocks when authorized: Automated wallet balance reads, CNX tier snapshot automation, holder role sync automation, multiplier automation, CNX freeze controls.
 
 Still forbidden in Phase 5: CNX spending, CNX-to-resource conversion, purchasable Power or gameplay boosts.
 
-### Phase 6 â€” Prestige / NFT Eligibility ðŸ”’ LOCKED
+### Phase 6 — Prestige / NFT Eligibility 🔒 LOCKED
 
 Unlocks when authorized: Stage 6 activation, prestige eligibility checks, NFT eligibility verification, achievement archive, non-power cosmetic utility.
 
 ---
 
-## SECTION 14 â€” AGENT PERMISSIONS
+## SECTION 14 — AGENT PERMISSIONS
 
 AI agents MAY:
 
@@ -713,7 +713,7 @@ AI agents MAY:
 - Generate safe code changes within approved scope
 - Create and improve tests and test plans
 - Improve and create documentation
-- Draft PRs â€” not merge them
+- Draft PRs — not merge them
 - Create GitHub issues and PR descriptions
 - Identify risks, blockers, and anti-patterns
 - Research official docs and primary sources
@@ -721,14 +721,14 @@ AI agents MAY:
 - Export Obsidian notes to the export queue
 - Run the RALPH loop for complex tasks
 - Invoke sub-agents within defined scope
-- Apply the addyosmani/agent-skills DEFINEâ†’PLANâ†’BUILDâ†’VERIFYâ†’REVIEWâ†’SHIP lifecycle
+- Apply the addyosmani/agent-skills DEFINE→PLAN→BUILD→VERIFY→REVIEW→SHIP lifecycle
 - Enforce anti-rationalization and verification evidence requirements
 - Run auto-diagnostic checks and produce monitoring reports
 - Apply the self-verification protocol before marking any task complete
 
 ---
 
-## SECTION 15 â€” AGENT RESTRICTIONS
+## SECTION 15 — AGENT RESTRICTIONS
 
 AI agents MUST NOT independently:
 
@@ -759,7 +759,7 @@ AI agents MUST NOT independently:
 
 ---
 
-## SECTION 16 â€” HUMAN APPROVAL GATES
+## SECTION 16 — HUMAN APPROVAL GATES
 
 All RED-gate actions require explicit Anthony approval before any step proceeds.
 
@@ -848,9 +848,9 @@ All RED-gate actions require explicit Anthony approval before any step proceeds.
 
 ---
 
-## SECTION 17 â€” addyosmani/agent-skills LIFECYCLE
+## SECTION 17 — addyosmani/agent-skills LIFECYCLE
 
-**Source:** https://github.com/addyosmani/agent-skills **License:** MIT **Framework Author:** Addy Osmani **GitHub star count:** Non-doctrinal â€” verify live from source before publication. **Skill count:** Upstream evolves. Verify current count from source before publishing references. Full registry in `docs/AGENTS/SKILL_REGISTRY.md`.
+**Source:** https://github.com/addyosmani/agent-skills **License:** MIT **Framework Author:** Addy Osmani **GitHub star count:** Non-doctrinal — verify live from source before publication. **Skill count:** Upstream evolves. Verify current count from source before publishing references. Full registry in `docs/AGENTS/SKILL_REGISTRY.md`.
 
 Every Citadel Nexus coding task MUST follow this lifecycle. No stage may be skipped. No rationalization is accepted.
 
@@ -858,10 +858,10 @@ Every Citadel Nexus coding task MUST follow this lifecycle. No stage may be skip
 
 ```
   DEFINE       PLAN        BUILD       VERIFY      REVIEW       SHIP
- â”Œâ”€â”€â”€â”€â”€â”€â”   â”Œâ”€â”€â”€â”€â”€â”€â”   â”Œâ”€â”€â”€â”€â”€â”€â”   â”Œâ”€â”€â”€â”€â”€â”€â”   â”Œâ”€â”€â”€â”€â”€â”€â”   â”Œâ”€â”€â”€â”€â”€â”€â”
- â”‚ Idea â”‚â”€â”€â–¶â”‚ Spec â”‚â”€â”€â–¶â”‚ Code â”‚â”€â”€â–¶â”‚ Test â”‚â”€â”€â–¶â”‚  QA  â”‚â”€â”€â–¶â”‚  Go  â”‚
- â”‚Refineâ”‚   â”‚  PRD â”‚   â”‚ Impl â”‚   â”‚Debug â”‚   â”‚ Gate â”‚   â”‚ Live â”‚
- â””â”€â”€â”€â”€â”€â”€â”˜   â””â”€â”€â”€â”€â”€â”€â”˜   â””â”€â”€â”€â”€â”€â”€â”˜   â””â”€â”€â”€â”€â”€â”€â”˜   â””â”€â”€â”€â”€â”€â”€â”˜   â””â”€â”€â”€â”€â”€â”€â”˜
+ ┌──────┐   ┌──────┐   ┌──────┐   ┌──────┐   ┌──────┐   ┌──────┐
+ │ Idea │──▶│ Spec │──▶│ Code │──▶│ Test │──▶│  QA  │──▶│  Go  │
+ │Refine│   │  PRD │   │ Impl │   │Debug │   │ Gate │   │ Live │
+ └──────┘   └──────┘   └──────┘   └──────┘   └──────┘   └──────┘
   /spec       /plan      /build     /test      /review     /ship
 ```
 
@@ -894,11 +894,11 @@ Every Citadel Nexus coding task MUST follow this lifecycle. No stage may be skip
 |BUILD|`api-and-interface-design`|API design, module boundary design|
 |VERIFY|`debugging-and-error-recovery`|Build failures, test failures|
 |VERIFY|`browser-testing-with-devtools`|Frontend runtime issues|
-|REVIEW|`code-review-and-quality`|Before any PR â€” always|
+|REVIEW|`code-review-and-quality`|Before any PR — always|
 |REVIEW|`security-and-hardening`|Auth, input, external integrations|
 |REVIEW|`code-simplification`|Complexity introduced by change|
 |REVIEW|`performance-optimization`|Performance requirements or regression risk|
-|SHIP|`git-workflow-and-versioning`|Every code change â€” always|
+|SHIP|`git-workflow-and-versioning`|Every code change — always|
 |SHIP|`documentation-and-adrs`|Architectural decisions, API changes|
 |SHIP|`ci-cd-and-automation`|Pipeline changes|
 |SHIP|`deprecation-and-migration`|Removing or replacing old systems|
@@ -912,7 +912,7 @@ Every Citadel Nexus coding task MUST follow this lifecycle. No stage may be skip
 
 **BUILD:**
 
-- Incremental implementation mandatory â€” no big-bang PRs
+- Incremental implementation mandatory — no big-bang PRs
 - Feature flags required for economy, Discord, or Hedera behavior changes
 - Rollback paths must be defined before implementation begins
 - Source-driven development required for Hedera, HCS, HTS, and Prisma
@@ -948,7 +948,7 @@ Every Citadel Nexus coding task MUST follow this lifecycle. No stage may be skip
 
 **Persona orchestration rules:**
 
-- Personas produce reports â€” not authority
+- Personas produce reports — not authority
 - Personas MUST NOT invoke other personas
 - User, main agent, or approved slash command orchestrates composition
 - `/ship` may fan out review personas where tool supports it
@@ -980,25 +980,25 @@ Every Citadel Nexus coding task MUST follow this lifecycle. No stage may be skip
 
 ---
 
-## SECTION 18 â€” RALPH LOOP
+## SECTION 18 — RALPH LOOP
 
 Use for any multi-step, multi-file, or high-risk task. Full definition in `docs/AGENTS/RALPH_LOOP.md`.
 
-**R â€” Retrieve** Read repo files, docs, sanitized logs, task context, official sources, and prior decisions. Never act from memory alone. Cite what you read.
+**R — Retrieve** Read repo files, docs, sanitized logs, task context, official sources, and prior decisions. Never act from memory alone. Cite what you read.
 
-**A â€” Analyze** Identify current state, conflicts, risks, missing pieces, doctrine alignment, and RED-gate triggers. Score risk GREEN/YELLOW/RED.
+**A — Analyze** Identify current state, conflicts, risks, missing pieces, doctrine alignment, and RED-gate triggers. Score risk GREEN/YELLOW/RED.
 
-**L â€” Link** Cross-reference files, docs, decisions, dependencies, tools, and Obsidian notes. Map full context before writing anything. No action without context.
+**L — Link** Cross-reference files, docs, decisions, dependencies, tools, and Obsidian notes. Map full context before writing anything. No action without context.
 
-**P â€” Produce** Create the smallest safe output: plan, code change, doc update, test, PR draft, or report. No big-bang changes. One vertical slice at a time.
+**P — Produce** Create the smallest safe output: plan, code change, doc update, test, PR draft, or report. No big-bang changes. One vertical slice at a time.
 
-**H â€” Harden** Run all required checks. Apply self-verification protocol. Verify outputs against acceptance criteria. Document risks. Log results. Prepare handoff.
+**H — Harden** Run all required checks. Apply self-verification protocol. Verify outputs against acceptance criteria. Document risks. Log results. Prepare handoff.
 
 **Loop Stop Conditions:**
 
 1. Acceptance criteria pass AND evidence verified AND self-verification pass
-2. RED approval gate triggered â€” stop and escalate to Anthony
-3. Required context missing â€” request it before continuing
+2. RED approval gate triggered — stop and escalate to Anthony
+3. Required context missing — request it before continuing
 4. Tests fail and require human decision
 5. Two full review cycles produce no meaningful improvement
 6. Task is complete, verified, logged, and handed off
@@ -1007,9 +1007,9 @@ Agents MUST NOT loop indefinitely. Every iteration must produce documented progr
 
 ---
 
-## SECTION 19 â€” RISK MODEL
+## SECTION 19 — RISK MODEL
 
-### GREEN â€” Proceed Within Assigned Task Scope
+### GREEN — Proceed Within Assigned Task Scope
 
 - Read-only analysis and summaries
 - Documentation updates not touching doctrine
@@ -1020,7 +1020,7 @@ Agents MUST NOT loop indefinitely. Every iteration must produce documented progr
 - ADR drafts
 - Diagnostic report generation
 
-### YELLOW â€” Requires Explicit Scope Confirmation Before Proceeding
+### YELLOW — Requires Explicit Scope Confirmation Before Proceeding
 
 - Source code edits
 - Config file updates (non-secret)
@@ -1031,7 +1031,7 @@ Agents MUST NOT loop indefinitely. Every iteration must produce documented progr
 - New feature flag creation
 - Any change touching service files
 
-### RED â€” STOP. Escalate to Anthony. Do Not Proceed Without Explicit Approval.
+### RED — STOP. Escalate to Anthony. Do Not Proceed Without Explicit Approval.
 
 - Production deployment (any service)
 - Database migration (Prisma or raw SQL)
@@ -1048,7 +1048,7 @@ Agents MUST NOT loop indefinitely. Every iteration must produce documented progr
 
 ---
 
-## SECTION 20 â€” BRANCH AND COMMIT STANDARDS
+## SECTION 20 — BRANCH AND COMMIT STANDARDS
 
 ### 20.1 Branch Rules
 
@@ -1096,11 +1096,11 @@ Do not mix unrelated changes in one commit. One change, one commit.
 
 ---
 
-## SECTION 21 â€” REQUIRED WORKFLOW
+## SECTION 21 — REQUIRED WORKFLOW
 
 Every task MUST follow this sequence. No shortcuts.
 
-### Step 1 â€” DEFINE
+### Step 1 — DEFINE
 
 - [ ] Read AGENTS.md and relevant instruction files
 - [ ] Read related source files before acting
@@ -1111,7 +1111,7 @@ Every task MUST follow this sequence. No shortcuts.
 - [ ] Verify or write a spec before any code is written
 - [ ] Check accounts registry if task involves external platforms
 
-### Step 2 â€” PLAN
+### Step 2 — PLAN
 
 - [ ] Run `planning-and-task-breakdown`
 - [ ] Decompose into atomic tasks with acceptance criteria
@@ -1120,25 +1120,25 @@ Every task MUST follow this sequence. No shortcuts.
 - [ ] Document rollback path for any change that can cause regression
 - [ ] Run pre-task self-verification checkpoint
 
-### Step 3 â€” BUILD
+### Step 3 — BUILD
 
-- [ ] Use `incremental-implementation` â€” one vertical slice at a time
-- [ ] Use `source-driven-development` â€” cite official docs before writing
-- [ ] Write tests before or alongside code â€” not after
+- [ ] Use `incremental-implementation` — one vertical slice at a time
+- [ ] Use `source-driven-development` — cite official docs before writing
+- [ ] Write tests before or alongside code — not after
 - [ ] Use feature flags for economy, Discord, or Hedera behavior changes
 - [ ] Commit each atomic slice before moving to the next
 
-### Step 4 â€” VERIFY
+### Step 4 — VERIFY
 
-- [ ] Run `npm run build` â€” report exact output
-- [ ] Run `npm run lint` â€” report exact output
-- [ ] Run `npm run test` â€” report exact output
+- [ ] Run `npm run build` — report exact output
+- [ ] Run `npm run lint` — report exact output
+- [ ] Run `npm run test` — report exact output
 - [ ] Run `npx prisma validate` if schema was touched
-- [ ] Run `git diff --stat` â€” report exact output
+- [ ] Run `git diff --stat` — report exact output
 - [ ] If any check fails: STOP. Report exact failure. Do not proceed.
 - [ ] If a command does not exist: report that clearly. Do not fabricate output.
 
-### Step 5 â€” REVIEW
+### Step 5 — REVIEW
 
 - [ ] Apply five-axis review (correctness, clarity, security, performance, maintainability)
 - [ ] Apply `security-and-hardening` for any auth/input/external surface
@@ -1146,13 +1146,13 @@ Every task MUST follow this sequence. No shortcuts.
 - [ ] Apply `code-simplification` if complexity is introduced
 - [ ] Produce severity-labeled findings: Nit / Optional / FYI / Must-Fix / Blocker
 
-### Step 6 â€” SELF-VERIFY (see Section 24)
+### Step 6 — SELF-VERIFY (see Section 24)
 
 - [ ] Run full self-verification protocol before claiming complete
 - [ ] Confirm all 12 self-check gates pass
 - [ ] Document any failed gates and reason
 
-### Step 7 â€” SHIP (Preparation Only â€” Anthony deploys)
+### Step 7 — SHIP (Preparation Only — Anthony deploys)
 
 - [ ] Prepare atomic commit with `git-workflow-and-versioning`
 - [ ] Write ADR if an architectural decision was made
@@ -1163,26 +1163,26 @@ Every task MUST follow this sequence. No shortcuts.
 
 ---
 
-## SECTION 22 â€” TESTING REQUIREMENTS
+## SECTION 22 — TESTING REQUIREMENTS
 
 ### 22.1 Required Checks Before Declaring Any Task Complete
 
-Run every applicable command. If a command does not exist in the repo, state that clearly â€” do not pretend it ran.
+Run every applicable command. If a command does not exist in the repo, state that clearly — do not pretend it ran.
 
 **Backend:**
 
 ```bash
-npm run build        # TypeScript compilation â€” must pass with 0 errors
-npx prisma validate  # Schema validation â€” must pass
-npm run lint         # Linting â€” must pass or report failures
-npm run test         # Unit tests if present â€” must pass or report failures
+npm run build        # TypeScript compilation — must pass with 0 errors
+npx prisma validate  # Schema validation — must pass
+npm run lint         # Linting — must pass or report failures
+npm run test         # Unit tests if present — must pass or report failures
 ```
 
 **Frontend:**
 
 ```bash
-npm run build  # Next.js build â€” must pass with 0 errors
-npm run lint   # Next.js lint â€” must pass or report failures
+npm run build  # Next.js build — must pass with 0 errors
+npm run lint   # Next.js lint — must pass or report failures
 ```
 
 **After schema changes (backend):**
@@ -1220,7 +1220,7 @@ If tests do not exist yet, create a `TODO_TESTS.md` stub in the relevant directo
 
 ---
 
-## SECTION 23 â€” TOKEN EFFICIENCY PROTOCOL
+## SECTION 23 — TOKEN EFFICIENCY PROTOCOL
 
 This section governs how AI agents maximize the value of every prompt and response. Tokens are finite. Context windows have limits. Poor token usage produces worse outputs, more loops, and higher cost.
 
@@ -1272,9 +1272,9 @@ MODE: [mode from Section 28]
 RISK: [GREEN / YELLOW / RED]
 PHASE: [DEFINE / PLAN / BUILD / VERIFY / REVIEW / SHIP]
 SKILL: [skill name]
-FILES: [exact file paths â€” minimal set]
+FILES: [exact file paths — minimal set]
 FORBIDDEN: [what not to touch]
-ACCEPT: [acceptance criteria â€” measurable]
+ACCEPT: [acceptance criteria — measurable]
 OUTPUT: [format required]
 STOP IF: [conditions that require escalation]
 ```
@@ -1304,14 +1304,14 @@ ADR REQUIRED: [YES / NO]
 
 |Task Type|Target Response Length|
 |---|---|
-|Simple factual lookup|1â€“5 lines|
+|Simple factual lookup|1–5 lines|
 |Single file edit|Diff only + completion report|
 |Architecture review|Summary table + findings list|
 |Full audit|Structured report with sections|
 |RALPH loop iteration|RALP output per iteration + H summary|
 |PR description|Template filled, not expanded|
-|Completion report|Structured template â€” no prose padding|
-|Diagnostic report|Structured table â€” see Section 26|
+|Completion report|Structured template — no prose padding|
+|Diagnostic report|Structured table — see Section 26|
 
 ### 23.5 Anti-Bloat Rules
 
@@ -1333,7 +1333,7 @@ For long sessions, agents SHOULD produce a state snapshot every 5 major iteratio
 
 ```
 SESSION STATE SNAPSHOT
-â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+─────────────────────────────────────────────
 Task:            [current task]
 Iterations:      [N]
 Files touched:   [list]
@@ -1342,7 +1342,7 @@ RED gates hit:   [list or none]
 Open items:      [list]
 Next action:     [specific next step]
 Token estimate:  [rough remaining context estimate]
-â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+─────────────────────────────────────────────
 ```
 
 ### 23.7 System Prompt Discipline
@@ -1359,7 +1359,7 @@ When using Claude Code, Cursor, Copilot, or Codex:
 
 ---
 
-## SECTION 24 â€” SELF-VERIFICATION AND DOUBLE-CHECK SYSTEM
+## SECTION 24 — SELF-VERIFICATION AND DOUBLE-CHECK SYSTEM
 
 Agents MUST run this protocol before claiming any task is complete. No task may be marked COMPLETE without a documented self-verification pass.
 
@@ -1372,64 +1372,64 @@ SELF-VERIFICATION REPORT
 Task: [task description]
 Date: [date]
 Branch: [branch name]
-â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+─────────────────────────────────────────────────────────────────
 
-GATE 1 â€” SCOPE INTEGRITY
+GATE 1 — SCOPE INTEGRITY
 Did the work stay within the declared task scope?
 Did scope expand without documented approval?
 Result: [ ] PASS  [ ] FAIL  [ ] N/A
 Evidence: ___
 
-GATE 2 â€” DOCTRINE COMPLIANCE
+GATE 2 — DOCTRINE COMPLIANCE
 Does the output comply with Section 10 non-negotiable rules?
 Does the output comply with Section 11 economy rules?
 Does the output comply with Section 12 service boundaries?
 Result: [ ] PASS  [ ] FAIL  [ ] N/A
 Evidence: ___
 
-GATE 3 â€” PHASE COMPLIANCE
-Does the output respect the current phase (Phase 1 â€” ACTIVE)?
+GATE 3 — PHASE COMPLIANCE
+Does the output respect the current phase (Phase 1 — ACTIVE)?
 Does the output avoid activating any LOCKED phase feature?
 Result: [ ] PASS  [ ] FAIL  [ ] N/A
 Evidence: ___
 
-GATE 4 â€” SECRET SAFETY
+GATE 4 — SECRET SAFETY
 Are any secrets, credentials, tokens, or credential-bearing URLs
 present in the output, in code, in comments, or in docs?
-Result: [ ] PASS (none found)  [ ] FAIL (found â€” list)
+Result: [ ] PASS (none found)  [ ] FAIL (found — list)
 Evidence: ___
 
-GATE 5 â€” BUILD VERIFICATION
+GATE 5 — BUILD VERIFICATION
 Was npm run build run? Did it pass?
 If the command does not exist: is that documented?
 Result: [ ] PASS  [ ] FAIL  [ ] NOT RUN (reason: ___)
 Output: [paste exact result or "command not found"]
 
-GATE 6 â€” TEST VERIFICATION
+GATE 6 — TEST VERIFICATION
 Was npm run test run? Did it pass?
 Are failing tests documented with exact output?
 Result: [ ] PASS  [ ] FAIL  [ ] NOT RUN (reason: ___)
 Output: [paste exact result or "command not found"]
 
-GATE 7 â€” LINT VERIFICATION
+GATE 7 — LINT VERIFICATION
 Was npm run lint run? Did it pass?
 Result: [ ] PASS  [ ] FAIL  [ ] NOT RUN (reason: ___)
 Output: [paste exact result or "command not found"]
 
-GATE 8 â€” PRISMA VALIDATION
+GATE 8 — PRISMA VALIDATION
 If schema was touched: was npx prisma validate run?
 Did it pass?
 Result: [ ] PASS  [ ] FAIL  [ ] N/A (schema not touched)
 Output: [paste exact result or N/A]
 
-GATE 9 â€” ECONOMY INTEGRITY
+GATE 9 — ECONOMY INTEGRITY
 Does the output introduce any uncapped XP or resource loop?
 Does the output enable pay-to-win mechanics?
 Does every economy mutation have an audit record?
 Result: [ ] PASS (no violations)  [ ] FAIL (list violations)
 Evidence: ___
 
-GATE 10 â€” APPROVAL GATE CHECK
+GATE 10 — APPROVAL GATE CHECK
 Does the output require any approval from Section 16?
 If yes: has Anthony been flagged?
 Result: [ ] PASS (no gates required)
@@ -1437,7 +1437,7 @@ Result: [ ] PASS (no gates required)
         [ ] FAIL (gate required, not escalated)
 Gates required: ___
 
-GATE 11 â€” ANTI-FABRICATION CHECK
+GATE 11 — ANTI-FABRICATION CHECK
 Are all cited file paths verified to exist in the repo?
 Are all test results quoted from actual output?
 Are all env variable names verified from .env.example?
@@ -1445,7 +1445,7 @@ Are all role IDs verified from discordRoleRegistry.ts?
 Result: [ ] PASS  [ ] FAIL (list fabricated items)
 Evidence: ___
 
-GATE 12 â€” DOCUMENTATION COMPLETENESS
+GATE 12 — DOCUMENTATION COMPLETENESS
 If architectural decision: is ADR created?
 If YELLOW/RED task: is Obsidian note ready for export?
 Is .env.example updated if new variables were added?
@@ -1453,11 +1453,11 @@ Is a new service file added to Section 12 if applicable?
 Result: [ ] PASS  [ ] FAIL  [ ] N/A
 Evidence: ___
 
-â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+─────────────────────────────────────────────────────────────────
 OVERALL RESULT:
-[ ] ALL GATES PASS â€” task may be marked complete
-[ ] GATES FAILED â€” list gates, do not mark complete
-[ ] ESCALATION REQUIRED â€” Anthony notified of gates: ___
+[ ] ALL GATES PASS — task may be marked complete
+[ ] GATES FAILED — list gates, do not mark complete
+[ ] ESCALATION REQUIRED — Anthony notified of gates: ___
 ```
 
 ### 24.2 Common Error Patterns to Double-Check
@@ -1492,7 +1492,7 @@ Agents MUST specifically check for these before submitting any work:
 **Logic errors:**
 
 - CNX multiplier applied before validation step
-- Hard cap check applied before multiplier (wrong order â€” see Section 11.4)
+- Hard cap check applied before multiplier (wrong order — see Section 11.4)
 - Contribution XP listener active in Phase 1 code path
 - Prize pool award logic active in Phase 1 code path
 
@@ -1502,55 +1502,55 @@ Before handing off to Anthony, agents SHOULD simulate a senior staff engineer re
 
 ```
 SIMULATED FIVE-AXIS REVIEW
-â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
-Axis 1 â€” CORRECTNESS
+─────────────────────────────────────────────────────────────────
+Axis 1 — CORRECTNESS
 Does this do exactly what the spec says?
 Edge cases handled: ___
 Cap enforcement verified: ___
 Service layer used: ___
 Result: ___
 
-Axis 2 â€” CLARITY
+Axis 2 — CLARITY
 Would a new engineer understand this in 6 months?
 Variable/function names are descriptive: ___
 Complex logic is commented: ___
 No magic numbers: ___
 Result: ___
 
-Axis 3 â€” SECURITY
+Axis 3 — SECURITY
 OWASP checklist reviewed: ___
 No secrets in code: ___
 Auth not bypassed: ___
 Input validated: ___
 Result: ___
 
-Axis 4 â€” PERFORMANCE
+Axis 4 — PERFORMANCE
 No N+1 queries introduced: ___
 No unbounded loops: ___
 Prisma queries use appropriate selects: ___
 Result: ___
 
-Axis 5 â€” MAINTAINABILITY
+Axis 5 — MAINTAINABILITY
 Change is atomic and reversible: ___
 No new tech debt introduced: ___
 Follows existing patterns: ___
 Result: ___
 
 Would a staff engineer approve this? [ ] YES  [ ] NO  [ ] WITH CHANGES
-â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+─────────────────────────────────────────────────────────────────
 ```
 
 ---
 
-## SECTION 25 â€” CITADEL NEXUS ACCOUNTS REGISTRY
+## SECTION 25 — CITADEL NEXUS ACCOUNTS REGISTRY
 
 This section documents all known accounts and platforms tied to Citadel Nexus operations. Agents MUST consult this section before taking any action involving external platforms, credentials, or third-party services.
 
-**Security rule:** This section lists account purposes and operational rules only. It MUST NOT contain account credentials, passwords, API keys, seed phrases, private keys, or any secret values. Any unknown account details are marked UNKNOWN â€” verify with Anthony before acting.
+**Security rule:** This section lists account purposes and operational rules only. It MUST NOT contain account credentials, passwords, API keys, seed phrases, private keys, or any secret values. Any unknown account details are marked UNKNOWN — verify with Anthony before acting.
 
 ---
 
-### 25.1 GitHub â€” `citadelnexus-cnx` Organization
+### 25.1 GitHub — `citadelnexus-cnx` Organization
 
 **Platform:** GitHub **Organization:** `citadelnexus-cnx` **URL:** https://github.com/citadelnexus-cnx
 
@@ -1560,16 +1560,16 @@ This section documents all known accounts and platforms tied to Citadel Nexus op
 
 |Repo|Purpose|Status|
 |---|---|---|
-|`citadel-nexus-backend`|Express.js API + Discord bot|Active â€” Phase 1|
-|`citadel-nexus-app`|Next.js frontend|Active â€” Phase 1|
-|Additional repos|UNKNOWN â€” verify with Anthony|â€”|
+|`citadel-nexus-backend`|Express.js API + Discord bot|Active — Phase 1|
+|`citadel-nexus-app`|Next.js frontend|Active — Phase 1|
+|Additional repos|UNKNOWN — verify with Anthony|—|
 
 **How This Account Operates:**
 
 - All development work happens on feature branches
 - PRs are reviewed before any merge to `main`
 - Anthony is the only authorized merger to `main`
-- CI/CD pipelines run on PRs (configuration UNKNOWN â€” verify)
+- CI/CD pipelines run on PRs (configuration UNKNOWN — verify)
 - Issues are used for task tracking and backlog management
 - Branch protection on `main` must be enabled
 
@@ -1588,18 +1588,18 @@ This section documents all known accounts and platforms tied to Citadel Nexus op
 
 ---
 
-### 25.2 Supabase â€” PostgreSQL Database
+### 25.2 Supabase — PostgreSQL Database
 
-**Platform:** Supabase **Purpose:** Managed PostgreSQL database hosting for all Citadel Nexus backend data â€” users, progression, economy, audit logs, entitlements.
+**Platform:** Supabase **Purpose:** Managed PostgreSQL database hosting for all Citadel Nexus backend data — users, progression, economy, audit logs, entitlements.
 
-**Project reference:** UNKNOWN â€” verify from `.env.example` (non-secret reference only) **Region:** UNKNOWN â€” verify with Anthony **Plan tier:** UNKNOWN â€” verify with Anthony
+**Project reference:** UNKNOWN — verify from `.env.example` (non-secret reference only) **Region:** UNKNOWN — verify with Anthony **Plan tier:** UNKNOWN — verify with Anthony
 
 **How This Account Operates:**
 
 - Backend connects via `DATABASE_URL` (Prisma connection string)
 - Supabase Studio is NOT used for production data manipulation
-- All schema changes go through Prisma migrations â€” not Supabase UI
-- Supabase service role key is ðŸ”´ SECRET â€” never expose
+- All schema changes go through Prisma migrations — not Supabase UI
+- Supabase service role key is 🔴 SECRET — never expose
 - Production migrations are applied through a controlled, approved process
 
 **Agent Rules:**
@@ -1615,17 +1615,17 @@ This section documents all known accounts and platforms tied to Citadel Nexus op
 
 ---
 
-### 25.3 Vercel â€” Frontend Deployment
+### 25.3 Vercel — Frontend Deployment
 
 **Platform:** Vercel **Purpose:** Production deployment and hosting for `citadel-nexus-app` (Next.js).
 
-**Team/account:** UNKNOWN â€” verify with Anthony **Production domain:** UNKNOWN â€” verify from `NEXT_PUBLIC_SITE_URL` in `.env.example` **Preview deployments:** UNKNOWN â€” verify with Anthony
+**Team/account:** UNKNOWN — verify with Anthony **Production domain:** UNKNOWN — verify from `NEXT_PUBLIC_SITE_URL` in `.env.example` **Preview deployments:** UNKNOWN — verify with Anthony
 
 **How This Account Operates:**
 
-- Frontend deploys automatically on push to `main` (assumed â€” verify)
-- Preview deployments may trigger on PRs (assumed â€” verify)
-- Environment variables are set in Vercel dashboard â€” never in code
+- Frontend deploys automatically on push to `main` (assumed — verify)
+- Preview deployments may trigger on PRs (assumed — verify)
+- Environment variables are set in Vercel dashboard — never in code
 - Production deployments require Anthony approval before triggering
 
 **Agent Rules:**
@@ -1640,22 +1640,22 @@ This section documents all known accounts and platforms tied to Citadel Nexus op
 
 ---
 
-### 25.4 Discord â€” Server and Bot
+### 25.4 Discord — Server and Bot
 
 **Platform:** Discord **Purpose:** Primary community platform and gameplay interface for Citadel Nexus.
 
-**Server ID:** Reference from `GUILD_ID` in `.env.example` (operational, not secret) **Bot token:** `BOT_TOKEN` â€” ðŸ”´ SECRET â€” never expose **Bot account name:** UNKNOWN â€” verify with Anthony **Bot permissions scope:** UNKNOWN â€” verify with Anthony
+**Server ID:** Reference from `GUILD_ID` in `.env.example` (operational, not secret) **Bot token:** `BOT_TOKEN` — 🔴 SECRET — never expose **Bot account name:** UNKNOWN — verify with Anthony **Bot permissions scope:** UNKNOWN — verify with Anthony
 
 **How This Account Operates:**
 
 - Discord server hosts the Citadel Nexus community
 - The Ascension bot runs as a separate PM2 process from the backend
 - Bot receives slash commands from members and calls backend API
-- Backend is the source of truth â€” Discord reflects backend state
+- Backend is the source of truth — Discord reflects backend state
 - Role mutations are executed only by `discordRoleMutationService.ts`
 - Role IDs are locked in `src/config/discordRoleRegistry.ts`
 
-**Server Channels (partial â€” verify current structure with Anthony):**
+**Server Channels (partial — verify current structure with Anthony):**
 
 |Channel Type|Purpose|
 |---|---|
@@ -1663,7 +1663,7 @@ This section documents all known accounts and platforms tied to Citadel Nexus op
 |Gameplay channels|Ascension command execution|
 |Community channels|Member discussion|
 |Admin channels|Operator oversight|
-|Bot log channels|Audit output (UNKNOWN â€” verify)|
+|Bot log channels|Audit output (UNKNOWN — verify)|
 
 **Agent Rules:**
 
@@ -1680,16 +1680,16 @@ This section documents all known accounts and platforms tied to Citadel Nexus op
 
 ---
 
-### 25.5 Hedera â€” Blockchain Network
+### 25.5 Hedera — Blockchain Network
 
 **Platform:** Hedera Hashgraph **Purpose:** CNX token hosting on Hedera Token Service (HTS). Hashgraph Consensus Service (HCS) for potential audit logging.
 
-**Operator account ID:** UNKNOWN â€” verify from safe config reference (not `.env`) **Operator private key:** ðŸ”´ SECRET â€” never expose â€” RED gate always **Network:** TESTNET only (mainnet operations are RED gate â€” require Anthony approval) **CNX Token ID:** UNKNOWN â€” verify from doctrine docs only
+**Operator account ID:** UNKNOWN — verify from safe config reference (not `.env`) **Operator private key:** 🔴 SECRET — never expose — RED gate always **Network:** TESTNET only (mainnet operations are RED gate — require Anthony approval) **CNX Token ID:** UNKNOWN — verify from doctrine docs only
 
 **How This Account Operates:**
 
 - Hedera SDK is initialized in `src/config/hederaClient.ts`
-- Current Phase 1: Hedera is deferred â€” testnet only
+- Current Phase 1: Hedera is deferred — testnet only
 - No mainnet transactions occur without explicit Anthony approval
 - Token reads (balance checks) are the only current permitted operation
 - No token transfers, mints, or burns without RED gate approval
@@ -1703,17 +1703,17 @@ This section documents all known accounts and platforms tied to Citadel Nexus op
 - Agents MUST NOT modify `hederaClient.ts` without approval
 - Agents may inspect `hederaClient.ts` for audit and review
 - All Hedera work defaults to testnet assumption
-- Mainnet operations are RED gate â€” STOP and escalate
+- Mainnet operations are RED gate — STOP and escalate
 
 **Goal:** Maintain a safe, locked blockchain integration where no mainnet operations occur without full human authorization, and CNX token utility remains within the zero pay-to-win doctrine.
 
 ---
 
-### 25.6 Production Server â€” VPS / Dedicated Host
+### 25.6 Production Server — VPS / Dedicated Host
 
-**Platform:** UNKNOWN â€” verify with Anthony (VPS, dedicated server, or other) **Purpose:** Production hosting for `citadel-nexus-backend` Express.js API and Ascension Discord bot via PM2.
+**Platform:** UNKNOWN — verify with Anthony (VPS, dedicated server, or other) **Purpose:** Production hosting for `citadel-nexus-backend` Express.js API and Ascension Discord bot via PM2.
 
-**Host/provider:** UNKNOWN â€” verify with Anthony **IP address:** UNKNOWN â€” do not expose publicly **OS:** UNKNOWN â€” Ubuntu assumed from UFW/Nginx references (verify) **Process manager:** PM2 **Web server:** Nginx (reverse proxy) **Firewall:** UFW
+**Host/provider:** UNKNOWN — verify with Anthony **IP address:** UNKNOWN — do not expose publicly **OS:** UNKNOWN — Ubuntu assumed from UFW/Nginx references (verify) **Process manager:** PM2 **Web server:** Nginx (reverse proxy) **Firewall:** UFW
 
 **How This Account Operates:**
 
@@ -1722,7 +1722,7 @@ This section documents all known accounts and platforms tied to Citadel Nexus op
 - Nginx proxies external requests to the PM2 processes
 - UFW controls inbound/outbound firewall rules
 - SSH access required for deployment and maintenance
-- Deployments are manual â€” no automated CI/CD to this server without approval
+- Deployments are manual — no automated CI/CD to this server without approval
 
 **Agent Rules:**
 
@@ -1738,11 +1738,11 @@ This section documents all known accounts and platforms tied to Citadel Nexus op
 
 ---
 
-### 25.7 Obsidian â€” Knowledge Base / Secondary Brain
+### 25.7 Obsidian — Knowledge Base / Secondary Brain
 
 **Platform:** Obsidian (local Markdown vault) **Purpose:** Long-term knowledge storage, agent task logging, architectural decision archive, and secondary brain for Citadel Nexus operations.
 
-**Vault location:** Local to Anthony's machine / UNKNOWN if synced (verify) **Sync method:** UNKNOWN â€” Obsidian Sync, iCloud, Git, or other (verify) **Export queue:** `docs/OBSIDIAN_EXPORT_QUEUE/` in repos (staging area)
+**Vault location:** Local to Anthony's machine / UNKNOWN if synced (verify) **Sync method:** UNKNOWN — Obsidian Sync, iCloud, Git, or other (verify) **Export queue:** `docs/OBSIDIAN_EXPORT_QUEUE/` in repos (staging area)
 
 **How This Account Operates:**
 
@@ -1766,7 +1766,7 @@ This section documents all known accounts and platforms tied to Citadel Nexus op
 
 ### 25.8 Payment Platforms (Future / UNKNOWN)
 
-**Platforms:** Stripe / Gumroad / PayPal â€” status UNKNOWN **Purpose:** Potential future use for public product sales or community monetization (not yet active â€” verify with Anthony)
+**Platforms:** Stripe / Gumroad / PayPal — status UNKNOWN **Purpose:** Potential future use for public product sales or community monetization (not yet active — verify with Anthony)
 
 **Agent Rules (apply to all payment platforms):**
 
@@ -1783,7 +1783,7 @@ This section documents all known accounts and platforms tied to Citadel Nexus op
 
 ### 25.9 Domain Registrar
 
-**Platform:** UNKNOWN â€” verify with Anthony **Domain(s):** UNKNOWN â€” reference from `NEXT_PUBLIC_SITE_URL` in `.env.example` **Purpose:** Domain registration and DNS management for Citadel Nexus web properties.
+**Platform:** UNKNOWN — verify with Anthony **Domain(s):** UNKNOWN — reference from `NEXT_PUBLIC_SITE_URL` in `.env.example` **Purpose:** Domain registration and DNS management for Citadel Nexus web properties.
 
 **Agent Rules:**
 
@@ -1811,11 +1811,11 @@ This section documents all known accounts and platforms tied to Citadel Nexus op
 
     - Mark it as DECOMMISSIONED in this section
     - Document the date and reason
-    - Do not delete the entry â€” preserve the history
+    - Do not delete the entry — preserve the history
 
 ---
 
-## SECTION 26 â€” AUTO-DIAGNOSTIC AND MONITORING SYSTEM
+## SECTION 26 — AUTO-DIAGNOSTIC AND MONITORING SYSTEM
 
 Agents SHOULD proactively run diagnostic checks and produce structured reports when any of the following conditions occur:
 
@@ -1833,7 +1833,7 @@ Run this diagnostic at the start of any AUDIT or IMPLEMENT session:
 
 ```
 CITADEL NEXUS SYSTEM HEALTH DIAGNOSTIC
-â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+══════════════════════════════════════════════════════════════════
 Timestamp:    [ISO 8601 date-time]
 Repo:         [backend / frontend / both]
 Branch:       [current branch]
@@ -1841,55 +1841,55 @@ Agent:        [Claude Code / Copilot / Codex / other]
 Session mode: [mode from Section 28]
 Risk level:   [GREEN / YELLOW / RED]
 
-â”€â”€ GIT STATUS â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+── GIT STATUS ──────────────────────────────────────────────────
 Branch:           [output of: git branch --show-current]
 Uncommitted:      [output of: git status --short]
 Last commit:      [output of: git log --oneline -1]
 
-â”€â”€ BUILD STATUS â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+── BUILD STATUS ────────────────────────────────────────────────
 npm run build:    [ ] PASS  [ ] FAIL  [ ] NOT RUN
 Errors:           [paste or "none"]
 
-â”€â”€ LINT STATUS â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+── LINT STATUS ─────────────────────────────────────────────────
 npm run lint:     [ ] PASS  [ ] FAIL  [ ] NOT RUN
 Warnings:         [count or "none"]
 
-â”€â”€ TEST STATUS â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+── TEST STATUS ─────────────────────────────────────────────────
 npm run test:     [ ] PASS  [ ] FAIL  [ ] NOT RUN  [ ] NO TESTS YET
 Coverage:         [if available]
 Failures:         [paste exact or "none"]
 
-â”€â”€ SCHEMA STATUS â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+── SCHEMA STATUS ───────────────────────────────────────────────
 npx prisma validate:  [ ] PASS  [ ] FAIL  [ ] NOT RUN
 Pending migrations:   [list or "none"]
 
-â”€â”€ PHASE STATUS â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
-Current phase:    Phase 1 â€” Stabilize (ACTIVE)
+── PHASE STATUS ────────────────────────────────────────────────
+Current phase:    Phase 1 — Stabilize (ACTIVE)
 Phase source:     AGENTS.md + docs/BUILD/CURRENT_BUILD_STATUS.md
 Deferred active:  [ ] None detected  [ ] Issue found: ___
 
-â”€â”€ ECONOMY INTEGRITY â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+── ECONOMY INTEGRITY ───────────────────────────────────────────
 Uncapped loops:   [ ] None detected  [ ] Issue found: ___
 Pay-to-win:       [ ] None detected  [ ] Issue found: ___
 Audit logging:    [ ] Present  [ ] Missing in: ___
 
-â”€â”€ SECRETS SCAN â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
-.env committed:   [ ] No  [ ] YES â€” CRITICAL â€” list files
+── SECRETS SCAN ────────────────────────────────────────────────
+.env committed:   [ ] No  [ ] YES — CRITICAL — list files
 Secrets in code:  [ ] None detected  [ ] Found in: ___
 Secrets in docs:  [ ] None detected  [ ] Found in: ___
 
-â”€â”€ OPEN DECISIONS â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+── OPEN DECISIONS ──────────────────────────────────────────────
 docs/BUILD/OPEN_DECISIONS.md: [open count or "file not found"]
 Critical items:   [list or "none"]
 
-â”€â”€ APPROVAL GATES â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+── APPROVAL GATES ──────────────────────────────────────────────
 RED gates pending Anthony: [list or "none"]
 YELLOW items needing scope confirmation: [list or "none"]
 
-â”€â”€ RECOMMENDATION â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+── RECOMMENDATION ──────────────────────────────────────────────
 Overall status:  [ ] HEALTHY  [ ] ATTENTION NEEDED  [ ] CRITICAL
 Priority action: [one sentence]
-â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+══════════════════════════════════════════════════════════════════
 ```
 
 ### 26.2 Economy Audit Report
@@ -1898,12 +1898,12 @@ Run this when any economy-touching change is being reviewed:
 
 ```
 ECONOMY AUDIT REPORT
-â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+══════════════════════════════════════════════════════════════════
 Timestamp:  [date-time]
 Scope:      [files reviewed]
 Auditor:    Economy Guardian sub-agent
 
-â”€â”€ XP CAP COMPLIANCE â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+── XP CAP COMPLIANCE ───────────────────────────────────────────
 Base Game XP daily ceiling (375 XP):    [ ] ENFORCED  [ ] VIOLATED
 Hard daily cap post-modifier (475 XP):  [ ] ENFORCED  [ ] VIOLATED
 Daily mission limit (12 total):         [ ] ENFORCED  [ ] VIOLATED
@@ -1912,48 +1912,48 @@ Same-mission type limit (5 full XP):    [ ] ENFORCED  [ ] VIOLATED
 Contribution XP daily cap (225 XP):     [ ] ENFORCED  [ ] VIOLATED (Phase 2 only)
 Arcade XP daily cap (100 XP):           [ ] ENFORCED  [ ] VIOLATED (Phase 4 only)
 
-â”€â”€ MULTIPLIER ORDER â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
-Step 1 â€” Validate eligibility:          [ ] PRESENT  [ ] MISSING
-Step 2 â€” Calculate base XP:             [ ] PRESENT  [ ] MISSING
-Step 3 â€” Action-specific cap:           [ ] PRESENT  [ ] MISSING
-Step 4 â€” Category daily cap:            [ ] PRESENT  [ ] MISSING
-Step 5 â€” Apply CNX multiplier:          [ ] PRESENT  [ ] MISSING
-Step 6 â€” Apply hard daily cap:          [ ] PRESENT  [ ] MISSING
-Step 7 â€” Write audit log:               [ ] PRESENT  [ ] MISSING
-Step 8 â€” Update user state:             [ ] PRESENT  [ ] MISSING
-Step 9 â€” Update Nexus Score:            [ ] PRESENT  [ ] MISSING (if applicable)
+── MULTIPLIER ORDER ────────────────────────────────────────────
+Step 1 — Validate eligibility:          [ ] PRESENT  [ ] MISSING
+Step 2 — Calculate base XP:             [ ] PRESENT  [ ] MISSING
+Step 3 — Action-specific cap:           [ ] PRESENT  [ ] MISSING
+Step 4 — Category daily cap:            [ ] PRESENT  [ ] MISSING
+Step 5 — Apply CNX multiplier:          [ ] PRESENT  [ ] MISSING
+Step 6 — Apply hard daily cap:          [ ] PRESENT  [ ] MISSING
+Step 7 — Write audit log:               [ ] PRESENT  [ ] MISSING
+Step 8 — Update user state:             [ ] PRESENT  [ ] MISSING
+Step 9 — Update Nexus Score:            [ ] PRESENT  [ ] MISSING (if applicable)
 
-â”€â”€ CNX MULTIPLIER VALUES â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
-Unranked â†’ 1.00Ã—:       [ ] CORRECT  [ ] MODIFIED
-Signal â†’ 1.10Ã—:         [ ] CORRECT  [ ] MODIFIED
-Node â†’ 1.15Ã—:           [ ] CORRECT  [ ] MODIFIED
-Citadel â†’ 1.20Ã—:        [ ] CORRECT  [ ] MODIFIED
-Nexus â†’ 1.25Ã—:          [ ] CORRECT  [ ] MODIFIED
-Founder â†’ 1.30Ã—:        [ ] CORRECT  [ ] MODIFIED
+── CNX MULTIPLIER VALUES ───────────────────────────────────────
+Unranked → 1.00×:       [ ] CORRECT  [ ] MODIFIED
+Signal → 1.10×:         [ ] CORRECT  [ ] MODIFIED
+Node → 1.15×:           [ ] CORRECT  [ ] MODIFIED
+Citadel → 1.20×:        [ ] CORRECT  [ ] MODIFIED
+Nexus → 1.25×:          [ ] CORRECT  [ ] MODIFIED
+Founder → 1.30×:        [ ] CORRECT  [ ] MODIFIED
 
-â”€â”€ PAY-TO-WIN SCAN â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
-CNX bypasses rank threshold:   [ ] No  [ ] YES â€” VIOLATION
-CNX bypasses stage gate:       [ ] No  [ ] YES â€” VIOLATION
-CNX purchases XP directly:     [ ] No  [ ] YES â€” VIOLATION
-CNX bypasses anti-abuse:       [ ] No  [ ] YES â€” VIOLATION
-CNX grants admin authority:    [ ] No  [ ] YES â€” VIOLATION
+── PAY-TO-WIN SCAN ─────────────────────────────────────────────
+CNX bypasses rank threshold:   [ ] No  [ ] YES — VIOLATION
+CNX bypasses stage gate:       [ ] No  [ ] YES — VIOLATION
+CNX purchases XP directly:     [ ] No  [ ] YES — VIOLATION
+CNX bypasses anti-abuse:       [ ] No  [ ] YES — VIOLATION
+CNX grants admin authority:    [ ] No  [ ] YES — VIOLATION
 
-â”€â”€ AUDIT LOGGING SCAN â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
-Every XP mutation logged:      [ ] YES  [ ] NO â€” list missing
-reason field always set:       [ ] YES  [ ] NO â€” list locations
-adminUserId always set:        [ ] YES  [ ] NO â€” list locations
-valueBefore/After set:         [ ] YES  [ ] NO â€” list locations
+── AUDIT LOGGING SCAN ──────────────────────────────────────────
+Every XP mutation logged:      [ ] YES  [ ] NO — list missing
+reason field always set:       [ ] YES  [ ] NO — list locations
+adminUserId always set:        [ ] YES  [ ] NO — list locations
+valueBefore/After set:         [ ] YES  [ ] NO — list locations
 
-â”€â”€ DIMINISHING RETURNS â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
-1â€“5 same mission â†’ 100%:  [ ] ENFORCED  [ ] NOT PRESENT
-6â€“8 same mission â†’ 60%:   [ ] ENFORCED  [ ] NOT PRESENT
-9+ same mission â†’ 25%/0:  [ ] ENFORCED  [ ] NOT PRESENT
+── DIMINISHING RETURNS ─────────────────────────────────────────
+1–5 same mission → 100%:  [ ] ENFORCED  [ ] NOT PRESENT
+6–8 same mission → 60%:   [ ] ENFORCED  [ ] NOT PRESENT
+9+ same mission → 25%/0:  [ ] ENFORCED  [ ] NOT PRESENT
 
-â”€â”€ VERDICT â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+── VERDICT ─────────────────────────────────────────────────────
 Economy integrity:  [ ] PASS  [ ] VIOLATIONS FOUND
 Violations:         [list or "none"]
-Approval needed:    [ ] No  [ ] Yes â€” escalate to Anthony
-â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+Approval needed:    [ ] No  [ ] Yes — escalate to Anthony
+══════════════════════════════════════════════════════════════════
 ```
 
 ### 26.3 Production Incident Report
@@ -1962,46 +1962,46 @@ Use when a production anomaly, build failure, or security concern is detected:
 
 ```
 PRODUCTION INCIDENT REPORT
-â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+══════════════════════════════════════════════════════════════════
 Timestamp:       [date-time]
 Severity:        [ ] LOW  [ ] MEDIUM  [ ] HIGH  [ ] CRITICAL
 Type:            [ ] Build failure  [ ] Test failure  [ ] Security
                  [ ] Economy anomaly  [ ] Discord issue  [ ] Database
                  [ ] Deployment issue  [ ] Other: ___
 
-â”€â”€ DESCRIPTION â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+── DESCRIPTION ─────────────────────────────────────────────────
 What happened:   ___
 When detected:   ___
 Affected system: ___
 
-â”€â”€ EVIDENCE â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+── EVIDENCE ────────────────────────────────────────────────────
 Exact error output:
 [paste]
 
 Relevant files:
 [list]
 
-â”€â”€ IMPACT ASSESSMENT â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+── IMPACT ASSESSMENT ───────────────────────────────────────────
 Users affected:        [ ] None  [ ] Unknown  [ ] N users
-Economy affected:      [ ] No  [ ] Yes â€” describe
-Data integrity:        [ ] No impact  [ ] Risk â€” describe
-Security exposure:     [ ] No  [ ] Yes â€” describe (redacted)
+Economy affected:      [ ] No  [ ] Yes — describe
+Data integrity:        [ ] No impact  [ ] Risk — describe
+Security exposure:     [ ] No  [ ] Yes — describe (redacted)
 
-â”€â”€ ROLLBACK AVAILABLE â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
-[ ] Yes â€” describe rollback path: ___
-[ ] No â€” explain why: ___
+── ROLLBACK AVAILABLE ──────────────────────────────────────────
+[ ] Yes — describe rollback path: ___
+[ ] No — explain why: ___
 
-â”€â”€ RECOMMENDED ACTION â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+── RECOMMENDED ACTION ──────────────────────────────────────────
 Immediate:  ___
 Short-term: ___
 Long-term:  ___
 
-â”€â”€ APPROVAL REQUIRED â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+── APPROVAL REQUIRED ───────────────────────────────────────────
 Anthony notified:  [ ] Yes  [ ] No
 Gate triggered:    [ ] RED  [ ] YELLOW  [ ] None
 
 Prepared by:  [agent identifier]
-â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+══════════════════════════════════════════════════════════════════
 ```
 
 ### 26.4 Auto-Diagnostic Trigger Rules
@@ -2031,7 +2031,7 @@ Agents SHOULD generate a Production Incident Report when:
 
 ---
 
-## SECTION 27 â€” SUB-AGENT REGISTRY
+## SECTION 27 — SUB-AGENT REGISTRY
 
 Full definitions in `docs/AGENTS/SUB_AGENT_REGISTRY.md`.
 
@@ -2054,14 +2054,14 @@ Full definitions in `docs/AGENTS/SUB_AGENT_REGISTRY.md`.
 
 **Persona orchestration rules:**
 
-- Personas produce reports â€” not authority
+- Personas produce reports — not authority
 - Personas MUST NOT invoke other personas
 - User, main agent, or approved slash command orchestrates composition
 - `/ship` may fan out review personas where the tool supports it
 
 ---
 
-## SECTION 28 â€” OPERATING MODES
+## SECTION 28 — OPERATING MODES
 
 |Mode|Description|Output|
 |---|---|---|
@@ -2085,7 +2085,7 @@ Full definitions in `docs/AGENTS/SUB_AGENT_REGISTRY.md`.
 
 ---
 
-## SECTION 29 â€” TOOL PERMISSION MATRIX
+## SECTION 29 — TOOL PERMISSION MATRIX
 
 |Tool|Allowed Use|Forbidden|Default Mode|
 |---|---|---|---|
@@ -2110,7 +2110,7 @@ Full definitions in `docs/AGENTS/SUB_AGENT_REGISTRY.md`.
 
 ---
 
-## SECTION 30 â€” OBSIDIAN KNOWLEDGE CAPTURE
+## SECTION 30 — OBSIDIAN KNOWLEDGE CAPTURE
 
 **Rule:** Every YELLOW or RED task, completed implementation task, release-prep task, architectural decision, doctrine change, and public-product decision MUST produce an Obsidian export note.
 
@@ -2149,21 +2149,21 @@ tags:
 
 ```
 Citadel Nexus/
-â”œâ”€â”€ 00 Command/
-â”œâ”€â”€ 01 Architecture/
-â”œâ”€â”€ 02 Backend/
-â”œâ”€â”€ 03 Frontend/
-â”œâ”€â”€ 04 Discord/
-â”œâ”€â”€ 05 Economy/
-â”œâ”€â”€ 06 Security/
-â”œâ”€â”€ 07 Agent Logs/
-â”œâ”€â”€ 08 Decisions/
-â”œâ”€â”€ 09 Productization/
-â”œâ”€â”€ 10 Release Readiness/
-â”œâ”€â”€ 11 Agent Skills Logs/
-â”œâ”€â”€ 12 ADR Archive/
-â”œâ”€â”€ 13 Accounts Registry/
-â””â”€â”€ 14 Diagnostic Reports/
+├── 00 Command/
+├── 01 Architecture/
+├── 02 Backend/
+├── 03 Frontend/
+├── 04 Discord/
+├── 05 Economy/
+├── 06 Security/
+├── 07 Agent Logs/
+├── 08 Decisions/
+├── 09 Productization/
+├── 10 Release Readiness/
+├── 11 Agent Skills Logs/
+├── 12 ADR Archive/
+├── 13 Accounts Registry/
+└── 14 Diagnostic Reports/
 ```
 
 ### 30.3 What Must NEVER Be Logged
@@ -2180,7 +2180,7 @@ Citadel Nexus/
 
 ---
 
-## SECTION 31 â€” NEGATIVE PROMPTS
+## SECTION 31 — NEGATIVE PROMPTS
 
 All of the following are absolute prohibitions with zero exceptions. Full list in `docs/AGENTS/NEGATIVE_PROMPTS.md`.
 
@@ -2209,22 +2209,22 @@ Do not merge to main.
 Do not force push.
 Do not delete files without explicit approval.
 Do not hide failing tests.
-Do not summarize errors vaguely â€” report exact failures.
+Do not summarize errors vaguely — report exact failures.
 Do not claim a task is complete without passing checks.
 Do not claim a check passed when the command does not exist.
-Do not read raw logs that may contain secrets â€” request sanitized output.
+Do not read raw logs that may contain secrets — request sanitized output.
 Do not create public products exposing private implementation details.
 Do not turn deferred features into live features.
 Do not expand scope without approval.
 Do not invent citations, file paths, logs, or test results.
-Do not invent environment variable names â€” verify from .env.example.
+Do not invent environment variable names — verify from .env.example.
 Do not skip spec-driven-development for significant changes.
 Do not skip test-driven-development for logic changes.
 Do not skip code-review-and-quality before any PR.
 Do not skip security-and-hardening for auth/input/external changes.
 Do not rationalize skipping any lifecycle stage.
 Do not invoke other personas from within a persona.
-Do not act on "seems right" â€” require evidence.
+Do not act on "seems right" — require evidence.
 Do not downgrade verified Citadel Nexus facts to UNKNOWN unless
   no approved source exists, a source conflict exists, or verification
   would require reading secrets.
@@ -2241,7 +2241,7 @@ Do not expose production server IP addresses in any log or doc.
 
 ---
 
-## SECTION 32 â€” OUTPUT FORMAT STANDARDS
+## SECTION 32 — OUTPUT FORMAT STANDARDS
 
 |Target|Format|
 |---|---|
@@ -2255,7 +2255,7 @@ Do not expose production server IP addresses in any log or doc.
 |Discord update|Short status, no private implementation details|
 |Public product|Genericized copy, no private implementation|
 |Security report|Severity, evidence, impact, fix, approval gate|
-|Completion report|Structured template â€” no prose padding|
+|Completion report|Structured template — no prose padding|
 |ADR|Context, decision, consequences, alternatives|
 |Release checklist|Phase, item, status, owner, rollback step|
 |OPEN_DECISION|Conflict identified, evidence, options, escalation target|
@@ -2267,7 +2267,7 @@ Do not expose production server IP addresses in any log or doc.
 
 ---
 
-## SECTION 33 â€” AGENT TASK TEMPLATE
+## SECTION 33 — AGENT TASK TEMPLATE
 
 ```
 TASK:
@@ -2299,35 +2299,35 @@ CHECKS TO RUN:
   - economy audit report         (if economy-touching)
   - Discord dry-run              (if role/bot change)
   - system health diagnostic     (if AUDIT/IMPLEMENT session)
-  - self-verification protocol   (ALWAYS â€” before claiming complete)
+  - self-verification protocol   (ALWAYS — before claiming complete)
 
 STOP CONDITIONS:
-  - RED gate triggered â€” escalate to Anthony
+  - RED gate triggered — escalate to Anthony
   - Failing check requires architectural decision
   - Missing context cannot be resolved without approval
   - Scope has expanded without approval
-  - Self-verification FAIL â€” do not mark complete
+  - Self-verification FAIL — do not mark complete
 
 TOKEN EFFICIENCY:
   - Prompt structure used: [single-task / RALPH / other]
-  - Context files loaded: [minimal set â€” list]
+  - Context files loaded: [minimal set — list]
   - Output format: [from Section 32]
 
 OUTPUT FORMAT:    [from Section 32]
-OBSIDIAN LOG:     YES â€” YELLOW/RED/implementation/architecture/product tasks
-                  NO  â€” GREEN micro-tasks (completion report only)
+OBSIDIAN LOG:     YES — YELLOW/RED/implementation/architecture/product tasks
+                  NO  — GREEN micro-tasks (completion report only)
 ADR REQUIRED:     [YES / NO]
-DIAGNOSTIC RUN:   [YES / NO â€” specify type]
+DIAGNOSTIC RUN:   [YES / NO — specify type]
 APPROVAL REQUIRED FOR:
 ANTI-RATIONALIZATION CHECK:
   Was any lifecycle stage skipped?
-  If yes â€” document the reason and escalate before proceeding.
+  If yes — document the reason and escalate before proceeding.
   Self-verification all 12 gates pass? [YES / NO / PARTIAL]
 ```
 
 ---
 
-## SECTION 34 â€” COMPLETION STANDARD
+## SECTION 34 — COMPLETION STANDARD
 
 A task is NOT complete until the agent provides ALL of the following. A task is COMPLETE only when ALL of the following are true:
 
@@ -2335,9 +2335,9 @@ A task is NOT complete until the agent provides ALL of the following. A task is 
 - [ ] Plan was decomposed into atomic tasks
 - [ ] Code was implemented in vertical slices with rollback path defined
 - [ ] Tests were written alongside or before code
-- [ ] `npm run build` passed â€” output shown, or absence documented
-- [ ] `npm run lint` passed â€” output shown, or absence documented
-- [ ] `npm run test` passed â€” output shown, or absence documented
+- [ ] `npm run build` passed — output shown, or absence documented
+- [ ] `npm run lint` passed — output shown, or absence documented
+- [ ] `npm run test` passed — output shown, or absence documented
 - [ ] `npx prisma validate` passed (if applicable)
 - [ ] `npx prisma format` only run if schema-formatting was in approved scope
 - [ ] Five-axis review complete
@@ -2346,10 +2346,10 @@ A task is NOT complete until the agent provides ALL of the following. A task is 
 - [ ] Economy audit report produced (if economy-touching)
 - [ ] Discord dry-run completed (if applicable)
 - [ ] System health diagnostic run (if AUDIT or IMPLEMENT session)
-- [ ] Self-verification protocol complete â€” all 12 gates documented
+- [ ] Self-verification protocol complete — all 12 gates documented
 - [ ] ADR written (if an architectural decision was made)
 - [ ] Obsidian note exported (if YELLOW/RED/implementation/arch/product task)
-- [ ] PR prepared â€” not merged
+- [ ] PR prepared — not merged
 - [ ] All RED gates respected and escalated to Anthony
 - [ ] No secrets or credential-bearing URLs logged
 - [ ] No lifecycle stage skipped without documented escalation
@@ -2359,7 +2359,7 @@ A task is NOT complete until the agent provides ALL of the following. A task is 
 
 ```
 TASK COMPLETION REPORT
-â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+──────────────────────────────────────────────────────────────────
 Task:          [what was assigned]
 Branch:        [branch name]
 Files changed: [list every file modified]
@@ -2367,15 +2367,15 @@ What changed:  [what each file change does]
 Why:           [why this change was made]
 
 Checks run:
-  [ ] npm run build         â€” PASS / FAIL / NOT RUN
-  [ ] npx prisma validate   â€” PASS / FAIL / N/A
-  [ ] npm run lint          â€” PASS / FAIL / NOT RUN
-  [ ] npm run test          â€” PASS / FAIL / NOT RUN / NO TESTS YET
+  [ ] npm run build         — PASS / FAIL / NOT RUN
+  [ ] npx prisma validate   — PASS / FAIL / N/A
+  [ ] npm run lint          — PASS / FAIL / NOT RUN
+  [ ] npm run test          — PASS / FAIL / NOT RUN / NO TESTS YET
 
 Self-verification: [ ] ALL 12 GATES PASS  [ ] GATES FAILED: ___
 
 Risks:
-  [list risks â€” classify: LOW / MEDIUM / HIGH]
+  [list risks — classify: LOW / MEDIUM / HIGH]
 
 Follow-up tasks:
   [list anything this change requires next]
@@ -2388,15 +2388,15 @@ Open questions:
 
 Obsidian note:  [ ] Exported  [ ] N/A (GREEN micro-task)
 ADR created:    [ ] Yes  [ ] No
-Diagnostic run: [ ] Yes â€” type: ___  [ ] No
-â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+Diagnostic run: [ ] Yes — type: ___  [ ] No
+──────────────────────────────────────────────────────────────────
 git diff --stat: [paste]
 git status --short: [paste]
 ```
 
 ---
 
-## SECTION 35 â€” HANDLING UNCERTAINTY
+## SECTION 35 — HANDLING UNCERTAINTY
 
 ### Code Conflicts with Doctrine
 
@@ -2442,16 +2442,16 @@ If any phase boundary conflicts between repo files, docs, memory, or chat:
 If a value is not confirmed from an approved source, mark it:
 
 ```
-UNKNOWN â€” requires verification from [source type]
+UNKNOWN — requires verification from [source type]
 ```
 
 Agents may proceed only if the unknown is not required for the current task.
 
-If the unknown affects production, economy, auth, schema, Discord, wallet, Hedera, CNX, payments, or IP exposure â€” STOP and request Anthony clarification.
+If the unknown affects production, economy, auth, schema, Discord, wallet, Hedera, CNX, payments, or IP exposure — STOP and request Anthony clarification.
 
 ---
 
-## SECTION 36 â€” COMMAND CONTROL DASHBOARD RULES
+## SECTION 36 — COMMAND CONTROL DASHBOARD RULES
 
 The Command Control Dashboard is a future system.
 
@@ -2459,10 +2459,10 @@ The Command Control Dashboard is a future system.
 
 |Phase|What Is Allowed|
 |---|---|
-|A â€” Static Prototype|UI layout, demo data, disabled controls|
-|B â€” Read-Only Monitor|Live reads from backend health and economy endpoints|
-|C â€” Controlled Actions|Pause/resume modules, flag users, export reports|
-|D â€” Emergency Controls|Safe mode, economy lockdown (requires full auth + audit infrastructure)|
+|A — Static Prototype|UI layout, demo data, disabled controls|
+|B — Read-Only Monitor|Live reads from backend health and economy endpoints|
+|C — Controlled Actions|Pause/resume modules, flag users, export reports|
+|D — Emergency Controls|Safe mode, economy lockdown (requires full auth + audit infrastructure)|
 
 ### 36.2 Dashboard Rules
 
@@ -2475,11 +2475,11 @@ The Command Control Dashboard is a future system.
 
 ### 36.3 CNMA Agent Oversight Panel
 
-The CNMA Command Center artifact is classified as **Dashboard Module 1: Agent Oversight**. It covers agent supervision, status, allowed tools, forbidden actions, and approval gates. Integrate into full dashboard â€” not as a standalone product.
+The CNMA Command Center artifact is classified as **Dashboard Module 1: Agent Oversight**. It covers agent supervision, status, allowed tools, forbidden actions, and approval gates. Integrate into full dashboard — not as a standalone product.
 
 ---
 
-## SECTION 37 â€” AGENTIC AI GOVERNANCE
+## SECTION 37 — AGENTIC AI GOVERNANCE
 
 ### 37.1 What Agents May Do
 
@@ -2517,87 +2517,87 @@ Sub-agents report to the Master Command Agent. Outputs MUST be reviewed before u
 
 ---
 
-## SECTION 38 â€” DOCUMENTATION STRUCTURE
+## SECTION 38 — DOCUMENTATION STRUCTURE
 
 The following doc files are the knowledge core. Agents should help populate these before making major code changes.
 
 ```
 docs/
-â”œâ”€â”€ DOCTRINE/
-â”‚   â”œâ”€â”€ CITADEL_NEXUS_V3_DOCTRINE.md
-â”‚   â”œâ”€â”€ ECONOMY_AND_XP_RULES.md
-â”‚   â”œâ”€â”€ CNX_UTILITY_RULES.md
-â”‚   â”œâ”€â”€ ANTI_ABUSE_RULES.md
-â”‚   â””â”€â”€ COMMAND_CONTROL_DASHBOARD_SPEC.md
-â”œâ”€â”€ ARCHITECTURE/
-â”‚   â”œâ”€â”€ SYSTEM_OVERVIEW.md
-â”‚   â”œâ”€â”€ BACKEND_ARCHITECTURE.md
-â”‚   â”œâ”€â”€ DISCORD_BOT_ARCHITECTURE.md
-â”‚   â”œâ”€â”€ DATABASE_SCHEMA_REFERENCE.md
-â”‚   â””â”€â”€ AGENTIC_AI_ARCHITECTURE.md
-â”œâ”€â”€ BUILD/
-â”‚   â”œâ”€â”€ CURRENT_BUILD_STATUS.md
-â”‚   â”œâ”€â”€ MASTER_BACKLOG.md
-â”‚   â”œâ”€â”€ IMPLEMENTATION_PHASES.md
-â”‚   â”œâ”€â”€ APPROVAL_GATES.md
-â”‚   â””â”€â”€ OPEN_DECISIONS.md
-â”œâ”€â”€ SECURITY/
-â”‚   â”œâ”€â”€ DO_NOT_TOUCH.md
-â”‚   â”œâ”€â”€ SECRETS_POLICY.md
-â”‚   â”œâ”€â”€ PERMISSION_MODEL.md
-â”‚   â””â”€â”€ WALLET_AND_TREASURY_BOUNDARIES.md
-â”œâ”€â”€ QA/
-â”‚   â”œâ”€â”€ V3_ACCEPTANCE_TESTS.md
-â”‚   â”œâ”€â”€ ECONOMY_TEST_PLAN.md
-â”‚   â””â”€â”€ PRODUCTION_READINESS_CHECKLIST.md
-â””â”€â”€ [12+ additional operational docs including runbooks]
+├── DOCTRINE/
+│   ├── CITADEL_NEXUS_V3_DOCTRINE.md
+│   ├── ECONOMY_AND_XP_RULES.md
+│   ├── CNX_UTILITY_RULES.md
+│   ├── ANTI_ABUSE_RULES.md
+│   └── COMMAND_CONTROL_DASHBOARD_SPEC.md
+├── ARCHITECTURE/
+│   ├── SYSTEM_OVERVIEW.md
+│   ├── BACKEND_ARCHITECTURE.md
+│   ├── DISCORD_BOT_ARCHITECTURE.md
+│   ├── DATABASE_SCHEMA_REFERENCE.md
+│   └── AGENTIC_AI_ARCHITECTURE.md
+├── BUILD/
+│   ├── CURRENT_BUILD_STATUS.md
+│   ├── MASTER_BACKLOG.md
+│   ├── IMPLEMENTATION_PHASES.md
+│   ├── APPROVAL_GATES.md
+│   └── OPEN_DECISIONS.md
+├── SECURITY/
+│   ├── DO_NOT_TOUCH.md
+│   ├── SECRETS_POLICY.md
+│   ├── PERMISSION_MODEL.md
+│   └── WALLET_AND_TREASURY_BOUNDARIES.md
+├── QA/
+│   ├── V3_ACCEPTANCE_TESTS.md
+│   ├── ECONOMY_TEST_PLAN.md
+│   └── PRODUCTION_READINESS_CHECKLIST.md
+└── [12+ additional operational docs including runbooks]
 ```
 
 ---
 
-## SECTION 39 â€” SUPPORTING FILE STRUCTURE
+## SECTION 39 — SUPPORTING FILE STRUCTURE
 
 The root AGENTS.md is constitutional law. Full operational detail lives in:
 
 ```
 docs/AGENTS/
-â”œâ”€â”€ MASTER_AGENT_SPEC.md           â† Agent name, capabilities, authority limits
-â”œâ”€â”€ AGENT_SKILLS_INTEGRATION.md    â† Full addyosmani/agent-skills reference
-â”œâ”€â”€ RALPH_LOOP.md                  â† Full RALPH loop definition and stop conditions
-â”œâ”€â”€ SUB_AGENT_REGISTRY.md          â† All sub-agents: scope, permissions, shutdown
-â”œâ”€â”€ TOOL_PERMISSION_MATRIX.md      â† Tool-by-tool: allowed, forbidden, approval
-â”œâ”€â”€ SKILL_REGISTRY.md              â† All skills: lifecycle, domain, Codex built-in
-â”œâ”€â”€ OBSIDIAN_LOGGING_STANDARD.md   â† Vault, export queue, templates, forbidden data
-â”œâ”€â”€ NEGATIVE_PROMPTS.md            â† Full hard-stop prohibition list
-â”œâ”€â”€ AGENT_TASK_TEMPLATE.md         â† Reusable task instruction template
-â”œâ”€â”€ AGENT_OUTPUT_FORMATS.md        â† Output adapters per destination
-â”œâ”€â”€ AGENT_IMPROVEMENT_PROTOCOL.md â† How agents may propose system improvements
-â”œâ”€â”€ ACCOUNTS_REGISTRY_DETAIL.md   â† Extended detail for Section 25 accounts
-â””â”€â”€ DIAGNOSTIC_TEMPLATES.md        â† All diagnostic report templates
+├── MASTER_AGENT_SPEC.md           ← Agent name, capabilities, authority limits
+├── AGENT_SKILLS_INTEGRATION.md    ← Full addyosmani/agent-skills reference
+├── RALPH_LOOP.md                  ← Full RALPH loop definition and stop conditions
+├── SUB_AGENT_REGISTRY.md          ← All sub-agents: scope, permissions, shutdown
+├── TOOL_PERMISSION_MATRIX.md      ← Tool-by-tool: allowed, forbidden, approval
+├── SKILL_REGISTRY.md              ← All skills: lifecycle, domain, Codex built-in
+├── OBSIDIAN_LOGGING_STANDARD.md   ← Vault, export queue, templates, forbidden data
+├── NEGATIVE_PROMPTS.md            ← Full hard-stop prohibition list
+├── AGENT_TASK_TEMPLATE.md         ← Reusable task instruction template
+├── AGENT_OUTPUT_FORMATS.md        ← Output adapters per destination
+├── AGENT_IMPROVEMENT_PROTOCOL.md ← How agents may propose system improvements
+├── ACCOUNTS_REGISTRY_DETAIL.md   ← Extended detail for Section 25 accounts
+└── DIAGNOSTIC_TEMPLATES.md        ← All diagnostic report templates
 
 docs/OBSIDIAN_EXPORT_QUEUE/
-â””â”€â”€ .gitkeep                       â† Secondary-brain export staging area
+└── .gitkeep                       ← Secondary-brain export staging area
 
 references/
-â”œâ”€â”€ testing-patterns.md
-â”œâ”€â”€ security-checklist.md
-â”œâ”€â”€ performance-checklist.md
-â””â”€â”€ accessibility-checklist.md
+├── testing-patterns.md
+├── security-checklist.md
+├── performance-checklist.md
+└── accessibility-checklist.md
 
 .github/
-â”œâ”€â”€ copilot-instructions.md
-â””â”€â”€ instructions/
-    â”œâ”€â”€ backend.instructions.md
-    â”œâ”€â”€ frontend.instructions.md
-    â”œâ”€â”€ discord.instructions.md
-    â”œâ”€â”€ economy.instructions.md
-    â”œâ”€â”€ security.instructions.md
-    â””â”€â”€ public-products.instructions.md
+├── copilot-instructions.md
+└── instructions/
+    ├── backend.instructions.md
+    ├── frontend.instructions.md
+    ├── discord.instructions.md
+    ├── economy.instructions.md
+    ├── security.instructions.md
+    └── public-products.instructions.md
 ```
 
 ---
 
-## SECTION 40 â€” FINAL DIRECTIVE
+## SECTION 40 — FINAL DIRECTIVE
 
 ```
 Build Citadel Nexus slowly, safely, and correctly.
@@ -2620,8 +2620,7 @@ Do not skip the self-verification protocol.
 Do not suppress diagnostic alerts.
 Do not waste tokens on padding when structure suffices.
 
-When in doubt â€” read the repo, check this file, and ask.
+When in doubt — read the repo, check this file, and ask.
 ```
 
 **Anthony Hammon is the Founder and final authority.** **All major decisions route through him.** **All irreversible actions require his explicit approval.**
-
