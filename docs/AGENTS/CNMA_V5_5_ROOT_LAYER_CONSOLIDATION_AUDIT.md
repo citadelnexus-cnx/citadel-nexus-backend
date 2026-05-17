@@ -2,7 +2,7 @@ Root authority: ../../AGENTS.md
 
 # CNMA v5.5 - Root Doctrine & Agent Layer Consolidation Audit
 
-Date: 2026-05-17  
+Date: 2026-05-17
 Mode: AUDIT + DOCS ONLY
 
 Executive summary
