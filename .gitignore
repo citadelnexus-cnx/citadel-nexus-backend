@@ -1,5 +1,16 @@
-node_modules/
+node_modules
+dist
+
 .env
-dist/
+.env.*
+!.env.example
+
 npm-debug.log*
 /src/generated/prisma
+
+# Database backup / restore artifacts
+backups/
+*.dump
+*.backup
+*.sql
+*.tar

@@ -1,5 +1,10 @@
-//backend/src/routes/accessRoutes.ts
+// backend/src/routes/accessRoutes.ts
 import express, { Request, Response } from "express";
+import {
+  requireAdmin,
+  requireInternalWorker,
+  requireOwnerOrAdmin,
+} from "../middleware/httpAuth";
 import {
   getOrCreateAccessState,
   getAllAccessStates,
@@ -10,7 +15,7 @@ import { expireExpiredEntitlements } from "../services/entitlementExpiryService"
 
 const router = express.Router();
 
-router.get("/", async (_req: Request, res: Response) => {
+router.get("/", requireAdmin, async (_req: Request, res: Response) => {
   try {
     const states = await getAllAccessStates();
     return res.json(states);
@@ -20,7 +25,7 @@ router.get("/", async (_req: Request, res: Response) => {
   }
 });
 
-router.post("/expire/run", async (_req: Request, res: Response) => {
+router.post("/expire/run", requireInternalWorker, async (_req: Request, res: Response) => {
   try {
     const result = await expireExpiredEntitlements();
     return res.json(result);
@@ -30,7 +35,7 @@ router.post("/expire/run", async (_req: Request, res: Response) => {
   }
 });
 
-router.get("/:userId/modifiers", async (req: Request, res: Response) => {
+router.get("/:userId/modifiers", requireOwnerOrAdmin("userId"), async (req: Request, res: Response) => {
   try {
     const userId = String(req.params.userId ?? "");
 
@@ -46,7 +51,7 @@ router.get("/:userId/modifiers", async (req: Request, res: Response) => {
   }
 });
 
-router.post("/:userId/refresh", async (req: Request, res: Response) => {
+router.post("/:userId/refresh", requireOwnerOrAdmin("userId"), async (req: Request, res: Response) => {
   try {
     const userId = String(req.params.userId ?? "");
 
@@ -69,7 +74,7 @@ router.post("/:userId/refresh", async (req: Request, res: Response) => {
   }
 });
 
-router.get("/:userId", async (req: Request, res: Response) => {
+router.get("/:userId", requireOwnerOrAdmin("userId"), async (req: Request, res: Response) => {
   try {
     const userId = String(req.params.userId ?? "");
 

@@ -1,10 +1,11 @@
 import express, { Request, Response } from "express";
+import { requireOwnerOrAdmin, requireSession } from "../middleware/httpAuth";
 import { getMemberState } from "../services/memberStateService";
-import { getSessionUserIdFromRequest } from "./sessionRoutes";
+import { getSessionUserIdFromRequest } from "../services/sessionService";
 
 const router = express.Router();
 
-router.get("/me", async (req: Request, res: Response) => {
+router.get("/me", requireSession, async (req: Request, res: Response) => {
   try {
     const userId = getSessionUserIdFromRequest(req);
 
@@ -25,7 +26,7 @@ router.get("/me", async (req: Request, res: Response) => {
   }
 });
 
-router.get("/:userId", async (req: Request, res: Response) => {
+router.get("/:userId", requireOwnerOrAdmin("userId"), async (req: Request, res: Response) => {
   try {
     const userId = String(req.params.userId ?? "").trim();
 

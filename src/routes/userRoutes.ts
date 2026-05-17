@@ -1,5 +1,6 @@
-//backend/src/routes/userRoutes.ts
+// backend/src/routes/userRoutes.ts
 import { Router, Request, Response } from "express";
+import { requireAdmin, requireOwnerOrAdmin, requireProductionDisabled } from "../middleware/httpAuth";
 import {
   createUser,
   getUser,
@@ -12,7 +13,7 @@ import {
 
 const router = Router();
 
-router.post("/create", async (req: Request, res: Response) => {
+router.post("/create", requireProductionDisabled, async (req: Request, res: Response) => {
   try {
     const { username } = req.body;
 
@@ -28,7 +29,7 @@ router.post("/create", async (req: Request, res: Response) => {
   }
 });
 
-router.post("/:id/discord", async (req: Request, res: Response) => {
+router.post("/:id/discord", requireOwnerOrAdmin("id"), async (req: Request, res: Response) => {
   try {
     const id = String(req.params.id ?? "");
     const { discordId, discordTag } = req.body;
@@ -58,7 +59,7 @@ router.post("/:id/discord", async (req: Request, res: Response) => {
   }
 });
 
-router.post("/:id/wallet", async (req: Request, res: Response) => {
+router.post("/:id/wallet", requireOwnerOrAdmin("id"), async (req: Request, res: Response) => {
   try {
     const id = String(req.params.id ?? "");
     const { wallet } = req.body;
@@ -84,7 +85,7 @@ router.post("/:id/wallet", async (req: Request, res: Response) => {
   }
 });
 
-router.get("/:id/payout-ready", async (req: Request, res: Response) => {
+router.get("/:id/payout-ready", requireOwnerOrAdmin("id"), async (req: Request, res: Response) => {
   try {
     const id = String(req.params.id ?? "");
 
@@ -105,7 +106,7 @@ router.get("/:id/payout-ready", async (req: Request, res: Response) => {
   }
 });
 
-router.get("/:id", async (req: Request, res: Response) => {
+router.get("/:id", requireOwnerOrAdmin("id"), async (req: Request, res: Response) => {
   try {
     const id = String(req.params.id ?? "");
 
@@ -126,7 +127,7 @@ router.get("/:id", async (req: Request, res: Response) => {
   }
 });
 
-router.post("/:id/xp", async (req: Request, res: Response) => {
+router.post("/:id/xp", requireAdmin, async (req: Request, res: Response) => {
   try {
     const id = String(req.params.id ?? "");
     const { amount } = req.body;
@@ -152,7 +153,7 @@ router.post("/:id/xp", async (req: Request, res: Response) => {
   }
 });
 
-router.get("/:id/balance", async (req: Request, res: Response) => {
+router.get("/:id/balance", requireOwnerOrAdmin("id"), async (req: Request, res: Response) => {
   try {
     const id = String(req.params.id ?? "");
 
