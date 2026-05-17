@@ -174,3 +174,18 @@ Every skill is:
 - **Anti-rationalization-enforced** (no excuses for skipping)
 
 Use this registry to select the right skills for your task. When in doubt, use more skills, not fewer.
+
+---
+
+## CNMA-v5.1 Notes: Skills for Specialized Sub-Agents
+
+These specialized sub-agents may activate existing skills from this registry. They are documentation and planning personas; automation and runtime skill activation remains a future implementation step requiring approvals.
+
+- Product R&D: activate `spec-driven-development`, `planning-and-task-breakdown`, and `market-research` (market_research is advisory; add via Improvement Protocol if formalized).
+- Social Media Command: activate `doc-driven-communication`, `security-secrets-audit` (for compliance checks), and `planning-and-task-breakdown`.
+- Storefront Operations: activate `doc-driven-communication`, `planning-and-task-breakdown`, and `productization`.
+- Evolution Forecasting: activate `debugging-and-error-recovery` (for data anomalies), `performance-optimization` (signal evaluation), and `planning-and-task-breakdown`.
+- Citadel Defense Security: activate `security-and-hardening`, `security-secrets-audit`, and `debugging-and-error-recovery`.
+- Project Doctor Recovery: activate `debugging-and-error-recovery`, `test-driven-development`, and `code-review-and-quality`.
+
+**Implementation note:** If new formal skills are required (e.g., `market_research`, `doc-driven-communication`), propose them via AGENT_IMPROVEMENT_PROTOCOL and follow approval flows.

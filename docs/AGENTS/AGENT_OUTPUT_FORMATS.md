@@ -582,4 +582,13 @@ Reason: [Why this requires human decision]
 5. **Never assume:** State all assumptions and unknowns explicitly
 6. **Always cite:** Include sources and links when relevant
 7. **Always verify:** Exact evidence before claiming any statement
+
+---
+
+CNMA-v5.1 Addendum: Reporting for Specialized Sub-Agents
+
+- All specialized sub-agent reports must use the existing output formats. Add a 1-line "Agent Persona" header indicating which persona produced the output.
+- Security reports must include explicit [REDACTED] placeholders for any secret or credential references.
+- Forecasting and Product R&D outputs must include an "Assumptions and Confidence" section.
+- All YELLOW/RED outputs must be exported to docs/OBSIDIAN_EXPORT_QUEUE/ with full YAML frontmatter.
 8. **Always escalate:** RED gates go to Anthony; never assume
