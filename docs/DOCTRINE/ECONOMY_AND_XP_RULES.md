@@ -743,4 +743,3 @@ The strongest members should be those who consistently play, contribute meaningf
 CNX should enhance the journey, not replace it.
 
 The economy should reward commitment, not loopholes.
-

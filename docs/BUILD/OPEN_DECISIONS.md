@@ -817,4 +817,3 @@ Do not treat placeholder fields as real decisions.
 Do not hide open decisions.
 
 Do not move into future phases while blocking decisions remain open.
-

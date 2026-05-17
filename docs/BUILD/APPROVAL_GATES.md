@@ -557,4 +557,3 @@ Do not treat speed as safety.
 Do not treat AI confidence as approval.
 
 Do not bypass Anthony Hammon.
-

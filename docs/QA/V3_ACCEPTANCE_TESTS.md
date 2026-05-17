@@ -546,4 +546,3 @@ Do not treat future plans as live systems.
 Do not treat recommendations as approvals.
 
 Do not move to implementation until the knowledge core passes review.
-

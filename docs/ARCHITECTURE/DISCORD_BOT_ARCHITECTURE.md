@@ -688,4 +688,3 @@ Keep production commands controlled.
 Keep future-phase systems locked.
 
 Do not let the Discord bot override backend truth.
-

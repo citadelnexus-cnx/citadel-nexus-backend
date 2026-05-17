@@ -618,4 +618,3 @@ Do not rush high-risk systems.
 Do not let agents deploy alone.
 
 Do not bypass Anthony Hammon.
-

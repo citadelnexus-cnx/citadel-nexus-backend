@@ -655,4 +655,3 @@ Unchanged during this bootstrap.
 Overall risk:
 
 Low, because work is documentation-only and being committed one file at a time.
-

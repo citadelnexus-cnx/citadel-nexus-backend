@@ -171,4 +171,3 @@ Hold reasons:
 - User-scoped RLS policies are not yet tested.
 - Supabase backup restore test is not yet performed.
 - Direct frontend database access is not yet part of the authorized architecture.
-

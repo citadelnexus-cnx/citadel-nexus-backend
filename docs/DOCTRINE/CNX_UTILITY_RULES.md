@@ -616,4 +616,3 @@ CNX should be useful, but never mandatory.
 No player should need CNX to matter.
 
 No holder should be able to break the economy.
-

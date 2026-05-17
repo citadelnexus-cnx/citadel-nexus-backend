@@ -717,4 +717,3 @@ Keep audit records intact.
 Keep future-phase systems locked.
 
 Do not let Discord, frontend, CNX, dashboard controls, or AI agents override backend authority.
-

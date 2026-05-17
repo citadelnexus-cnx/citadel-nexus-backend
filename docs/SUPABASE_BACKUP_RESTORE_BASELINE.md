@@ -382,4 +382,3 @@ Storage object backup: DEFERRED
 PITR: NOT VERIFIED
 
 Public launch readiness: HOLD
-

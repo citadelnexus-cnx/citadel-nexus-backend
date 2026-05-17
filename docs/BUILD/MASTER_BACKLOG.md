@@ -945,4 +945,3 @@ Do not skip to high-risk systems because they are exciting.
 Do not activate future systems before current systems are stable.
 
 Protect the economy, community, codebase, and human command authority.
-

@@ -475,4 +475,3 @@ Public launch readiness: HOLD
 Reason for partial backup status:
 
 Database backup and restore procedure still requires separate Supabase-specific documentation before public launch.
-

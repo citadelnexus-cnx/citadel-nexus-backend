@@ -602,4 +602,3 @@ Build each layer only when its foundation is stable.
 Do not let Discord, frontend, CNX, dashboard controls, or AI agents override backend truth.
 
 The architecture must support scale without sacrificing auditability, fairness, or human command authority.
-

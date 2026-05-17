@@ -1039,4 +1039,3 @@ Control third.
 Emergency powers last.
 
 Do not give the dashboard power before the backend can prove every action is authenticated, authorized, logged, and reversible where possible.
-
