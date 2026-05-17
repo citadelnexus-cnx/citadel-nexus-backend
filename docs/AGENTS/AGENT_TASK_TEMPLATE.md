@@ -239,6 +239,14 @@ Before handing off to human review:
 - [ ] No lifecycle stages skipped
 - [ ] Evidence verified (not assumed)
 - [ ] Ready for human review and approval
+
+---
+
+CNMA-v5.1: Task Template Notes for Specialized Sub-Agents
+
+- Add `AGENT_PERSONA:` field to TASK DEFINITION when a specialized sub-agent produces the task artifacts (e.g., AGENT_PERSONA: PRODUCT_RESEARCH_AND_DEVELOPMENT_AGENT).
+- For YELLOW/RED tasks originating from these personas, include `Obsidian export: docs/OBSIDIAN_EXPORT_QUEUE/[timestamp]-[task-id]-[short-title].md` in the OUTPUT REQUIREMENTS section.
+- Do not allow these personas to request runtime actions in the TASK DEFINITION; explicit human approval and a separate IMPLEMENTATION task are required.
 - [ ] Task closure report prepared
 
 ---

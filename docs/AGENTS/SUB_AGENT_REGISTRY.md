@@ -443,3 +443,19 @@ Each sub-agent MUST shut down (stop operating) when:
    → Return output to human and stop (do not continue)
 
 Sub-agents MUST NOT continue operating beyond their defined scope or after outputting findings. They serve the Master Agent and human user, not themselves.
+
+---
+
+## CNMA-v5.1 Specialized Sub-Agents (Addition)
+
+The following specialized sub-agents were added as CNMA-v5.1 documentation-only personas. Each is a human-supervised planning and reporting persona; none may run autonomous runtime actions or perform RED-gate operations without Anthony approval.
+
+- Agent Sync Coordinator — docs governance, handoffs, Obsidian exports (docs/AGENTS/SUB_AGENTS/AGENT_SYNC_COORDINATOR.md)
+- Product Research and Development Agent — product research, MVPs, evidence packs (docs/AGENTS/SUB_AGENTS/PRODUCT_RESEARCH_AND_DEVELOPMENT_AGENT.md)
+- Social Media Command Agent — social calendars, compliance, manifests (docs/AGENTS/SUB_AGENTS/SOCIAL_MEDIA_COMMAND_AGENT.md)
+- Storefront Operations Agent — listing drafts and rollout checklists (docs/AGENTS/SUB_AGENTS/STOREFRONT_OPERATIONS_AGENT.md)
+- Evolution Forecasting Agent — scenario forecasts, signals, and triggers (docs/AGENTS/SUB_AGENTS/EVOLUTION_FORECASTING_AGENT.md)
+- Citadel Defense Security Agent — incident playbooks and security planning (docs/AGENTS/SUB_AGENTS/CITADEL_DEFENSE_SECURITY_AGENT.md)
+- Project Doctor Recovery Agent — diagnostic and recovery planning (docs/AGENTS/SUB_AGENTS/PROJECT_DOCTOR_RECOVERY_AGENT.md)
+
+**Note:** Adding these docs is a GREEN/docs-only operation under CNMA-v5.1. Any subsequent implementation that transforms these personas into running agents or automation must follow the Improvement Protocol and receive Anthony approval.

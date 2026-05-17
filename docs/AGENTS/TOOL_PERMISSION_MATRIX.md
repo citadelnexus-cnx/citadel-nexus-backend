@@ -197,3 +197,13 @@ These tools are BLOCKED except with explicit Anthony approval:
 5. If not found, escalate to Anthony for guidance
 
 **Never assume tool availability.** Verify tool exists before claiming output. Report absence explicitly. Do not fabricate results.
+
+---
+
+CNMA-v5.1 Addendum: Specialized Sub-Agent Tool Guidance
+
+- Docs-only sub-agents may use read/create/edit tools for documentation changes. Any tool that performs runtime changes (github-create_or_update_file that would push, powershell that would deploy, github-merge_pull_request) remains RED or YELLOW per AGENTS.md.
+- Social Media and Storefront planning personas MUST NOT call external posting APIs or storefront APIs. Use web_fetch only for public guidance.
+- Security and Recovery personas may use scanning tools (github-run_secret_scanning) and powershell locally for reproduction, but must request sanitized logs and never expose secrets.
+
+If a tool change or new tool allowance is proposed, follow AGENT_IMPROVEMENT_PROTOCOL.

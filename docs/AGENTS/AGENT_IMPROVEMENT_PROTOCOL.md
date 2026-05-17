@@ -421,3 +421,11 @@ Agents may propose improvements to the system, but:
 - ✗ No improvements are implemented without evidence and documentation
 
 The goal is continuous improvement within a stable, governed system. Governance preserves the integrity of Citadel Nexus. Improvements enhance that integrity.
+
+---
+
+CNMA-v5.1: Improvements Related to Specialized Sub-Agents
+
+- Proposals to formalize or operationalize any of the specialized sub-agents (i.e., make them runtime agents or automation) are YELLOW-to-RED depending on scope and must follow the Improvement Proposal Process including Anthony review.
+- If an improvement requires new permissions in TOOL_PERMISSION_MATRIX.md, include a security and doctrine impact section and route to Anthony for approval.
+- Any attempt to weaken approval gates or automate RED operations is explicitly disallowed.

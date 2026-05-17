@@ -431,3 +431,11 @@ Periodically:
 - Review and archive old decision logs
 - Validate backlinks (no broken links)
 - Ensure ADR archive is up to date
+
+---
+
+CNMA-v5.1: Obsidian Logging for Specialized Sub-Agents
+
+- When specialized sub-agents produce YELLOW/RED outputs, the Obsidian note must include `agent_persona:` in the frontmatter and reference the persona file path (e.g., docs/AGENTS/SUB_AGENTS/PRODUCT_RESEARCH_AND_DEVELOPMENT_AGENT.md).
+- Security incident notes must include `incident_severity: [CRITICAL|HIGH|MEDIUM|LOW]` and `[REDACTED]` placeholders for any secret values.
+- The Obsidian Archivist persona should validate frontmatter includes `approval_required` and `approval_from` when appropriate.
